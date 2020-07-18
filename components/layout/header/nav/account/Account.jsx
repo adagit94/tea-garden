@@ -1,9 +1,15 @@
+import Link from 'next/link'
 import React from 'react';
 import Button from 'react-bootstrap/Button'
 
-export default function Account() {
+import styles from './Account.module.scss';
+
+export default function Account(props) {
   return (
-      <Button variant='outline-light' type='button'><img src='/icons/log-in.svg' alt='log-in' /></Button>
+    <div {...props}>
+      <Button variant='light'><img src='/icons/user.svg' alt='user' /></Button>
+      <Button variant='light'><img src='/icons/shopping-cart.svg' alt='shopping cart' /></Button>
+    </div>
   );
 }
-//<Image src='/icons/user.svg' />
+//<Button variant='light' as='a'><img src='/icons/user.svg' alt='user' /></Button>
