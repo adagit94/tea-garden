@@ -4,9 +4,9 @@ import Button from 'react-bootstrap/Button'
 
 import styles from './Account.module.scss';
 
-export default function Account(props) {
+export default function Account() {
   return (
-    <div {...props}>
+    <div>
       <Button variant='light'><img src='/icons/user.svg' alt='user' /></Button>
       <Button variant='light'><img src='/icons/shopping-cart.svg' alt='shopping cart' /></Button>
     </div>
