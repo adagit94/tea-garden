@@ -9,13 +9,13 @@ export default function Header() {
   return (
     <Container className='bg-light' fluid>
       <Container>
-        <Row>
-          <Col>
-            <header>
+        <header>
+          <Row>
+            <Col>
               <Nav />
-            </header>
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        </header>
       </Container>
     </Container>
   );

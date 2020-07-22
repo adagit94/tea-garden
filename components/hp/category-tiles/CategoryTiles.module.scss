@@ -1,0 +1,34 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+@media (min-width: map-get($grid-breakpoints, 'xs')) {
+  .categoryTileFirst {
+    border-bottom: $border-width solid $border-color;
+  }
+}
+
+@media (min-width: map-get($grid-breakpoints, 'sm')) {
+  .categoryTileFirst {
+    border-right: $border-width solid $border-color;
+    border-bottom: none;
+  }
+}
+
+.categoryTile {
+  div {
+    width: 200px;
+    height: 200px;
+
+    img {
+      width: 200px;
+      height: 200px;
+      transition: transform 0.25s ease-in;
+    }
+  }
+
+  :hover {
+    div img {
+      transform: scale(1.25, 1.25);
+    }
+  }
+}

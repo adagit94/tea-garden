@@ -1,10 +1,13 @@
-$enable-caret: false;
 $primary: #000000;
-$navbar-light-color:                #000000;
-$navbar-light-hover-color:          #000000;
-$navbar-light-active-color:         #000000;
-$dropdown-link-color: #000000;
-$dropdown-link-hover-color: #000000;
-$dropdown-link-active-color: #000000;
+$link-hover-decoration: none;
+$enable-caret: false;
+$enable-gradients: true;
+$navbar-light-color: $primary;
+$navbar-light-hover-color: $primary;
+$navbar-light-active-color: $primary;
+$dropdown-link-color: $primary;
+$dropdown-link-hover-color: $primary;
+$dropdown-link-active-color: $primary;
+$figure-caption-color: $primary;
 
-@import "~bootstrap/scss/bootstrap";
+@import '~bootstrap/scss/bootstrap';

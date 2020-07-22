@@ -3,17 +3,23 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
+import Newsletter from './newsletter/Newsletter';
+import Contact from './contact/Contact';
+
 export default function Footer() {
   return (
-    <Container fluid>
+    <Container className='bg-light' fluid>
       <Container>
-        <Row>
-          <Col>
-            <footer>
-
-            </footer>
-          </Col>
-        </Row>
+        <footer>
+          <Row xs={1} lg={2}>
+            <Col className='d-lg-flex flex-lg-column justify-content-lg-center'>
+              <Newsletter />
+            </Col>
+            <Col className='d-flex'>
+              <Contact />
+            </Col>
+          </Row>
+        </footer>
       </Container>
     </Container>
   );
