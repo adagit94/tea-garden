@@ -1,13 +1,16 @@
 import Link from 'next/link';
 import React from 'react';
+import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import styles from './CategoryTiles.module.scss';
 
 export default function CategoryTiles() {
   return (
-    <>
-      <Col className={`p-3 ${styles.categoryTile} ${styles.categoryTileFirst}`}>
+    <Row xs={1} sm={2}>
+      <Col
+        className={`p-3 ${styles.categoryTile}`}
+      >
         <Link href='/cerstve'>
           <a className='stretched-link'>
             <h1 className='text-center'>Čerstvé čaje</h1>
@@ -33,6 +36,6 @@ export default function CategoryTiles() {
           </a>
         </Link>
       </Col>
-    </>
+    </Row>
   );
 }

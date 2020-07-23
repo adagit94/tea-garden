@@ -12,7 +12,7 @@ export default function Newsletter() {
           <InputGroup.Prepend>
             <InputGroup.Text>@</InputGroup.Text>
           </InputGroup.Prepend>
-          <Form.Control type='email' placeholder='Váš email' id='emailField' />
+          <Form.Control type='email' placeholder='Váš email' id='email-field' />
           <Form.Control.Feedback>
             Byly jste přihlášeni k odběru novinek
           </Form.Control.Feedback>

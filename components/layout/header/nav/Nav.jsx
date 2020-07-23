@@ -22,19 +22,19 @@ export default function Header() {
             <Form.Label htmlFor='searchField' srOnly>
               Vyhledávač
             </Form.Label>
-            <Form.Control type='text' placeholder='Hledat' id='searchField' />
+            <Form.Control type='text' placeholder='Hledat' id='search-field' />
           </Form>
           <Account />
         </div>
         <div className='order-lg-0'>
           <Nav>
             <NavDropdown
-              title='Pu erh'
               className='d-flex flex-column align-items-center'
+              title='Pu erh'
               id='dropdown-puerh'
             >
               <Link href='/pu-erh/sheng' passHref>
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-dark'>
                   Sheng
                 </NavDropdown.Item>
               </Link>
@@ -50,17 +50,17 @@ export default function Header() {
               id='dropdown-oolong'
             >
               <Link href='/oolong/an-xi' passHref>
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-dark'>
                   An Xi
                 </NavDropdown.Item>
               </Link>
               <Link href='/oolong/feng-huang' passHref>
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-dark'>
                   Feng Huang
                 </NavDropdown.Item>
               </Link>
               <Link href='/oolong/wu-yi' passHref>
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-dark'>
                   Wu Yi
                 </NavDropdown.Item>
               </Link>

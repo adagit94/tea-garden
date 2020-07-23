@@ -8,8 +8,8 @@ import Contact from './contact/Contact';
 
 export default function Footer() {
   return (
-    <Container className='bg-light' fluid>
-      <Container>
+    <Container className='p-0 bg-secondary' fluid>
+      <Container className='p-0'>
         <footer>
           <Row xs={1} lg={2}>
             <Col className='d-lg-flex flex-lg-column justify-content-lg-center'>

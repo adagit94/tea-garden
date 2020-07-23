@@ -9,7 +9,7 @@ import styles from './New.module.scss';
 export default function New() {
   return (
     <Row xs={1} sm={2} md={3} lg={4} xl={5}>
-      <Col className={`p-3 d-flex justify-content-center align-items-center ${styles.teaItem}`}>
+      <Col className={`p-3 d-flex justify-content-center ${styles.teaItem}`}>
         <Link href='/'>
           <a className='stretched-link'>
             <Figure className='m-0'>
@@ -19,12 +19,12 @@ export default function New() {
                   alt='červený'
                 />
               </div>
-              <Figure.Caption>Darjeeling Rohini Delight</Figure.Caption>
+              <Figure>Darjeeling Rohini Delight</Figure>
             </Figure>
           </a>
         </Link>
       </Col>
-      <Col className={`p-3 d-flex flex-column justify-content-center align-items-center ${styles.teaItem}`}>
+      <Col className={`p-3 d-flex justify-content-center ${styles.teaItem}`}>
         <Link href='/'>
           <a className='stretched-link'>
             <Figure className='m-0'>
@@ -34,14 +34,14 @@ export default function New() {
                   alt='červený'
                 />
               </div>
-              <Figure.Caption>
+              <Figure>
                 Darjeeling Arya Diamond
-              </Figure.Caption>
+              </Figure>
             </Figure>
           </a>
         </Link>
       </Col>
-      <Col className={`p-3 d-flex flex-column justify-content-center align-items-center ${styles.teaItem}`}>
+      <Col className={`p-3 d-flex justify-content-center ${styles.teaItem}`}>
         <Link href='/'>
           <a className='stretched-link'>
             <Figure className='m-0'>
@@ -51,14 +51,14 @@ export default function New() {
                   alt='zelený'
                 />
               </div>
-              <Figure.Caption>
+              <Figure>
                 Ha Giang Green Shan
-              </Figure.Caption>
+              </Figure>
             </Figure>
           </a>
         </Link>
       </Col>
-      <Col className={`p-3 d-flex flex-column justify-content-center align-items-center ${styles.teaItem}`}>
+      <Col className={`p-3 d-flex justify-content-center ${styles.teaItem}`}>
         <Link href='/'>
           <a className='stretched-link'>
             <Figure className='m-0'>
@@ -68,14 +68,14 @@ export default function New() {
                   alt='zelený'
                 />
               </div>
-              <Figure.Caption>
+              <Figure>
                 Lung Ching Xi Hu{' '}
-              </Figure.Caption>
+              </Figure>
             </Figure>
           </a>
         </Link>
       </Col>
-      <Col className={`p-3 d-flex flex-column justify-content-center align-items-center ${styles.teaItem}`}>
+      <Col className={`p-3 d-flex justify-content-center ${styles.teaItem}`}>
         <Link href='/'>
           <a className='stretched-link'>
             <Figure className='m-0'>
@@ -85,9 +85,9 @@ export default function New() {
                   alt='oolong'
                 />
               </div>
-              <Figure.Caption>
+              <Figure>
                 Formosa Alishan Hong Shui
-              </Figure.Caption>
+              </Figure>
             </Figure>
           </a>
         </Link>
