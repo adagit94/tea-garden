@@ -1,0 +1,20 @@
+.authProviderFacebook {
+  background-color: #3b5897;
+
+  &:hover {
+    background-color: #334d84;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.authProviderGoogle {
+  background-color: #c93e22;
+
+  &:hover {
+    background-color: #b3371e;
+  }
+}

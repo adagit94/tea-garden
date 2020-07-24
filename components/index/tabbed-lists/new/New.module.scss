@@ -1,16 +1,14 @@
-.categoryTile {
+.teaItem {
   div {
-    width: 200px;
-    height: 200px;
+    width: 100px;
+    height: 100px;
 
     img {
-      width: 200px;
-      height: 200px;
       transition: transform 0.25s ease-in;
     }
   }
 
-  :hover {
+  &:hover {
     div img {
       transform: scale(1.25, 1.25);
     }

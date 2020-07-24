@@ -20,5 +20,6 @@ $dropdown-link-hover-bg: $dark;
 $dropdown-border-color: transparent;
 $dropdown-padding-y: 0;
 $figure-caption-color: $dark;
+$btn-focus-box-shadow: none !important;
 
 @import '~bootstrap/scss/bootstrap';

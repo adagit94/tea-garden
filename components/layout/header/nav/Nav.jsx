@@ -19,10 +19,15 @@ export default function Header() {
       <Navbar.Collapse id='responsive-nav'>
         <div className='order-lg-1 flex-grow-1 d-flex justify-content-between'>
           <Form inline>
-            <Form.Label htmlFor='searchField' srOnly>
-              Vyhledávač
-            </Form.Label>
-            <Form.Control type='text' placeholder='Hledat' id='search-field' />
+            <Form.Group controlId='nav-search-field'>
+              <Form.Label srOnly>
+                Vyhledávač
+              </Form.Label>
+              <Form.Control
+                type='text'
+                placeholder='Hledat'
+              />
+            </Form.Group>
           </Form>
           <Account />
         </div>

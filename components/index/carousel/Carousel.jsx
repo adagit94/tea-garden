@@ -9,22 +9,18 @@ export default function Carousel() {
       <Col>
         <Carous controls={false} keyboard={false} pause={false} touch={false}>
           <Carous.Item>
-            <div className='rounded'>
-              <img
-                className='d-block w-100'
-                src='/carousel/pu-erh-1.jpg'
-                alt='slide 1'
-              />
-            </div>
+            <img
+              className='d-block w-100'
+              src='/carousel/pu-erh-1.jpg'
+              alt='slide 1'
+            />
           </Carous.Item>
           <Carous.Item>
-            <div className='rounded'>
-              <img
-                className='d-block w-100'
-                src='/carousel/pu-erh-2.jpg'
-                alt='slide 2'
-              />
-            </div>
+            <img
+              className='d-block w-100'
+              src='/carousel/pu-erh-2.jpg'
+              alt='slide 2'
+            />
           </Carous.Item>
         </Carous>
       </Col>

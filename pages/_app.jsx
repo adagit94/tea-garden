@@ -1,13 +1,16 @@
 import React from 'react';
 
-import Layout from "../components/layout/Layout";
+import UserDataProvider from '../components/user/UserDataProvider';
+import Layout from '../components/layout/Layout';
 
-import "../scss/app.scss";
+import '../scss/app.scss';
 
 export default function MyApp({ Component, pageProps }) {
   return (
-  <Layout>
-    <Component {...pageProps} />
-  </Layout>
+    <UserDataProvider>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </UserDataProvider>
   );
 }
