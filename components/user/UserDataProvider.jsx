@@ -1,3 +1,4 @@
+import Router from 'next/router';
 import React, { useReducer, useEffect, createContext } from 'react';
 
 import { initFirebase } from 'firebase/init-firebase';
@@ -44,6 +45,7 @@ export const UserDispatchContext = createContext();
 export default function UserDataProvider({ children }) {
   const [userState, userDispatch] = useReducer(reducer, inits);
 
+  
   useEffect(() => {
     function initUser(user) {
       userDispatch({ type: 'initUser', payload: user });
@@ -51,6 +53,10 @@ export default function UserDataProvider({ children }) {
 
     function clearUser() {
       userDispatch({ type: 'clearUser' });
+    }
+
+    if (window.localStorage.getItem('userLoading') === 'true') {
+      userDispatch({ type: 'setLoading', value: true });
     }
 
     initFirebase();

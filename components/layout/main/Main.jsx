@@ -3,7 +3,7 @@ import Container from 'react-bootstrap/Container';
 
 export default function Main({ children }) {
   return (
-    <Container className='p-0'>
+    <Container>
       <main>{children}</main>
     </Container>
   );

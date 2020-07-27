@@ -24,7 +24,7 @@ export default function Header() {
                 Vyhledávač
               </Form.Label>
               <Form.Control
-                type='text'
+                type='search'
                 placeholder='Hledat'
               />
             </Form.Group>

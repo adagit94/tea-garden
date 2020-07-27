@@ -2,12 +2,38 @@ import Link from 'next/link';
 import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
+import Spinner from 'react-bootstrap/Spinner';
 
 import { UserStateContext } from 'components/user/UserDataProvider';
+import LogIn from 'components/log-in/LogIn';
 
 import styles from './Account.module.scss';
 
-function LogIn() {
+function LoadingBtn() {
+  return (
+    <Button variant='outline-light' type='button'>
+      <Spinner
+        variant='primary'
+        size='sm'
+        animation='border'
+        role='status'
+        aria-hidden='true'
+      >
+        <span className='sr-only'>Načítání...</span>
+      </Spinner>
+    </Button>
+  );
+}
+
+function UserBtn({ uid }) {
+  return (
+      <Button onClick={} variant='outline-light'>
+        <img src='/icons/user.svg' alt='uživatel' />
+      </Button>
+  );
+}
+
+function LogInBtn() {
   return (
     <Link href='/prihlaseni' passHref>
       <Button as='a' variant='outline-light'>
@@ -17,24 +43,18 @@ function LogIn() {
   );
 }
 
-function User({ uid }) {
-  return (
-    <Link href='/[uid]/nastaveni' as={`/${uid}/nastaveni`} passHref>
-      <Button as='a' variant='outline-light'>
-        <img src='/icons/user.svg' alt='uživatel' />
-      </Button>
-    </Link>
-  );
-}
-
 export default function Account() {
   const userState = useContext(UserStateContext);
 
-  const { firebase } = userState;
+  const { firebase, isAuthenticated, loading } = userState;
 
   return (
     <div className='d-flex'>
-      {firebase === undefined ? <LogIn /> : <User uid={firebase.uid} />}
+      {loading && <LoadingBtn />}
+
+      {!loading && isAuthenticated && <UserBtn uid={firebase.uid} />}
+
+      {!loading && !isAuthenticated && <LogInBtn />}
       <Dropdown>
         <Dropdown.Toggle variant='outline-light' id='dropdown-shopping-cart'>
           <img src='/icons/shopping-cart.svg' alt='nákupní košík' />

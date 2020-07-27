@@ -2,46 +2,109 @@ import * as firebase from 'firebase/app';
 import 'firebase/firebase-auth';
 import 'firebase/firestore';
 
-export async function logout() {
-  firebase
-    .auth()
-    .signOut()
-    .catch(err => console.error(err));
-}
-
-export function initAuthObserver(
-  initFirebaseUser,
-  clearFirebaseUser
-) {
+export function initAuthObserver(initUser, clearUser) {
   firebase.auth().onAuthStateChanged(
     user => {
       if (user) {
-        if (user.emailVerified) {
-          sessionStorage.setItem('uid', user.uid);
-
-          initFirebaseUser(user);
-        } else {
-          logout();
-        }
+        initUser(user);
       } else {
-        sessionStorage.removeItem('uid');
-
-        clearFirebaseUser();
+        clearUser();
       }
     },
     err => console.error(err)
   );
 }
 
-export async function createUser(email, password) {
+export async function loginEmail(email, password, setAlert) {
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      window.localStorage.setItem('userLoading', 'true');
+    })
+    .catch(err => {
+      let msg;
+
+      switch (err.code) {
+        case 'auth/invalid-email':
+          msg = 'Neplatná e-mailová adresa';
+          break;
+
+        case 'auth/user-disabled':
+          msg = 'Uživatel byl deaktivován.';
+          break;
+
+        case 'auth/user-not-found':
+          msg = 'Uživatel neexistuje.';
+          break;
+
+        case 'auth/wrong-password':
+          msg = 'Neplatné heslo.';
+          break;
+      }
+
+      setAlert({ show: true, msg });
+    });
+}
+
+export async function loginProvider(provider) {
+  window.localStorage.setItem('userLoading', 'true');
+
+  let providerObj;
+
+  switch (provider) {
+    case 'facebook':
+      providerObj = new firebase.auth.FacebookAuthProvider();
+      break;
+
+    case 'google':
+      providerObj = new firebase.auth.GoogleAuthProvider();
+      break;
+  }
+  
+  await firebase
+  .auth()
+  .signInWithRedirect(providerObj)
+  .catch(err => console.error(err));
+  
+  await firebase
+    .auth()
+    .getRedirectResult()
+    .catch(err => console.error(err));
+}
+
+export async function logout() {
+  window.localStorage.removeItem('userLoading');
+
+  await firebase
+    .auth()
+    .signOut()
+    .catch(err => console.error(err));
+}
+
+export async function createUser(email, password, setAlert) {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
-    .then(credential => {
-      credential.user.sendEmailVerification().catch(err => console.error(err));
-      window.history.back();
-    })
-    .catch(err => alert(err));
+    .catch(err => {
+      let msg;
+
+      switch (err.code) {
+        case 'auth/email-already-in-use':
+          msg = 'E-mailová adresa je již registrována.';
+          break;
+      }
+
+      setAlert({ show: true, msg });
+    });
+}
+
+export async function resetPassword(email) {
+  firebase
+    .auth()
+    .sendPasswordResetEmail(email)
+    .then(() => window.history.back())
+    .catch(err => console.error(err));
 }
 
 export async function updateUser(user, username, avatar) {
@@ -83,59 +146,4 @@ export async function updateUser(user, username, avatar) {
   await user.updateProfile(updateObj).catch(err => alert(err));
 
   window.location.reload();
-}
-
-export async function loginEmail(
-  email,
-  password,
-  handleLoading
-) {
-  handleLoading(true);
-
-  firebase
-    .auth()
-    .signInWithEmailAndPassword(email, password)
-    .then(credential => {
-      if (!credential.user.emailVerified) {
-        alert('Please, verify your email before log in.');
-      }
-    })
-    .catch(err => {
-      handleLoading(false);
-      alert(err);
-    });
-}
-
-export async function loginProvider(provider, handleLoading) {
-  handleLoading(true);
-
-  let providerObj;
-
-  switch (provider) {
-    case 'facebook':
-      providerObj = new firebase.auth.FacebookAuthProvider();
-      break;
-
-    case 'google':
-      providerObj = new firebase.auth.GoogleAuthProvider();
-      break;
-  }
-
-  await firebase
-    .auth()
-    .signInWithRedirect(providerObj)
-    .catch(err => console.error(err));
-
-  await firebase
-    .auth()
-    .getRedirectResult()
-    .catch(err => console.error(err));
-}
-
-export async function resetPassword(email) {
-  firebase
-    .auth()
-    .sendPasswordResetEmail(email)
-    .then(() => window.history.back())
-    .catch(err => console.error(err));
 }
