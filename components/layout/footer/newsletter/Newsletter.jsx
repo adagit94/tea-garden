@@ -8,7 +8,7 @@ export default function Newsletter() {
     <>
       <Form className='justify-content-center' inline>
         <Form.Label className='m-0' htmlFor='emailField'>Odběr novinek</Form.Label>
-        <InputGroup className='p-1'>
+        <InputGroup className='px-1'>
           <InputGroup.Prepend>
             <InputGroup.Text>@</InputGroup.Text>
           </InputGroup.Prepend>

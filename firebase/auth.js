@@ -8,6 +8,8 @@ export function initAuthObserver(initUser, clearUser) {
       if (user) {
         initUser(user);
       } else {
+        window.localStorage.removeItem('userLoading');
+
         clearUser();
       }
     },
@@ -48,8 +50,6 @@ export async function loginEmail(email, password, setAlert) {
 }
 
 export async function loginProvider(provider) {
-  window.localStorage.setItem('userLoading', 'true');
-
   let providerObj;
 
   switch (provider) {
@@ -61,12 +61,15 @@ export async function loginProvider(provider) {
       providerObj = new firebase.auth.GoogleAuthProvider();
       break;
   }
-  
+
+  window.localStorage.setItem('userLoading', 'true');
+
   await firebase
-  .auth()
-  .signInWithRedirect(providerObj)
-  .catch(err => console.error(err));
-  
+    .auth()
+    .signInWithRedirect(providerObj)
+    .then()
+    .catch(err => console.error(err));
+
   await firebase
     .auth()
     .getRedirectResult()
@@ -74,9 +77,7 @@ export async function loginProvider(provider) {
 }
 
 export async function logout() {
-  window.localStorage.removeItem('userLoading');
-
-  await firebase
+  firebase
     .auth()
     .signOut()
     .catch(err => console.error(err));
@@ -86,6 +87,9 @@ export async function createUser(email, password, setAlert) {
   firebase
     .auth()
     .createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      window.localStorage.setItem('userLoading', 'true');
+    })
     .catch(err => {
       let msg;
 
@@ -107,43 +111,8 @@ export async function resetPassword(email) {
     .catch(err => console.error(err));
 }
 
-export async function updateUser(user, username, avatar) {
-  if (!username && !avatar) {
-    alert('No changes were made');
-
-    return;
-  }
-
-  const updateObj = {};
-
-  if (username) updateObj.displayName = username;
-
-  if (avatar) {
-    const storage = firebase.storage();
-    const avatarsUserRef = storage.ref(`images/avatars/${user.uid}`);
-    const newAvatarRef = avatarsUserRef.child(`${avatar.name}`);
-    const currentAvatar = await avatarsUserRef
-      .listAll()
-      .then(result => result.items[0])
-      .catch(err => console.error(err));
-
-    if (currentAvatar) {
-      const currentAvatarRef = avatarsUserRef.child(`${currentAvatar.name}`);
-
-      await currentAvatarRef.delete().catch(err => console.error(err));
-    }
-
-    await newAvatarRef.put(avatar).catch(err => console.error(err));
-
-    await newAvatarRef
-      .getDownloadURL()
-      .then(url => {
-        updateObj.photoURL = url;
-      })
-      .catch(err => console.error(err));
-  }
-
-  await user.updateProfile(updateObj).catch(err => alert(err));
+export async function updateUser(user, name) {
+  user.updateProfile({displayName: name}).catch(err => console.error(err));
 
   window.location.reload();
 }

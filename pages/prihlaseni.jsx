@@ -1,6 +1,6 @@
-import Router from 'next/router'
+import Router from 'next/router';
 import Link from 'next/link';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -8,11 +8,13 @@ import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { loginEmail, loginProvider } from '../../firebase/auth';
+import { loginEmail, loginProvider } from '../firebase/auth';
 import { useFirebaseAlert } from 'custom-hooks/error-handling';
-import { FirebaseAlert } from 'components/registration/node_modules/components/ui/Alerts';
+import { UserStateContext } from 'components/user/UserDataProvider';
+import { PageLoading } from 'components/ui/Indicators';
+import { FirebaseAlert } from 'components/ui/Alerts';
 
-import styles from 'components/log-in/LogIn.module.scss';
+import styles from 'components/user/log-in/LogIn.module.scss';
 
 const LogInSchema = Yup.object({
   email: Yup.string()
@@ -23,14 +25,21 @@ const LogInSchema = Yup.object({
 
 export default function LogIn() {
   const [alert, setAlert] = useFirebaseAlert();
-  
+  const userState = useContext(UserStateContext);
+
+  const { firebase, isAuthenticated, loading } = userState;
+
   useEffect(() => {
-    Router.prefetch('/[uid]/settings');
-  }, []);
-  
+    if (isAuthenticated) {
+      Router.push('/[uid]/nastaveni', `/${firebase.uid}/nastaveni`);
+    }
+  });
+
+  if (loading || isAuthenticated) return <PageLoading />;
+
   return (
     <Row className='p-3' xs={1} lg={2}>
-      <Col className='px-0 pr-lg-3 pb-3 pb-lg-0'>
+      <Col className='px-3 pb-3 py-lg-3 pl-lg-0 pr-lg-3'>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={LogInSchema}
@@ -49,7 +58,7 @@ export default function LogIn() {
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type='email'
-                    autoComplete='on'
+                    autoComplete='email'
                     isInvalid={touched.email && errors.email}
                     {...getFieldProps('email')}
                   />
@@ -67,7 +76,7 @@ export default function LogIn() {
                   <Form.Label>Heslo</Form.Label>
                   <Form.Control
                     type='password'
-                    autoComplete='on'
+                    autoComplete='current-password'
                     isInvalid={touched.password && errors.password}
                     {...getFieldProps('password')}
                   />
@@ -106,7 +115,7 @@ export default function LogIn() {
         <FirebaseAlert show={alert.show} msg={alert.msg} />
       </Col>
       <Col
-        className={`px-0 pt-3 pt-lg-0 pl-lg-3 d-flex flex-column justify-content-center align-items-center align-items-lg-start ${styles.authProviders}`}
+        className={`px-3 pt-3 py-lg-3 pr-lg-0 pl-lg-3 d-flex flex-column justify-content-center align-items-center align-items-lg-start ${styles.authProviders}`}
       >
         <button
           onClick={() => {

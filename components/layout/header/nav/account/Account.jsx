@@ -5,11 +5,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import Spinner from 'react-bootstrap/Spinner';
 
 import { UserStateContext } from 'components/user/UserDataProvider';
-import LogIn from 'components/log-in/LogIn';
 
-import styles from './Account.module.scss';
-
-function LoadingBtn() {
+function Loading() {
   return (
     <Button variant='outline-light' type='button'>
       <Spinner
@@ -25,15 +22,17 @@ function LoadingBtn() {
   );
 }
 
-function UserBtn({ uid }) {
+function User({ uid }) {
   return (
-      <Button onClick={} variant='outline-light'>
+    <Link href='/[uid]/nastaveni' as={`/${uid}/nastaveni`} passHref>
+      <Button as='a' variant='outline-light'>
         <img src='/icons/user.svg' alt='uživatel' />
       </Button>
+    </Link>
   );
 }
 
-function LogInBtn() {
+function LogIn() {
   return (
     <Link href='/prihlaseni' passHref>
       <Button as='a' variant='outline-light'>
@@ -50,11 +49,11 @@ export default function Account() {
 
   return (
     <div className='d-flex'>
-      {loading && <LoadingBtn />}
+      {loading && <Loading />}
 
-      {!loading && isAuthenticated && <UserBtn uid={firebase.uid} />}
+      {!loading && isAuthenticated && <User uid={firebase.uid} />}
 
-      {!loading && !isAuthenticated && <LogInBtn />}
+      {!loading && !isAuthenticated && <LogIn />}
       <Dropdown>
         <Dropdown.Toggle variant='outline-light' id='dropdown-shopping-cart'>
           <img src='/icons/shopping-cart.svg' alt='nákupní košík' />

@@ -9,7 +9,7 @@ import Account from './account/Account';
 
 export default function Header() {
   return (
-    <Navbar bg='light' expand='lg'>
+    <Navbar className='p-0' bg='light' expand='lg'>
       <Navbar.Brand>
         <Link href='/'>
           <a>HP</a>
@@ -39,7 +39,7 @@ export default function Header() {
               id='dropdown-puerh'
             >
               <Link href='/pu-erh/sheng' passHref>
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-dark'>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
                   Sheng
                 </NavDropdown.Item>
               </Link>
@@ -55,17 +55,17 @@ export default function Header() {
               id='dropdown-oolong'
             >
               <Link href='/oolong/an-xi' passHref>
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-dark'>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
                   An Xi
                 </NavDropdown.Item>
               </Link>
               <Link href='/oolong/feng-huang' passHref>
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-dark'>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
                   Feng Huang
                 </NavDropdown.Item>
               </Link>
               <Link href='/oolong/wu-yi' passHref>
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-dark'>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
                   Wu Yi
                 </NavDropdown.Item>
               </Link>

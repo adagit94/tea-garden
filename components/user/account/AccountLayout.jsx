@@ -8,6 +8,8 @@ import Nav from 'react-bootstrap/Nav';
 import { UserStateContext } from '../UserDataProvider';
 import { logout } from '../../../firebase/auth';
 
+import styles from './AccountLayout.module.scss';
+
 export default function AccountLayout({ activeItem, children }) {
   const userState = useContext(UserStateContext);
 
@@ -15,25 +17,21 @@ export default function AccountLayout({ activeItem, children }) {
 
   return (
     <>
-      <Row>
-        <Col className='d-flex justify-content-end'>
-          <Button onClick={logout} variant='outline-light'>
-            <img src='/icons/log-out.svg' alt='odhlásit' />
-          </Button>
-        </Col>
-      </Row>
-      <Row>
-        <Col lg={2}>
-          <Nav as='nav' className='flex-column' variant='pills' activeKey={activeItem}>
+      <Row className='p-3'>
+        <Col className={`p-3 ${styles.accountNavCol}`} xs={12} lg={2}>
+          <Nav as='nav' className='flex-lg-column' variant='pills' activeKey={activeItem}>
             <Link href='/[uid]/nastaveni' as={`/${uid}/nastaveni`} passHref>
-              <Nav.Link eventKey='settings'>Nastavení</Nav.Link>
+              <Nav.Link className='border-bottom' eventKey='settings'>Nastavení</Nav.Link>
             </Link>
             <Link href='/[uid]/objednavky' as={`/${uid}/objednavky`} passHref>
               <Nav.Link eventKey='orders'>Objednávky</Nav.Link>
             </Link>
           </Nav>
+          <Button onClick={logout} variant='outline-secondary'>
+            <img src='/icons/log-out.svg' alt='odhlásit' />
+          </Button>
         </Col>
-        <Col lg={10}>{children}</Col>
+        <Col xs={12} lg={10}>{children}</Col>
       </Row>
     </>
   );

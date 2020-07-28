@@ -1,5 +1,5 @@
 import Router from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -7,9 +7,11 @@ import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { createUser } from '../../firebase/auth';
+import { createUser } from '../firebase/auth';
 import { useFirebaseAlert } from 'custom-hooks/error-handling';
+import { PageLoading } from 'components/ui/Indicators';
 import { FirebaseAlert } from 'components/ui/Alerts';
+import { UserStateContext } from 'components/user/UserDataProvider';
 
 const RegistrationSchema = Yup.object({
   email: Yup.string()
@@ -26,14 +28,23 @@ const RegistrationSchema = Yup.object({
 
 export default function Registration() {
   const [alert, setAlert] = useFirebaseAlert();
+  const userState = useContext(UserStateContext);
+
+  const { firebase, isAuthenticated, loading } = userState;
 
   useEffect(() => {
-    Router.prefetch('/prihlaseni');
+    //Router.prefetch('/[uid]/nastaveni'); Zmerit rozdil rychlosti nacteni
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated) Router.push('/[uid]/nastaveni', `/${firebase.uid}/nastaveni`);
+  });
+
+  if (loading || isAuthenticated) return <PageLoading />;
 
   return (
     <Row className='p-3' lg={2}>
-      <Col className='px-0 pr-lg-3'>
+      <Col className='px-3 pb-3 py-lg-3 pl-lg-0 pr-lg-3'>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={RegistrationSchema}
@@ -52,7 +63,7 @@ export default function Registration() {
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type='email'
-                    autoComplete='on'
+                    autoComplete='email'
                     isValid={touched.email && !errors.email}
                     isInvalid={touched.email && errors.email}
                     {...getFieldProps('email')}
@@ -71,7 +82,7 @@ export default function Registration() {
                   <Form.Label>Heslo</Form.Label>
                   <Form.Control
                     type='password'
-                    autoComplete='off'
+                    autoComplete='new-password'
                     isValid={touched.password && !errors.password}
                     isInvalid={touched.password && errors.password}
                     {...getFieldProps('password')}
@@ -97,7 +108,7 @@ export default function Registration() {
         </Formik>
         <FirebaseAlert show={alert.show} msg={alert.msg} />
       </Col>
-      <Col className='d-none d-lg-block px-0 pl-lg-3' />
+      <Col className='d-none d-lg-block' />
     </Row>
   );
 }

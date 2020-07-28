@@ -1,0 +1,38 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+
+@media (min-width: map-get($grid-breakpoints, 'xs')) {
+  .authProviders {
+    border-top: $border-width solid $border-color;
+  }
+}
+
+@media (min-width: map-get($grid-breakpoints, 'lg')) {
+  .authProviders {
+    border-left: $border-width solid $border-color;
+    border-top: none;
+  }
+}
+
+.authProviderFacebook {
+  background-color: #3b5897;
+
+  &:hover {
+    background-color: #334d84;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.authProviderGoogle {
+  background-color: #c93e22;
+
+  &:hover {
+    background-color: #b3371e;
+  }
+}
+

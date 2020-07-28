@@ -1,116 +1,24 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
 
 import AccountLayout from 'components/user/account/AccountLayout';
-import { useFirebaseAlert } from 'custom-hooks/error-handling';
-import { FirebaseAlert } from 'components/registration/node_modules/components/ui/Alerts';
-import { UserStateContext } from 'components/user/UserDataProvider';
+import UserForm from 'components/user/account/settings/UserForm';
+import AddressForm from 'components/user/account/settings/AddressForm';
 
-const AddressSchema = Yup.object({
-  streetHouseNo: Yup.string()
-    .matches(/[a-zA-Z]{2,}/, 'Zadejte název ulice.')
-    .matches(/[0-9]+/, 'Zadejte č.p.')
-    .matches(/\s+/, 'Oddělte název ulice a č.p. mezerou.')
-    .required('Zadejte název ulice a č.p.'),
-  city: Yup.string()
-    .matches(/[a-zA-Z]{2,}/, 'Zadejte název města nebo obce.')
-    .required('Zadejte název města nebo obce.'),
-  postCode: Yup.string()
-    .matches(/([0-9]{5})|([0-9]{3}\s[0-9]{2})/, 'Zadejte PSČ.')
-    .required('Zadejte PSČ.'),
-});
+import styles from 'components/user/account/settings/Settings.module.scss';
 
 export default function Settings() {
-  const [alert, setAlert] = useFirebaseAlert();
-  const userState = useContext(UserStateContext);
-
-  const uid = userState.firebase?.uid;
-
   return (
     <AccountLayout activeItem='settings'>
-      <Formik
-        initialValues={{ streetHouseNo: '', city: '', postCode: '' }}
-        validationSchema={AddressSchema}
-        onSubmit={values => {
-          //loginEmail(values.email, values.password, setFirebaseErr);
-        }}
-      >
-        {({ handleSubmit, getFieldProps, touched, errors }) => (
-          <Form onSubmit={handleSubmit} noValidate>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
-                controlId='settings-streethouseno-input'
-              >
-                <Form.Label>Ulice a č.p.</Form.Label>
-                <Form.Control
-                  type='text'
-                  autoComplete='on'
-                  isInvalid={touched.streetHouseNo && errors.streetHouseNo}
-                  {...getFieldProps('streetHouseNo')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.streetHouseNo}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
-                controlId='settings-city-input'
-              >
-                <Form.Label>Město/Obec</Form.Label>
-                <Form.Control
-                  type='text'
-                  autoComplete='on'
-                  isInvalid={touched.city && errors.city}
-                  {...getFieldProps('city')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.city}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
-                controlId='settings-postcode-input'
-              >
-                <Form.Label>PSČ</Form.Label>
-                <Form.Control
-                  type='text'
-                  autoComplete='on'
-                  isInvalid={touched.postcode && errors.postcode}
-                  {...getFieldProps('postcode')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.postcode}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                className='d-flex justify-content-center justify-content-lg-start align-items-center'
-                controlId='settings-address-button'
-              >
-                <Button type='submit' variant='outline-primary'>
-                  Potvrdit
-                </Button>
-              </Form.Group>
-            </Form.Row>
-          </Form>
-        )}
-      </Formik>
-      <FirebaseAlert show={alert.show} msg={alert.msg} />
+      <Row xs={1} lg={2}>
+        <Col className='p-3'>
+          <UserForm />
+        </Col>
+        <Col className={`px-3 pt-3 pb-0 pb-lg-3 ${styles.addressForm}`}>
+          <AddressForm />
+        </Col>
+      </Row>
     </AccountLayout>
   );
 }
