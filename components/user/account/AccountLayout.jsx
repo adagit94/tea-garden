@@ -14,24 +14,46 @@ export default function AccountLayout({ activeItem, children }) {
   const userState = useContext(UserStateContext);
 
   const uid = userState.firebase?.uid;
+  const displayName = userState.firebase?.displayName;
 
   return (
     <>
       <Row className='p-3'>
-        <Col className={`p-3 ${styles.accountNavCol}`} xs={12} lg={2}>
-          <Nav as='nav' className='flex-lg-column' variant='pills' activeKey={activeItem}>
+        <Col
+          className={`d-flex flex-lg-column justify-content-between p-3 ${styles.accountNavCol}`}
+          xs={12}
+          lg={2}
+        >
+          <Nav
+            as='nav'
+            className='flex-lg-column'
+            variant='pills'
+            activeKey={activeItem}
+          >
             <Link href='/[uid]/nastaveni' as={`/${uid}/nastaveni`} passHref>
-              <Nav.Link className='border-bottom' eventKey='settings'>Nastavení</Nav.Link>
+              <Nav.Link className='border-bottom' eventKey='settings'>
+                Nastavení
+              </Nav.Link>
             </Link>
             <Link href='/[uid]/objednavky' as={`/${uid}/objednavky`} passHref>
               <Nav.Link eventKey='orders'>Objednávky</Nav.Link>
             </Link>
           </Nav>
-          <Button onClick={logout} variant='outline-secondary'>
-            <img src='/icons/log-out.svg' alt='odhlásit' />
-          </Button>
+          <div className='text-center'>
+            <Button
+              className='text-primary'
+              onClick={() => {
+                logout('/');
+              }}
+              variant='outline-secondary'
+            >
+              {displayName} <img src='/icons/log-out.svg' alt='odhlásit' />
+            </Button>
+          </div>
         </Col>
-        <Col xs={12} lg={10}>{children}</Col>
+        <Col xs={12} lg={10}>
+          {children}
+        </Col>
       </Row>
     </>
   );

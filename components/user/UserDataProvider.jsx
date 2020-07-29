@@ -8,7 +8,7 @@ const inits = {
   firebase: undefined,
   isAuthenticated: false,
   loading: false,
-  address: undefined,
+  addresses: undefined,
   orders: undefined,
   shoppingCart: {},
 };
@@ -17,6 +17,7 @@ function reducer(state, action) {
   switch (action.type) {
     case 'initUser':
       return {
+        ...state,
         firebase: action.payload,
         isAuthenticated: true,
         loading: false,
@@ -26,6 +27,12 @@ function reducer(state, action) {
       return {
         ...inits,
         shoppingCart: state.shoppingCart,
+      };
+
+    case 'syncUser':
+      return {
+        ...state,
+        ...action.payload,
       };
 
     case 'setLoading':
@@ -45,7 +52,6 @@ export const UserDispatchContext = createContext();
 export default function UserDataProvider({ children }) {
   const [userState, userDispatch] = useReducer(reducer, inits);
 
-  
   useEffect(() => {
     function initUser(user) {
       userDispatch({ type: 'initUser', payload: user });
@@ -55,13 +61,21 @@ export default function UserDataProvider({ children }) {
       userDispatch({ type: 'clearUser' });
     }
 
+    function syncUser(doc) {
+      userDispatch({ type: 'syncUser', payload: doc });
+    }
+
     if (window.localStorage.getItem('userLoading') === 'true') {
       userDispatch({ type: 'setLoading', value: true });
     }
 
     initFirebase();
-    initAuthObserver(initUser, clearUser);
+    initAuthObserver(initUser, clearUser, syncUser);
   }, []);
+
+  useEffect(() => {
+    console.log(userState);
+  });
 
   return (
     <UserStateContext.Provider value={userState}>

@@ -5,12 +5,16 @@ import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import { updateUser } from '../../../../firebase/auth';
 import { useFirebaseAlert } from 'custom-hooks/error-handling';
 import { FirebaseAlert } from 'components/ui/Alerts';
 import { UserStateContext } from 'components/user/UserDataProvider';
 
 const UserSchema = Yup.object({
-  name: Yup.string().matches(/\s+/, 'Jméno/a musí být oddělené/á mezerou.'),
+  name: Yup.string().matches(
+    /([a-zA-Z]\s[a-zA-Z])+/,
+    'Jméno/a musí být oddělené/á mezerou.'
+  ),
   email: Yup.string().email('Zadejte e-mailovou adresu ve správném formátu.'),
   password: Yup.string()
     .min(8, ({ min }) => `Heslo musí být minimálně ${min} znaků dlouhé.`)
@@ -28,14 +32,21 @@ export default function UserForm() {
 
   return (
     <>
+      <h2 className='text-center text-lg-left'>Osobní údaje</h2>
       <Formik
         initialValues={{ name: '', email: '', password: '' }}
         validationSchema={UserSchema}
         onSubmit={values => {
-          //loginEmail(values.email, values.password, setFirebaseErr);
+          updateUser(
+            firebase,
+            values.name,
+            values.email,
+            values.password,
+            setAlert
+          );
         }}
       >
-        {({ handleSubmit, getFieldProps, touched, errors }) => (
+        {({ handleSubmit, getFieldProps, touched, values, errors }) => (
           <Form onSubmit={handleSubmit} noValidate>
             <Form.Row>
               <Form.Group
@@ -66,7 +77,7 @@ export default function UserForm() {
                   type='email'
                   autoComplete='email'
                   isInvalid={touched.email && errors.email}
-                    {...getFieldProps('email')}
+                  {...getFieldProps('email')}
                 />
                 <Form.Control.Feedback type='invalid'>
                   {errors.email}
@@ -74,22 +85,22 @@ export default function UserForm() {
               </Form.Group>
             </Form.Row>
             <Form.Row>
-            <Form.Group
-                  as={Col}
-                  className='d-flex flex-column align-items-center align-items-lg-start'
-                  controlId='settings-password-input'
-                >
-                  <Form.Label>Heslo</Form.Label>
-                  <Form.Control
-                    type='password'
-                    autoComplete='new-password'
-                    isInvalid={touched.password && errors.password}
-                    {...getFieldProps('password')}
-                  />
-                  <Form.Control.Feedback type='invalid'>
-                    {errors.password}
-                  </Form.Control.Feedback>
-                </Form.Group>
+              <Form.Group
+                as={Col}
+                className='d-flex flex-column align-items-center align-items-lg-start'
+                controlId='settings-password-input'
+              >
+                <Form.Label>Heslo</Form.Label>
+                <Form.Control
+                  type='password'
+                  autoComplete='new-password'
+                  isInvalid={touched.password && errors.password}
+                  {...getFieldProps('password')}
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.password}
+                </Form.Control.Feedback>
+              </Form.Group>
             </Form.Row>
             <Form.Row>
               <Form.Group

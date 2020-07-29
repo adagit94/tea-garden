@@ -31,6 +31,7 @@ export default function AddressForm() {
 
   return (
     <>
+      <h2 className='text-center text-lg-left'>Fakturační adresa</h2>
       <Formik
         initialValues={{ streetHouseNo: '', city: '', postCode: '' }}
         validationSchema={AddressSchema}
