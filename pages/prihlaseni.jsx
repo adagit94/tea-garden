@@ -1,4 +1,4 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React, { useEffect, useContext } from 'react';
 import Row from 'react-bootstrap/Row';
@@ -24,6 +24,7 @@ const LogInSchema = Yup.object({
 });
 
 export default function LogIn() {
+  const router = useRouter();
   const [alert, setAlert] = useFirebaseAlert();
   const userState = useContext(UserStateContext);
 
@@ -31,7 +32,7 @@ export default function LogIn() {
 
   useEffect(() => {
     if (isAuthenticated) {
-      Router.push('/[uid]/nastaveni', `/${firebase.uid}/nastaveni`);
+      router.push('/[uid]/nastaveni', `/${firebase.uid}/nastaveni`);
     }
   });
 
@@ -39,7 +40,7 @@ export default function LogIn() {
 
   return (
     <Row className='p-3' xs={1} lg={2}>
-      <Col className='px-3 pb-3 py-lg-3 pl-lg-0 pr-lg-3'>
+      <Col className='p-0 pb-3 pb-lg-0 pr-lg-3'>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={LogInSchema}
@@ -48,13 +49,13 @@ export default function LogIn() {
           }}
         >
           {({ handleSubmit, getFieldProps, touched, errors }) => (
-            <Form onSubmit={handleSubmit} noValidate>
+            <Form
+              className='text-center text-lg-left'
+              onSubmit={handleSubmit}
+              noValidate
+            >
               <Form.Row>
-                <Form.Group
-                  as={Col}
-                  className='d-flex flex-column align-items-center align-items-lg-start'
-                  controlId='login-email-input'
-                >
+                <Form.Group as={Col} controlId='login-email-input'>
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type='email'
@@ -68,11 +69,7 @@ export default function LogIn() {
                 </Form.Group>
               </Form.Row>
               <Form.Row>
-                <Form.Group
-                  as={Col}
-                  className='d-flex flex-column align-items-center align-items-lg-start'
-                  controlId='login-password-input'
-                >
+                <Form.Group as={Col} controlId='login-password-input'>
                   <Form.Label>Heslo</Form.Label>
                   <Form.Control
                     type='password'
@@ -86,18 +83,14 @@ export default function LogIn() {
                 </Form.Group>
               </Form.Row>
               <Form.Row>
-                <Form.Group
-                  as={Col}
-                  className='m-0 d-flex justify-content-center justify-content-lg-start align-items-center'
-                  controlId='login-button'
-                >
+                <Form.Group as={Col} className='m-0 d-flex justify-content-center justify-content-lg-start align-items-end' controlId='login-button'>
                   <Button type='submit' variant='outline-primary'>
                     Přihlásit
                   </Button>
                 </Form.Group>
                 <Form.Group
                   as={Col}
-                  className='m-0 d-flex justify-content-center justify-content-lg-end'
+                  className='m-0 text-left d-flex justify-content-center justify-content-lg-end'
                 >
                   <div className='d-flex flex-column'>
                     <Link href='/registrace'>
@@ -112,16 +105,20 @@ export default function LogIn() {
             </Form>
           )}
         </Formik>
-        <FirebaseAlert show={alert.show} msg={alert.msg} />
+        <FirebaseAlert
+          variant={alert.variant}
+          show={alert.show}
+          msg={alert.msg}
+        />
       </Col>
       <Col
-        className={`px-3 pt-3 py-lg-3 pr-lg-0 pl-lg-3 d-flex flex-column justify-content-center align-items-center align-items-lg-start ${styles.authProviders}`}
+        className={`p-0 pt-3 pt-lg-0 pl-lg-3 d-flex flex-column justify-content-center align-items-center align-items-lg-start ${styles.authProviders}`}
       >
         <button
           onClick={() => {
             loginProvider('fb');
           }}
-          className={`border-0 rounded p-2 mb-1 text-light text-xs-center text-lg-left w-50 ${styles.authProviderFacebook}`}
+          className={`border-0 rounded p-2 mb-1 text-light text-center text-lg-left w-50 ${styles.authProviderFacebook}`}
           type='button'
         >
           <img src='/icons/facebook.svg' alt='facebook účet' /> Příhlásit
@@ -131,7 +128,7 @@ export default function LogIn() {
           onClick={() => {
             loginProvider('google');
           }}
-          className={`border-0 rounded p-2 mt-1 text-light text-xs-center text-lg-left w-50 ${styles.authProviderGoogle}`}
+          className={`border-0 rounded p-2 mt-1 text-light text-center text-lg-left w-50 ${styles.authProviderGoogle}`}
           type='button'
         >
           <img src='/icons/facebook.svg' alt='facebook účet' /> Příhlásit Google

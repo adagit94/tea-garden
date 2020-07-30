@@ -13,7 +13,7 @@ import { UserStateContext } from 'components/user/UserDataProvider';
 const UserSchema = Yup.object({
   name: Yup.string().matches(
     /([a-zA-Z]\s[a-zA-Z])+/,
-    'Jméno/a musí být oddělené/á mezerou.'
+    'Jména musí být oddělená mezerou.'
   ),
   email: Yup.string().email('Zadejte e-mailovou adresu ve správném formátu.'),
   password: Yup.string()
@@ -34,26 +34,24 @@ export default function UserForm() {
     <>
       <h2 className='text-center text-lg-left'>Osobní údaje</h2>
       <Formik
-        initialValues={{ name: '', email: '', password: '' }}
+        initialValues={{
+          name: firebase.displayName || '',
+          email: firebase.email,
+          password: '',
+        }}
         validationSchema={UserSchema}
         onSubmit={values => {
-          updateUser(
-            firebase,
-            values.name,
-            values.email,
-            values.password,
-            setAlert
-          );
+          updateUser(firebase, values, setAlert);
         }}
       >
-        {({ handleSubmit, getFieldProps, touched, values, errors }) => (
-          <Form onSubmit={handleSubmit} noValidate>
+        {({ handleSubmit, getFieldProps, touched, errors }) => (
+          <Form
+            className='text-center text-lg-left'
+            onSubmit={handleSubmit}
+            noValidate
+          >
             <Form.Row>
-              <Form.Group
-                as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
-                controlId='settings-name-input'
-              >
+              <Form.Group as={Col} controlId='settings-name-input'>
                 <Form.Label>Jméno</Form.Label>
                 <Form.Control
                   type='text'
@@ -67,11 +65,7 @@ export default function UserForm() {
               </Form.Group>
             </Form.Row>
             <Form.Row>
-              <Form.Group
-                as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
-                controlId='settings-email-input'
-              >
+              <Form.Group as={Col} controlId='settings-email-input'>
                 <Form.Label>Email</Form.Label>
                 <Form.Control
                   type='email'
@@ -85,11 +79,7 @@ export default function UserForm() {
               </Form.Group>
             </Form.Row>
             <Form.Row>
-              <Form.Group
-                as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
-                controlId='settings-password-input'
-              >
+              <Form.Group as={Col} controlId='settings-password-input'>
                 <Form.Label>Heslo</Form.Label>
                 <Form.Control
                   type='password'
@@ -105,7 +95,7 @@ export default function UserForm() {
             <Form.Row>
               <Form.Group
                 as={Col}
-                className='m-0 d-flex justify-content-center justify-content-lg-start align-items-center'
+                className='m-0'
                 controlId='settings-user-button'
               >
                 <Button type='submit' variant='outline-primary'>
@@ -116,7 +106,11 @@ export default function UserForm() {
           </Form>
         )}
       </Formik>
-      <FirebaseAlert show={alert.show} msg={alert.msg} />
+      <FirebaseAlert
+        variant={alert.variant}
+        show={alert.show}
+        msg={alert.msg}
+      />
     </>
   );
 }

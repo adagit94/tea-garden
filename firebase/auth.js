@@ -3,16 +3,28 @@ import * as firebase from 'firebase/app';
 import 'firebase/firebase-auth';
 import 'firebase/firestore';
 
-import { initUserListener } from './db';
+import {
+  initFirestoreListeners,
+  detachAddressListener,
+  detachOrdersListener,
+} from './db';
 
-export function initAuthObserver(initUser, clearUser, syncUser) {
+export function initAuthObserver(initUser, clearUser, syncData) {
   firebase.auth().onAuthStateChanged(
     user => {
       if (user) {
+        initFirestoreListeners(user, syncData);
         initUser(user);
-        initUserListener(user, syncUser);
       } else {
         window.localStorage.removeItem('userLoading');
+
+        if (typeof detachAddressListener === 'function') {
+          detachAddressListener();
+        }
+
+        if (typeof detachOrdersListener === 'function') {
+          detachOrdersListener();
+        }
 
         clearUser();
       }
@@ -53,7 +65,7 @@ export async function loginEmail(email, password, setAlert) {
           break;
       }
 
-      setAlert({ show: true, msg });
+      setAlert({ variant: 'danger', show: true, msg });
     });
 }
 
@@ -93,6 +105,8 @@ export async function logout(route) {
     .auth()
     .signOut()
     .then(() => {
+      window.localStorage.removeItem('userLoading');
+
       Router.push(route);
     })
     .catch(err => {
@@ -113,6 +127,7 @@ export async function createUser(email, password, setAlert) {
       switch (err.code) {
         case 'auth/email-already-in-use':
           setAlert({
+            variant: 'danger',
             show: true,
             msg: 'E-mailová adresa je již registrována.',
           });
@@ -131,24 +146,26 @@ export async function resetPassword(email) {
     });
 }
 
-export async function updateUser(user, name, email, password, setAlert) {
-  if (name === '' && email === '' && password === '') {
-    setAlert({ show: true, msg: 'Alespoň jedno pole musí být vyplněné.' });
-    return;
-  }
+export async function updateUser(user, values, setAlert) {
+  const { name, email, password } = values;
 
-  if (email !== '') {
+  let updated;
+
+  if (email !== '' && email !== user.email) {
     let error;
 
     await user
       .updateEmail(email)
-      .then()
+      .then(() => {
+        updated = true;
+      })
       .catch(err => {
         console.error(err);
 
         switch (err.code) {
           case 'auth/email-already-in-use':
             setAlert({
+              variant: 'danger',
               show: true,
               msg: 'E-mailová adresa je již registrována.',
             });
@@ -166,22 +183,46 @@ export async function updateUser(user, name, email, password, setAlert) {
   }
 
   if (password !== '') {
-    await user.updatePassword(password).catch(err => {
-      console.error(err);
+    await user
+      .updatePassword(password)
+      .then(() => {
+        updated = true;
+      })
+      .catch(err => {
+        console.error(err);
 
-      switch (err.code) {
-        case 'auth/requires-recent-login':
-          logout('/prihlaseni');
-          break;
-      }
-    });
+        switch (err.code) {
+          case 'auth/requires-recent-login':
+            logout('/prihlaseni');
+            break;
+        }
+      });
   }
 
-  if (name !== '') {
-    await user.updateProfile({ displayName: name }).catch(err => {
-      console.error(err);
-    });
+  if (name !== '' && name !== user.displayName) {
+    await user
+      .updateProfile({ displayName: name })
+      .then(() => {
+        updated = true;
+
+        document.querySelector('#account-name').innerHTML = name;
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
-  Router.reload();
+  if (updated) {
+    setAlert({
+      variant: 'success',
+      show: true,
+      msg: 'Změna proběhla úspěšně.',
+    });
+  } else {
+    setAlert({
+      variant: 'danger',
+      show: true,
+      msg: 'Nebyla provedena zádná změna.',
+    });
+  }
 }

@@ -1,4 +1,3 @@
-import Router from 'next/router';
 import React, { useReducer, useEffect, createContext } from 'react';
 
 import { initFirebase } from 'firebase/init-firebase';
@@ -8,7 +7,7 @@ const inits = {
   firebase: undefined,
   isAuthenticated: false,
   loading: false,
-  addresses: undefined,
+  address: undefined,
   orders: undefined,
   shoppingCart: {},
 };
@@ -29,10 +28,10 @@ function reducer(state, action) {
         shoppingCart: state.shoppingCart,
       };
 
-    case 'syncUser':
+    case 'syncData':
       return {
         ...state,
-        ...action.payload,
+        [action.collection]: action.payload,
       };
 
     case 'setLoading':
@@ -61,8 +60,8 @@ export default function UserDataProvider({ children }) {
       userDispatch({ type: 'clearUser' });
     }
 
-    function syncUser(doc) {
-      userDispatch({ type: 'syncUser', payload: doc });
+    function syncData(collection, data) {
+      userDispatch({ type: 'syncData', collection,  payload: data });
     }
 
     if (window.localStorage.getItem('userLoading') === 'true') {
@@ -70,7 +69,7 @@ export default function UserDataProvider({ children }) {
     }
 
     initFirebase();
-    initAuthObserver(initUser, clearUser, syncUser);
+    initAuthObserver(initUser, clearUser, syncData);
   }, []);
 
   useEffect(() => {

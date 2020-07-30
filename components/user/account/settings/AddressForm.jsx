@@ -5,9 +5,10 @@ import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
+import { updateAddress } from '../../../../firebase/db';
 import { useFirebaseAlert } from 'custom-hooks/error-handling';
-import { FirebaseAlert } from 'components/ui/Alerts';
 import { UserStateContext } from 'components/user/UserDataProvider';
+import { FirebaseAlert } from 'components/ui/Alerts';
 
 const AddressSchema = Yup.object({
   streetHouseNo: Yup.string()
@@ -20,6 +21,7 @@ const AddressSchema = Yup.object({
     .required('Zadejte název města nebo obce.'),
   postCode: Yup.string()
     .matches(/([0-9]{5})|([0-9]{3}\s[0-9]{2})/, 'Zadejte PSČ.')
+    .matches(/[^a-zA-Z]/, 'Zadejte PSČ.')
     .required('Zadejte PSČ.'),
 });
 
@@ -27,24 +29,29 @@ export default function AddressForm() {
   const [alert, setAlert] = useFirebaseAlert();
   const userState = useContext(UserStateContext);
 
-  const { firebase } = userState;
+  const { firebase, address } = userState;
 
   return (
     <>
       <h2 className='text-center text-lg-left'>Fakturační adresa</h2>
       <Formik
-        initialValues={{ streetHouseNo: '', city: '', postCode: '' }}
+        initialValues={{
+          streetHouseNo: address.invoicing.streetHouseNo,
+          city: address.invoicing.city,
+          postCode: address.invoicing.postCode,
+          country: address.invoicing.country,
+        }}
         validationSchema={AddressSchema}
         onSubmit={values => {
-          //loginEmail(values.email, values.password, setFirebaseErr);
+          console.log(values);
+          updateAddress(firebase.uid, values, address.invoicing, setAlert);
         }}
       >
         {({ handleSubmit, getFieldProps, touched, errors }) => (
-          <Form onSubmit={handleSubmit} noValidate>
+          <Form className='text-center text-lg-left' onSubmit={handleSubmit} noValidate>
             <Form.Row>
               <Form.Group
                 as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
                 controlId='settings-streethouseno-input'
               >
                 <Form.Label>Ulice a č.p.</Form.Label>
@@ -62,7 +69,6 @@ export default function AddressForm() {
             <Form.Row>
               <Form.Group
                 as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
                 controlId='settings-city-input'
               >
                 <Form.Label>Město/Obec</Form.Label>
@@ -80,7 +86,6 @@ export default function AddressForm() {
             <Form.Row>
               <Form.Group
                 as={Col}
-                className='d-flex flex-column align-items-center align-items-lg-start'
                 controlId='settings-postcode-input'
               >
                 <Form.Label>PSČ</Form.Label>
@@ -98,7 +103,23 @@ export default function AddressForm() {
             <Form.Row>
               <Form.Group
                 as={Col}
-                className='m-0 d-flex justify-content-center justify-content-lg-start align-items-center'
+                controlId='settings-country-select'
+              >
+                <Form.Label>Země</Form.Label>
+                <Form.Control
+                  as='select'
+                  custom
+                  {...getFieldProps('country')}
+                >
+                  <option>Česká republika</option>
+                  <option>Slovensko</option>
+                </Form.Control>
+              </Form.Group>
+            </Form.Row>
+            <Form.Row>
+              <Form.Group
+                as={Col}
+                className='m-0'
                 controlId='settings-address-button'
               >
                 <Button type='submit' variant='outline-primary'>
@@ -109,7 +130,11 @@ export default function AddressForm() {
           </Form>
         )}
       </Formik>
-      <FirebaseAlert show={alert.show} msg={alert.msg} />
+      <FirebaseAlert
+        variant={alert.variant}
+        show={alert.show}
+        msg={alert.msg}
+      />
     </>
   );
 }

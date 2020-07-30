@@ -12,10 +12,10 @@ export default function Settings() {
   return (
     <AccountLayout activeItem='settings'>
       <Row xs={1} lg={2}>
-        <Col className='p-3'>
+        <Col className='p-0 py-3 py-lg-0 px-lg-3'>
           <UserForm />
         </Col>
-        <Col className={`px-3 pt-3 pb-0 pb-lg-3 ${styles.addressForm}`}>
+        <Col className={`p-0 pt-3 pt-lg-0 pl-lg-3 ${styles.addressForm}`}>
           <AddressForm />
         </Col>
       </Row>

@@ -1,4 +1,4 @@
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import React, { useEffect, useContext } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -27,24 +27,26 @@ const RegistrationSchema = Yup.object({
 });
 
 export default function Registration() {
+  const router = useRouter();
   const [alert, setAlert] = useFirebaseAlert();
   const userState = useContext(UserStateContext);
 
   const { firebase, isAuthenticated, loading } = userState;
 
-  useEffect(() => {
-    //Router.prefetch('/[uid]/nastaveni'); Zmerit rozdil rychlosti nacteni
-  }, []);
+  /*useEffect(() => {
+    Router.prefetch('/[uid]/nastaveni'); Zmerit rozdil rychlosti nacteni
+  }, []);*/
 
   useEffect(() => {
-    if (isAuthenticated) Router.push('/[uid]/nastaveni', `/${firebase.uid}/nastaveni`);
+    if (isAuthenticated)
+      router.push('/[uid]/nastaveni', `/${firebase.uid}/nastaveni`);
   });
 
   if (loading || isAuthenticated) return <PageLoading />;
 
   return (
     <Row className='p-3' lg={2}>
-      <Col className='px-3 pb-3 py-lg-3 pl-lg-0 pr-lg-3'>
+      <Col>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={RegistrationSchema}
@@ -53,13 +55,13 @@ export default function Registration() {
           }}
         >
           {({ handleSubmit, getFieldProps, touched, errors }) => (
-            <Form onSubmit={handleSubmit} noValidate>
+            <Form
+              className='text-center text-lg-left'
+              onSubmit={handleSubmit}
+              noValidate
+            >
               <Form.Row>
-                <Form.Group
-                  as={Col}
-                  className='d-flex flex-column align-items-center align-items-lg-start'
-                  controlId='registration-email-input'
-                >
+                <Form.Group as={Col} controlId='registration-email-input'>
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     type='email'
@@ -74,11 +76,7 @@ export default function Registration() {
                 </Form.Group>
               </Form.Row>
               <Form.Row>
-                <Form.Group
-                  as={Col}
-                  className='d-flex flex-column align-items-center align-items-lg-start'
-                  controlId='registration-password-input'
-                >
+                <Form.Group as={Col} controlId='registration-password-input'>
                   <Form.Label>Heslo</Form.Label>
                   <Form.Control
                     type='password'
@@ -95,10 +93,13 @@ export default function Registration() {
               <Form.Row>
                 <Form.Group
                   as={Col}
-                  className='m-0 d-flex justify-content-center justify-content-lg-start align-items-center'
+                  className='m-0'
                   controlId='registration-button'
                 >
-                  <Button type='submit' variant='outline-primary'>
+                  <Button
+                    type='submit'
+                    variant='outline-primary'
+                  >
                     Registrovat
                   </Button>
                 </Form.Group>
@@ -106,7 +107,11 @@ export default function Registration() {
             </Form>
           )}
         </Formik>
-        <FirebaseAlert show={alert.show} msg={alert.msg} />
+        <FirebaseAlert
+          variant={alert.variant}
+          show={alert.show}
+          msg={alert.msg}
+        />
       </Col>
       <Col className='d-none d-lg-block' />
     </Row>
