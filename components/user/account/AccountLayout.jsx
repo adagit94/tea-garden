@@ -55,7 +55,7 @@ export default function AccountLayout({ activeItem, children }) {
               as={`/${firebase.uid}/nastaveni`}
               passHref
             >
-              <Nav.Link className='border-bottom' eventKey='settings'>
+              <Nav.Link eventKey='settings'>
                 Nastavení
               </Nav.Link>
             </Link>

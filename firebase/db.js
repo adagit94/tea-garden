@@ -1,6 +1,8 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
+import { routeTranslator } from './helpers';
+
 export let detachAddressListener;
 export let detachOrdersListener;
 
@@ -62,10 +64,18 @@ export async function initFirestoreListeners(user, syncData) {
   });
 
   detachOrdersListener = ordersRef.onSnapshot(data => {
+    const dateFormat = new Intl.DateTimeFormat('cs-CZ');
+
     let orders = {};
 
     data.docs.forEach(doc => {
-      orders[doc.id] = doc.data();
+      let dataObj = doc.data();
+
+      if (dataObj.date) {
+        dataObj.date = dateFormat.format(dataObj.date.toDate());
+      }
+
+      orders[doc.id] = dataObj;
     });
 
     syncData('orders', orders);
@@ -106,4 +116,35 @@ export async function updateAddress(uid, formValues, stateValues, setAlert) {
         console.error(err);
       });
   }
+}
+
+/*ordersRef
+          .doc()
+          .set({
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'Založená',
+            price: '1500 Kč',
+          })
+          .catch(err => {
+            console.error(err);
+          });*/
+
+export async function getProducts(params) {
+  const translatedParams = routeTranslator(params);
+
+  const productsRef = firebase
+    .firestore()
+    .collection(translatedParams.products)
+    .doc(translatedParams.category);
+
+  if ('subcategory' in translatedParams) productsRef.collection(translatedParams.subcategory);
+
+  const products = await productsRef
+    .get()
+    .then(docs => docs.map(doc => doc.data()))
+    .catch(err => {
+      console.error(err);
+    });
+
+  return products;
 }

@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Spinner from 'react-bootstrap/Spinner';
+import Nav from 'react-bootstrap/Nav';
 
 import { UserStateContext } from 'components/user/UserDataProvider';
 
@@ -25,9 +26,9 @@ function Loading() {
 function User({ uid }) {
   return (
     <Link href='/[uid]/nastaveni' as={`/${uid}/nastaveni`} passHref>
-      <Button as='a' variant='outline-light'>
-        <img src='/icons/user.svg' alt='uživatel' />
-      </Button>
+      <Nav.Link className='p-2'>
+        <img className='p-1' src='/icons/user.svg' alt='uživatel' />
+      </Nav.Link>
     </Link>
   );
 }
@@ -35,9 +36,9 @@ function User({ uid }) {
 function LogIn() {
   return (
     <Link href='/prihlaseni' passHref>
-      <Button as='a' variant='outline-light'>
-        <img src='/icons/log-in.svg' alt='přihlásit' />
-      </Button>
+      <Nav.Link className='p-2'>
+        <img className='p-1' src='/icons/log-in.svg' alt='přihlásit' />
+      </Nav.Link>
     </Link>
   );
 }
@@ -48,20 +49,25 @@ export default function Account() {
   const { firebase, isAuthenticated, loading } = userState;
 
   return (
-    <div className='d-flex'>
+    <Nav className='flex-row'>
       {loading && <Loading />}
 
       {!loading && isAuthenticated && <User uid={firebase.uid} />}
 
       {!loading && !isAuthenticated && <LogIn />}
       <Dropdown>
-        <Dropdown.Toggle variant='outline-light' id='dropdown-shopping-cart'>
-          <img src='/icons/shopping-cart.svg' alt='nákupní košík' />
+        <Dropdown.Toggle
+          as={Nav.Link}
+          className='p-2'
+          id='dropdown-shopping-cart'
+        >
+          <img className='p-1' src='/icons/shopping-cart.svg' alt='nákupní košík' />
         </Dropdown.Toggle>
         <Dropdown.Menu>
-          <Dropdown.Item></Dropdown.Item>
+          <Dropdown.Item>a</Dropdown.Item>
+          <Dropdown.Item>b</Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-    </div>
+    </Nav>
   );
 }

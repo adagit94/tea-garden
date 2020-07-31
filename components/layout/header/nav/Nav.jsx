@@ -9,7 +9,7 @@ import Account from './account/Account';
 
 export default function Header() {
   return (
-    <Navbar className='p-0' bg='light' expand='lg'>
+    <Navbar className='p-0' bg='light' expand='lg' collapseOnSelect>
       <Navbar.Brand>
         <Link href='/'>
           <a>HP</a>
@@ -20,13 +20,8 @@ export default function Header() {
         <div className='order-lg-1 flex-grow-1 d-flex justify-content-between'>
           <Form inline>
             <Form.Group controlId='nav-search-field'>
-              <Form.Label srOnly>
-                Vyhledávač
-              </Form.Label>
-              <Form.Control
-                type='search'
-                placeholder='Hledat'
-              />
+              <Form.Label srOnly>Vyhledávač</Form.Label>
+              <Form.Control type='search' placeholder='Hledat' />
             </Form.Group>
           </Form>
           <Account />
@@ -38,12 +33,20 @@ export default function Header() {
               title='Pu erh'
               id='dropdown-puerh'
             >
-              <Link href='/pu-erh/sheng' passHref>
+              <Link
+                href='/[products]/[category]/[subcategory]'
+                as='/caje/pu-erh/sheng'
+                passHref
+              >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
                   Sheng
                 </NavDropdown.Item>
               </Link>
-              <Link href='/pu-erh/shu' passHref>
+              <Link
+                href='/[products]/[category]/[subcategory]'
+                as='/caje/pu-erh/shu'
+                passHref
+              >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
                   Shu
                 </NavDropdown.Item>
@@ -54,24 +57,40 @@ export default function Header() {
               className='d-flex flex-column align-items-center'
               id='dropdown-oolong'
             >
-              <Link href='/oolong/an-xi' passHref>
+              <Link
+                href='/[products]/[category]/[subcategory]'
+                as='/caje/oolong/an-xi'
+                passHref
+              >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
                   An Xi
                 </NavDropdown.Item>
               </Link>
-              <Link href='/oolong/feng-huang' passHref>
+              <Link
+                href='/[products]/[category]/[subcategory]'
+                as='/caje/oolong/feng-huang'
+                passHref
+              >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
                   Feng Huang
                 </NavDropdown.Item>
               </Link>
-              <Link href='/oolong/wu-yi' passHref>
+              <Link
+                href='/[products]/[category]/[subcategory]'
+                as='/caje/oolong/wu-yi'
+                passHref
+              >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
                   Wu Yi
                 </NavDropdown.Item>
               </Link>
-              <Link href='/oolong/taiwan' passHref>
+              <Link
+                href='/[products]/[category]/[subcategory]'
+                as='/caje/oolong/formosa'
+                passHref
+              >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
-                  Taiwan
+                  Formosa
                 </NavDropdown.Item>
               </Link>
             </NavDropdown>
