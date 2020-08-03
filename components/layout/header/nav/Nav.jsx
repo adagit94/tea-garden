@@ -9,7 +9,7 @@ import Account from './account/Account';
 
 export default function Header() {
   return (
-    <Navbar className='p-0' bg='light' expand='lg' collapseOnSelect>
+    <Navbar className='p-0 border-bottom border-primary' bg='secondary' expand='lg' collapseOnSelect>
       <Navbar.Brand>
         <Link href='/'>
           <a>HP</a>
@@ -29,13 +29,11 @@ export default function Header() {
         <div className='order-lg-0'>
           <Nav>
             <NavDropdown
-              className='d-flex flex-column align-items-center'
               title='Pu erh'
               id='dropdown-puerh'
             >
               <Link
-                href='/[products]/[category]/[subcategory]'
-                as='/caje/pu-erh/sheng'
+                href='/pu-erh/sheng'
                 passHref
               >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
@@ -43,8 +41,7 @@ export default function Header() {
                 </NavDropdown.Item>
               </Link>
               <Link
-                href='/[products]/[category]/[subcategory]'
-                as='/caje/pu-erh/shu'
+                href='/pu-erh/shu'
                 passHref
               >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
@@ -54,12 +51,11 @@ export default function Header() {
             </NavDropdown>
             <NavDropdown
               title='Oolong'
-              className='d-flex flex-column align-items-center'
+              className=''
               id='dropdown-oolong'
             >
               <Link
-                href='/[products]/[category]/[subcategory]'
-                as='/caje/oolong/an-xi'
+                href='/oolong/an-xi'
                 passHref
               >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
@@ -67,8 +63,7 @@ export default function Header() {
                 </NavDropdown.Item>
               </Link>
               <Link
-                href='/[products]/[category]/[subcategory]'
-                as='/caje/oolong/feng-huang'
+                href='/oolong/feng-huang'
                 passHref
               >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
@@ -76,8 +71,7 @@ export default function Header() {
                 </NavDropdown.Item>
               </Link>
               <Link
-                href='/[products]/[category]/[subcategory]'
-                as='/caje/oolong/wu-yi'
+                href='/oolong/wu-yi'
                 passHref
               >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
@@ -85,8 +79,7 @@ export default function Header() {
                 </NavDropdown.Item>
               </Link>
               <Link
-                href='/[products]/[category]/[subcategory]'
-                as='/caje/oolong/formosa'
+                href='/oolong/formosa'
                 passHref
               >
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>

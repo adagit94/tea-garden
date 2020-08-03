@@ -40,6 +40,33 @@ function reducer(state, action) {
         loading: action.value,
       };
 
+    case 'initCart':
+      return {
+        ...state,
+        shoppingCart: action.payload,
+      };
+
+    case 'updateCart':
+      return {
+        ...state,
+        shoppingCart: {
+          ...state.shoppingCart,
+          [action.id]: action.payload,
+        },
+      };
+
+    case 'updateCartItem':
+      return {
+        ...state,
+        shoppingCart: {
+          ...state.shoppingCart,
+          [action.id]: {
+            ...state.shoppingCart[action.id],
+            ...action.payload
+          },
+        },
+      };
+
     default:
       return state;
   }
@@ -52,6 +79,9 @@ export default function UserDataProvider({ children }) {
   const [userState, userDispatch] = useReducer(reducer, inits);
 
   useEffect(() => {
+    const userLoading = window.localStorage.getItem('userLoading');
+    const shoppingCartStr = window.localStorage.getItem('shoppingCart');
+    
     function initUser(user) {
       userDispatch({ type: 'initUser', payload: user });
     }
@@ -61,20 +91,25 @@ export default function UserDataProvider({ children }) {
     }
 
     function syncData(collection, data) {
-      userDispatch({ type: 'syncData', collection,  payload: data });
+      userDispatch({ type: 'syncData', collection, payload: data });
+    }
+    
+    if (userLoading) {
+      userDispatch({ type: 'setLoading', value: true });
     }
 
-    if (window.localStorage.getItem('userLoading') === 'true') {
-      userDispatch({ type: 'setLoading', value: true });
+    if (shoppingCartStr) {
+      const shoppingCartObj = JSON.parse(shoppingCartStr);
+
+      userDispatch({ type: 'initCart', payload: shoppingCartObj });
     }
 
     initFirebase();
     initAuthObserver(initUser, clearUser, syncData);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {
-    console.log(userState);
-  });
+  console.log(userState.shoppingCart);
 
   return (
     <UserStateContext.Provider value={userState}>

@@ -4,7 +4,7 @@ import UserDataProvider from '../components/user/UserDataProvider';
 import Layout from '../components/layout/Layout';
 
 import 'scss/app.scss';
-//abc
+
 export default function MyApp({ Component, pageProps }) {
   return (
     <UserDataProvider>

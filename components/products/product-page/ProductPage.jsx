@@ -1,43 +1,33 @@
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import CardDeck from 'react-bootstrap/CardDeck';
 
+import ProductCard from './product-card/ProductCard';
 import { getProducts } from 'firebase/db';
-import { PageLoading } from 'components/ui/Indicators';
-import { ProductCard } from './ProductCard';
 
-export default function ProductPage({ children }) {
-  const [products, setProducts] = useState({});
-  const router = useRouter();
+export default function ProductPage({ param }) {
+  const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
 
   useEffect(() => {
-    const nextPage = Object.getOwnPropertyNames(products).length + 1;
-    const productList = getProducts(router.query).then(
-      nextProducts => nextProducts
-    );
+    async function initPage() {
+      const next = await getProducts(param);
 
-    setProducts(current => ({
-      ...current,
-      [nextPage]: productList,
-    }));
+      setProducts(current => [...current, next]);
+    }
+
+    if (param && page > products.length) initPage();
   });
 
-  if (products.length === 0) return <PageLoading />;
-
   return (
-    <Row>
-      <Col className=''>
-        <CardDeck>
-          {products.map(product => {
-            return <ProductCard key={product.name} productData={product} />;
+    <>
+      <Row xs={1} sm={2} md={3}>
+        {products.length > 0 &&
+          products[page - 1].map(product => {
+            return <ProductCard key={product.name} {...product} />;
           })}
-        </CardDeck>
-        {/* pagination */}
-      </Col>
-    </Row>
+      </Row>
+      {/* pagination */}
+    </>
   );
 }
-//{children}

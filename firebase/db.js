@@ -1,7 +1,7 @@
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
-import { routeTranslator } from './helpers';
+import { collectionTranslator } from './helpers';
 
 export let detachAddressListener;
 export let detachOrdersListener;
@@ -129,19 +129,21 @@ export async function updateAddress(uid, formValues, stateValues, setAlert) {
             console.error(err);
           });*/
 
-export async function getProducts(params) {
-  const translatedParams = routeTranslator(params);
+export async function getProducts(param) {
+  const [category, subcategory] = param;
 
-  const productsRef = firebase
+  let products;
+  let productsRef = firebase
     .firestore()
-    .collection(translatedParams.products)
-    .doc(translatedParams.category);
+    .collection(collectionTranslator(category));
 
-  if ('subcategory' in translatedParams) productsRef.collection(translatedParams.subcategory);
+  if (subcategory) {
+    productsRef = productsRef.where('url.subcategory', '==', subcategory);
+  }
 
-  const products = await productsRef
+  products = await productsRef
     .get()
-    .then(docs => docs.map(doc => doc.data()))
+    .then(data => data.docs.map(doc => ({ id: doc.id, ...doc.data() })))
     .catch(err => {
       console.error(err);
     });
