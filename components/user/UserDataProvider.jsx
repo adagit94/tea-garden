@@ -9,6 +9,7 @@ const inits = {
   loading: false,
   address: undefined,
   orders: undefined,
+  products: [],
   shoppingCart: {},
 };
 
@@ -38,6 +39,12 @@ function reducer(state, action) {
       return {
         ...state,
         loading: action.value,
+      };
+
+    case 'setProducts':
+      return {
+        ...state,
+        products: action.payload,
       };
 
     case 'initCart':
@@ -109,7 +116,8 @@ export default function UserDataProvider({ children }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  console.log(userState.shoppingCart);
+//  console.log(userState.products, 'products');
+  //console.log(userState.shoppingCart, 'shoppingCart');
 
   return (
     <UserStateContext.Provider value={userState}>

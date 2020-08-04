@@ -9,7 +9,12 @@ import Account from './account/Account';
 
 export default function Header() {
   return (
-    <Navbar className='p-0 border-bottom border-primary' bg='secondary' expand='lg' collapseOnSelect>
+    <Navbar
+      className='border-bottom border-primary'
+      bg='secondary'
+      expand='lg'
+      collapseOnSelect
+    >
       <Navbar.Brand>
         <Link href='/'>
           <a>HP</a>
@@ -30,20 +35,15 @@ export default function Header() {
           <Nav>
             <NavDropdown
               title='Pu erh'
+              className='mx-auto text-center'
               id='dropdown-puerh'
             >
-              <Link
-                href='/pu-erh/sheng'
-                passHref
-              >
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
+              <Link href='/[...param]' as='/pu-erh/sheng' passHref>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
                   Sheng
                 </NavDropdown.Item>
               </Link>
-              <Link
-                href='/pu-erh/shu'
-                passHref
-              >
+              <Link href='/[...param]' as='/pu-erh/shu' passHref>
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
                   Shu
                 </NavDropdown.Item>
@@ -51,37 +51,25 @@ export default function Header() {
             </NavDropdown>
             <NavDropdown
               title='Oolong'
-              className=''
+              className='mx-auto text-center'
               id='dropdown-oolong'
             >
-              <Link
-                href='/oolong/an-xi'
-                passHref
-              >
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
+              <Link href='/[...param]' as='/oolong/an-xi' passHref>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
                   An Xi
                 </NavDropdown.Item>
               </Link>
-              <Link
-                href='/oolong/feng-huang'
-                passHref
-              >
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
+              <Link href='/[...param]' as='/oolong/feng-huang' passHref>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
                   Feng Huang
                 </NavDropdown.Item>
               </Link>
-              <Link
-                href='/oolong/wu-yi'
-                passHref
-              >
-                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start border-bottom border-primary'>
+              <Link href='/[...param]' as='/oolong/wu-yi' passHref>
+                <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
                   Wu Yi
                 </NavDropdown.Item>
               </Link>
-              <Link
-                href='/oolong/formosa'
-                passHref
-              >
+              <Link href='/[...param]' as='/oolong/formosa' passHref>
                 <NavDropdown.Item className='d-flex justify-content-center justify-content-lg-start'>
                   Formosa
                 </NavDropdown.Item>

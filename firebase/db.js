@@ -132,7 +132,7 @@ export async function updateAddress(uid, formValues, stateValues, setAlert) {
 export async function getProducts(param) {
   const [category, subcategory] = param;
 
-  let products;
+  let productsData;
   let productsRef = firebase
     .firestore()
     .collection(collectionTranslator(category));
@@ -141,12 +141,31 @@ export async function getProducts(param) {
     productsRef = productsRef.where('url.subcategory', '==', subcategory);
   }
 
-  products = await productsRef
+  productsData = await productsRef
     .get()
     .then(data => data.docs.map(doc => ({ id: doc.id, ...doc.data() })))
     .catch(err => {
       console.error(err);
     });
 
-  return products;
+  return productsData;
+}
+
+export async function getProduct(param) {
+  const [category, subcategory, product] = param;
+
+  let productData;
+  const productRef = firebase
+    .firestore()
+    .collection(collectionTranslator(category))
+    .where('url.product', '==', product);
+
+  productData = await productRef
+    .get()
+    .then(data => data.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0])
+    .catch(err => {
+      console.error(err);
+    });
+
+  return productData;
 }

@@ -1,9 +1,12 @@
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useState, useRef } from 'react';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
+import Overlay from 'react-bootstrap/Overlay';
+import Popover from 'react-bootstrap/Popover';
 
+import { saveProduct, updateProduct } from 'helpers/products';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
@@ -15,56 +18,101 @@ export default function ProductCard({
   describtion,
   images,
 }) {
+  const [btnPopover, setBtnPopover] = useState({
+    show: false,
+    target: null,
+  });
+
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
+  const btnContainerRef = useRef(null);
 
   const { shoppingCart } = userState;
-
   const packsWeight = Object.getOwnPropertyNames(packs);
 
   return (
     <Col className='py-3'>
       <Card>
         <Link
-          href={`/${url.category}/${url.subcategory}/${url.product}`}
+          href='/[...param]'
+          as={`/${url.category}/${url.subcategory}/${url.product}`}
           passHref
         >
-          <a>
+          <a className='flex-grow-1'>
             <Card.Img variant='top' src={images.main} />
             <Card.Body className='d-flex flex-column'>
               <Card.Title className='text-center'>{name}</Card.Title>
-              <Card.Text className='flex-grow-1'>{describtion}</Card.Text>
+              <Card.Text>{describtion}</Card.Text>
             </Card.Body>
           </a>
         </Link>
-        <Card.Body className='d-flex justify-content-center align-items-end'>
+        <Card.Body className='flex-grow-0'>
           <div className='w-100 d-flex flex-column flex-lg-row justify-content-lg-around align-items-center'>
             <div>
               {packsWeight.length > 1 && 'Od'} {packs[packsWeight[0]]} Kč za{' '}
               {packsWeight[0]}g
             </div>
-            <div>
+            <div className='py-2 py-lg-0' ref={btnContainerRef}>
+              <Overlay
+                className='bg-success'
+                show={btnPopover.show}
+                target={btnPopover.target}
+                container={btnContainerRef.current}
+              >
+                <Popover id={`card-btn-popover-${id}`}>
+                  <Popover.Content className='bg-success text-secondary'>
+                    Zboží bylo přidáno do košíku.
+                  </Popover.Content>
+                </Popover>
+              </Overlay>
               <Button
-                onClick={() => {
-                  const cartItem = {
-                    name,
-                    image: images.main,
-                    category: url.category,
-                    pack: [packsWeight[0], 1],
-                    price: packs[packsWeight[0]],
-                  };
+                onClick={e => {
+                  if (id in shoppingCart) {
+                    const [weight, amount] = shoppingCart[id].pack;
 
-                  window.localStorage.setItem(
-                    'shoppingCart',
-                    JSON.stringify({ ...shoppingCart, [id]: cartItem })
-                  );
+                    updateProduct(
+                      'updateAmount',
+                      id,
+                      shoppingCart,
+                      userDispatch,
+                      {
+                        pack: [weight, amount + 1],
+                      }
+                    );
+                  } else {
+                    saveProduct(id, shoppingCart, userDispatch, {
+                      name,
+                      url,
+                      image: images.main,
+                      pack: [packsWeight[0], 1],
+                      price: packs[packsWeight[0]],
+                    });
+                  }
 
-                  userDispatch({ type: 'updateCart', id, payload: cartItem });
+                  setBtnPopover({
+                    show: true,
+                    target: e.target,
+                  });
+
+                  setTimeout(() => {
+                    setBtnPopover({
+                      show: false,
+                      target: null,
+                    });
+                  }, 2000);
                 }}
                 variant='primary'
               >
                 Do košíku
               </Button>
+            </div>
+            <div>
+              {id in shoppingCart && (
+                <img
+                  src='/icons/shopping-cart-product-card.svg'
+                  alt='košík ikona'
+                />
+              )}
             </div>
           </div>
         </Card.Body>

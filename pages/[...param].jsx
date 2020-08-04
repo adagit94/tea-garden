@@ -4,16 +4,16 @@ import React from 'react';
 import ProductPage from 'components/products/product-page/ProductPage';
 import Product from 'components/products/product/Product';
 
-export default function Tea() {
+export default function Param() {
   const router = useRouter();
 
-  const {
-    query: { param },
-  } = router;
+  const { query } = router;
 
-  if (param?.length === 3) {
-    return <Product param={param} />;
+  if (!query.param) return <></>;
+
+  if (query.param.length === 3) {
+    return <Product param={query.param} />;
   } else {
-    return <ProductPage param={param} />;
+    return <ProductPage param={query.param} />;
   }
 }

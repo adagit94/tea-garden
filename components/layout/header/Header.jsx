@@ -8,7 +8,7 @@ import Nav from './nav/Nav';
 export default function Header() {
   return (
     <Container fluid>
-      <Container className='p-3'>
+      <Container>
         <header>
           <Row>
             <Col>
