@@ -9,7 +9,7 @@ import Contact from './contact/Contact';
 export default function Footer() {
   return (
     <Container className='bg-light' fluid>
-      <Container className='p-3'>
+      <Container>
         <footer>
           <Row xs={1} lg={2}>
             <Col className='d-lg-flex flex-lg-column justify-content-lg-center'>

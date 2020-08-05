@@ -1,12 +1,12 @@
 import Link from 'next/link';
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext, useRef } from 'react';
 import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
-import Overlay from 'react-bootstrap/Overlay';
-import Popover from 'react-bootstrap/Popover';
 
 import { saveProduct, updateProduct } from 'helpers/products';
+import { useBtnPopover } from 'custom-hooks/product';
+import { ProductBtnPopover } from 'components/ui/Popovers';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
@@ -18,14 +18,12 @@ export default function ProductCard({
   describtion,
   images,
 }) {
-  const [btnPopover, setBtnPopover] = useState({
-    show: false,
-    target: null,
-  });
-
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
+
   const btnContainerRef = useRef(null);
+
+  const [btnPopover, setBtnPopover] = useBtnPopover();
 
   const { shoppingCart } = userState;
   const packsWeight = Object.getOwnPropertyNames(packs);
@@ -53,18 +51,12 @@ export default function ProductCard({
               {packsWeight[0]}g
             </div>
             <div className='py-2 py-lg-0' ref={btnContainerRef}>
-              <Overlay
-                className='bg-success'
+              <ProductBtnPopover
                 show={btnPopover.show}
                 target={btnPopover.target}
                 container={btnContainerRef.current}
-              >
-                <Popover id={`card-btn-popover-${id}`}>
-                  <Popover.Content className='bg-success text-secondary'>
-                    Zboží bylo přidáno do košíku.
-                  </Popover.Content>
-                </Popover>
-              </Overlay>
+                popoverID={`card-btn-popover-${id}`}
+              />
               <Button
                 onClick={e => {
                   if (id in shoppingCart) {

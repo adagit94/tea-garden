@@ -1,3 +1,6 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
 .dropdownMenu {
   padding-top: 0.45rem !important;
 }
@@ -10,4 +13,13 @@
 .amountInput {
   width: 60px !important;
   height: 30px !important;
+}
+
+.cancelSymbol {
+  opacity: unset !important;
+  color: $primary !important;
+
+  &:hover {
+    color: $danger !important;
+  }
 }

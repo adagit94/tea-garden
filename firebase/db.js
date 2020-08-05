@@ -118,17 +118,6 @@ export async function updateAddress(uid, formValues, stateValues, setAlert) {
   }
 }
 
-/*ordersRef
-          .doc()
-          .set({
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-            status: 'Založená',
-            price: '1500 Kč',
-          })
-          .catch(err => {
-            console.error(err);
-          });*/
-
 export async function getProducts(param) {
   const [category, subcategory] = param;
 
@@ -168,4 +157,17 @@ export async function getProduct(param) {
     });
 
   return productData;
+}
+
+export async function saveOrder(order) {
+/*ordersRef
+          .doc()
+          .set({
+            date: firebase.firestore.FieldValue.serverTimestamp(),
+            status: 'Založená',
+            price: '1500 Kč',
+          })
+          .catch(err => {
+            console.error(err);
+          });*/
 }

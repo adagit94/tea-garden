@@ -47,7 +47,7 @@ function reducer(state, action) {
         products: action.payload,
       };
 
-    case 'initCart':
+    case 'setCart':
       return {
         ...state,
         shoppingCart: action.payload,
@@ -108,7 +108,7 @@ export default function UserDataProvider({ children }) {
     if (shoppingCartStr) {
       const shoppingCartObj = JSON.parse(shoppingCartStr);
 
-      userDispatch({ type: 'initCart', payload: shoppingCartObj });
+      userDispatch({ type: 'setCart', payload: shoppingCartObj });
     }
 
     initFirebase();
@@ -116,8 +116,8 @@ export default function UserDataProvider({ children }) {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-//  console.log(userState.products, 'products');
-  //console.log(userState.shoppingCart, 'shoppingCart');
+//console.log(userState.products, 'products');
+console.log(userState.shoppingCart, 'shoppingCart');
 
   return (
     <UserStateContext.Provider value={userState}>

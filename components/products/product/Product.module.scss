@@ -1,0 +1,20 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+
+@media (min-width: map-get($grid-breakpoints, 'xs')) {
+  .carouselCol {
+    border-bottom: $border-width solid $primary;
+  }
+}
+
+@media (min-width: map-get($grid-breakpoints, 'md')) {
+  .carouselCol {
+    border-right: $border-width solid $primary;
+    border-bottom: none;
+  }
+}
+
+.formInput {
+  width: 100px !important;
+}

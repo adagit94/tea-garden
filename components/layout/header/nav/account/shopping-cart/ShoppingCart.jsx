@@ -6,7 +6,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Table from 'react-bootstrap/Table';
 
-import { updateProduct } from 'helpers/products';
+import { updateProduct, deleteProduct } from 'helpers/products';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
@@ -31,6 +31,7 @@ export default function ShoppingCart({ cart }) {
   const { shoppingCart } = userState;
 
   const cartItems = Object.getOwnPropertyNames(cart);
+  let subtotal = 0;
 
   return (
     <Dropdown alignRight>
@@ -60,8 +61,10 @@ export default function ShoppingCart({ cart }) {
                 const { name, image, pack, price, url } = cart[itemID];
 
                 const [weight, amount] = pack;
-
                 const amountInputID = `cart-amount-input-${itemID}`;
+                const itemPrice = price * amount;
+
+                subtotal += itemPrice;
 
                 return (
                   <tr
@@ -74,12 +77,18 @@ export default function ShoppingCart({ cart }) {
                         passHref
                       >
                         <a>
-                          <img width='50' height='50' src={image} alt={name} />{' '}
+                          <img
+                            className='border rounded'
+                            width='50'
+                            height='50'
+                            src={image}
+                            alt={name}
+                          />{' '}
                           <b className='d-none d-lg-inline'>{name}</b> {weight}g
                         </a>
                       </Link>
                     </td>
-                    <td className='align-middle'>
+                    <td className='d-flex'>
                       <InputGroup className='p-2 flex-nowrap'>
                         <InputGroup.Prepend>
                           <Button
@@ -102,7 +111,7 @@ export default function ShoppingCart({ cart }) {
                                 }
                               );
                             }}
-                            variant='outline-primary'
+                            variant='primary'
                           >
                             -
                           </Button>
@@ -142,18 +151,51 @@ export default function ShoppingCart({ cart }) {
                                 }
                               );
                             }}
-                            variant='outline-primary'
+                            variant='primary'
                           >
                             +
                           </Button>
                         </InputGroup.Append>
                       </InputGroup>
+                      <InputGroup>
+                        <Button
+                          onClick={() => {
+                            deleteProduct(itemID, shoppingCart, userDispatch);
+                          }}
+                          className={`mb-1 close ${styles.cancelSymbol}`}
+                          variant='outline-secondary'
+                          aria-label='Odstranit'
+                        >
+                          <span aria-hidden='true'>&times;</span>
+                        </Button>
+                      </InputGroup>
                     </td>
-                    <td className='align-middle'>{price * amount} Kč</td>
+                    <td className='align-middle'>{itemPrice} Kč</td>
                   </tr>
                 );
               })}
             </tbody>
+            <tfoot>
+              <tr className='border border-top-0 border-primary'>
+                <td className='text-right' colSpan='3'>
+                  <b>Celkem</b>
+                </td>
+              </tr>
+              <tr className='border border-top-0 border-bottom-0 border-primary'>
+                <td className='text-right' colSpan='3'>
+                  {subtotal} Kč
+                </td>
+              </tr>
+              <tr className='border border-top-0 border-primary'>
+                <td className='text-right' colSpan='3'>
+                  <Link href='/objednavka' passHref>
+                    <Button as='a' variant='primary'>
+                      K objednávce
+                    </Button>
+                  </Link>
+                </td>
+              </tr>
+            </tfoot>
           </Table>
         ) : (
           <div className='text-center p-3 border border-top-0 border-primary'>

@@ -7,6 +7,16 @@ export function saveProduct(id, shoppingCart, stateUpdater, data) {
   stateUpdater({ type: 'updateCart', id, payload: data });
 }
 
+export function deleteProduct(id, shoppingCart, stateUpdater) {
+  let data = { ...shoppingCart };
+
+  delete data[id];
+
+  window.localStorage.setItem('shoppingCart', JSON.stringify(data));
+
+  stateUpdater({ type: 'setCart', payload: data });
+}
+
 export function updateProduct(operation, id, shoppingCart, stateUpdater, data) {
   const product = shoppingCart[id];
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Carous from 'react-bootstrap/Carousel';
@@ -7,18 +7,31 @@ import Button from 'react-bootstrap/Button';
 
 import { getProduct } from 'firebase/db';
 import { saveProduct } from 'helpers/products';
+import { useBtnPopover } from 'custom-hooks/product';
+import { ProductBtnPopover } from 'components/ui/Popovers';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
+import styles from './Product.module.scss';
+
 function Carousel({ images }) {
   return (
-    <Carous controls={false} keyboard={false} pause={false} touch={false}>
+    <Carous
+      className='border rounded'
+      indicators={false}
+      controls={false}
+      keyboard={false}
+      touch={false}
+      fade={true}
+    >
       <Carous.Item>
         <img className='d-block w-100' src={images.main} alt='Půlený' />
       </Carous.Item>
-      <Carous.Item>
-        <img className='d-block w-100' src={images.infusion} alt='Nálev' />
-      </Carous.Item>
+      {images.infusion && (
+        <Carous.Item>
+          <img className='d-block w-100' src={images.infusion} alt='Nálev' />
+        </Carous.Item>
+      )}
     </Carous>
   );
 }
@@ -31,6 +44,10 @@ export default function Product({ param }) {
 
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
+
+  const btnContainerRef = useRef(null);
+
+  const [btnPopover, setBtnPopover] = useBtnPopover();
 
   const { products, shoppingCart } = userState;
 
@@ -54,36 +71,47 @@ export default function Product({ param }) {
   if (productData === null) return <></>;
 
   return (
-    <Row>
-      <Col xs={12} md={12}>
-        <h1>{productData.name}</h1>
+    <Row className='pb-md-3'>
+      <Col xs={12}>
+        <h1 className='text-center text-md-left'>{productData.name}</h1>
       </Col>
-      <Col xs={12} md={6}>
+      <Col className={`pb-3 pb-md-0 ${styles.carouselCol}`} xs={12} md={6}>
         <Carousel images={productData.images} />
       </Col>
-      <Col xs={12} md={6}>
-        <div>{productData.describtion}</div>
+      <Col className='pt-3 pt-md-0' xs={12} md={6}>
         <div>
-          <Form
-            onSubmit={() => {
-              const { id, name, packs, images, url } = productData;
-
-              saveProduct(id, shoppingCart, userDispatch, {
-                name,
-                url,
-                image: images.main,
-                pack: [weightInput, amountInput],
-                price: packs[weightInput] * amountInput,
-              });
-            }}
-            inline
-          >
-            <Form.Group controlId='product-weight'>
-              <Form.Label>Balení: </Form.Label>
+          <p>{productData.describtion}</p>
+        </div>
+        <div className='py-3'>
+          <p>
+            <b>Sklizeň: </b>
+            {productData.harvest}
+          </p>
+          <p>
+            <b>Oblast: </b>
+            {productData.location.detail}
+          </p>
+          <p>
+            <b>Zpracování: </b>
+            {productData.processing}
+          </p>
+        </div>
+        <Form
+          className='justify-content-around'
+          ref={btnContainerRef}
+          inline
+        >
+          <div className='d-flex flex-column'>
+            <Form.Group
+              className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
+              controlId='product-weight'
+            >
+              <Form.Label className='mr-sm-3'>Balení:</Form.Label>
               <Form.Control
                 onChange={e => {
                   setWeightInput(e.target.value);
                 }}
+                className={styles.formInput}
                 as='select'
                 custom
               >
@@ -94,35 +122,59 @@ export default function Product({ param }) {
                 ))}
               </Form.Control>
             </Form.Group>
-            <Form.Group controlId='product-amount'>
-              <Form.Label srOnly>Množství</Form.Label>
+            <Form.Group
+              className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
+              controlId='product-amount'
+            >
+              <Form.Label className='mr-sm-3'>Množství:</Form.Label>
               <Form.Control
                 onChange={e => {
                   if (e.target.value < 1) return;
 
                   setAmountInput(e.target.value);
                 }}
+                className={styles.formInput}
                 value={amountInput}
                 type='number'
               />
             </Form.Group>
-            <Button variant='primary' type='submit' />
-          </Form>
-        </div>
-      </Col>
-      <Col xs={12} md={12}>
-        <p>
-          <b>Sklizeň: </b>
-          {productData.harvest}
-        </p>
-        <p>
-          <b>Oblast: </b>
-          {productData.location.detail}
-        </p>
-        <p>
-          <b>Zpracování: </b>
-          {productData.processing}
-        </p>
+            <ProductBtnPopover
+              show={btnPopover.show}
+              target={btnPopover.target}
+              container={btnContainerRef.current}
+              popoverID='product-btn-popover'
+            />
+          </div>
+          <Button
+            onClick={e => {
+              const { id, name, packs, images, url } = productData;
+
+              saveProduct(id, shoppingCart, userDispatch, {
+                name,
+                url,
+                image: images.main,
+                pack: [weightInput, amountInput],
+                price: packs[weightInput],
+              });
+
+              setBtnPopover({
+                show: true,
+                target: e.target,
+              });
+
+              setTimeout(() => {
+                setBtnPopover({
+                  show: false,
+                  target: null,
+                });
+              }, 2000);
+            }}
+            className='m-2'
+            variant='primary'
+          >
+            Do košíku
+          </Button>
+        </Form>
       </Col>
     </Row>
   );
