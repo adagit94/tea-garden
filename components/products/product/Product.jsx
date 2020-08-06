@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import { getProduct } from 'firebase/db';
 import { saveProduct } from 'helpers/products';
 import { useBtnPopover } from 'custom-hooks/product';
-import { ProductBtnPopover } from 'components/ui/Popovers';
+import { BtnPopover } from 'components/ui/Popovers';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
@@ -96,11 +96,7 @@ export default function Product({ param }) {
             {productData.processing}
           </p>
         </div>
-        <Form
-          className='justify-content-around'
-          ref={btnContainerRef}
-          inline
-        >
+        <Form className='justify-content-around' inline>
           <div className='d-flex flex-column'>
             <Form.Group
               className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
@@ -125,6 +121,7 @@ export default function Product({ param }) {
             <Form.Group
               className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
               controlId='product-amount'
+              ref={btnContainerRef}
             >
               <Form.Label className='mr-sm-3'>Množství:</Form.Label>
               <Form.Control
@@ -138,12 +135,15 @@ export default function Product({ param }) {
                 type='number'
               />
             </Form.Group>
-            <ProductBtnPopover
+            <BtnPopover
+              bg='success'
               show={btnPopover.show}
               target={btnPopover.target}
               container={btnContainerRef.current}
               popoverID='product-btn-popover'
-            />
+            >
+              Zboží bylo přidáno do košíku.
+            </BtnPopover>
           </div>
           <Button
             onClick={e => {

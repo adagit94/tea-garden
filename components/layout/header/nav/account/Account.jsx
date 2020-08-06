@@ -46,7 +46,7 @@ function LogIn() {
 export default function Account() {
   const userState = useContext(UserStateContext);
 
-  const { firebase, isAuthenticated, loading, shoppingCart } = userState;
+  const { firebase, isAuthenticated, loading } = userState;
 
   return (
     <Nav className='flex-row'>
@@ -56,7 +56,7 @@ export default function Account() {
 
       {!loading && !isAuthenticated && <LogIn />}
 
-      <ShoppingCart cart={shoppingCart} />
+      <ShoppingCart />
     </Nav>
   );
 }

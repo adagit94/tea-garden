@@ -1,0 +1,33 @@
+@import '~bootstrap/scss/functions';
+@import '~bootstrap/scss/variables';
+
+@media (min-width: map-get($grid-breakpoints, 'xs')) {
+  .singleInput {
+    width: 100%;
+  }
+}
+
+@media (min-width: map-get($grid-breakpoints, 'lg')) {
+  .singleInput {
+    width: 25%;
+  }
+}
+
+.amountBtn {
+  width: 45px;
+  height: 45px;
+}
+
+.amountInput {
+  width: 90px !important;
+  height: 45px !important;
+}
+
+.cancelSymbol {
+  opacity: unset !important;
+  color: $primary !important;
+
+  &:hover {
+    color: $danger !important;
+  }
+}

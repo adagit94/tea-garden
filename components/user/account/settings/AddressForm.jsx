@@ -47,86 +47,60 @@ export default function AddressForm() {
           updateAddress(firebase.uid, values, address.invoicing, setAlert);
         }}
       >
-        {({ handleSubmit, getFieldProps, touched, errors }) => (
-          <Form className='text-center text-lg-left' onSubmit={handleSubmit} noValidate>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId='settings-streethouseno-input'
-              >
-                <Form.Label>Ulice a č.p.</Form.Label>
-                <Form.Control
-                  type='text'
-                  autoComplete='street-address'
-                  isInvalid={touched.streetHouseNo && errors.streetHouseNo}
-                  {...getFieldProps('streetHouseNo')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.streetHouseNo}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId='settings-city-input'
-              >
-                <Form.Label>Město/Obec</Form.Label>
-                <Form.Control
-                  type='text'
-                  autoComplete='country-name'
-                  isInvalid={touched.city && errors.city}
-                  {...getFieldProps('city')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.city}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId='settings-postcode-input'
-              >
-                <Form.Label>PSČ</Form.Label>
-                <Form.Control
-                  type='text'
-                  autoComplete='postal-code'
-                  isInvalid={touched.postCode && errors.postCode}
-                  {...getFieldProps('postCode')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.postCode}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                controlId='settings-country-select'
-              >
-                <Form.Label>Země</Form.Label>
-                <Form.Control
-                  as='select'
-                  custom
-                  {...getFieldProps('country')}
-                >
-                  <option>Česká republika</option>
-                  <option>Slovensko</option>
-                </Form.Control>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                className='m-0'
-                controlId='settings-address-button'
-              >
-                <Button type='submit' variant='outline-primary'>
-                  Potvrdit
-                </Button>
-              </Form.Group>
-            </Form.Row>
+        {({ handleSubmit, getFieldProps, touched, values, errors }) => (
+          <Form
+            className='text-center text-lg-left'
+            onSubmit={handleSubmit}
+            noValidate
+          >
+            <Form.Group controlId='settings-streethouseno-input'>
+              <Form.Label>Ulice a č.p.</Form.Label>
+              <Form.Control
+                type='text'
+                autoComplete='street-address'
+                isInvalid={touched.streetHouseNo && errors.streetHouseNo}
+                {...getFieldProps('streetHouseNo')}
+              />
+              <Form.Control.Feedback type='invalid'>
+                {errors.streetHouseNo}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId='settings-city-input'>
+              <Form.Label>Město/Obec</Form.Label>
+              <Form.Control
+                type='text'
+                autoComplete='address-level1'
+                isInvalid={touched.city && errors.city}
+                {...getFieldProps('city')}
+              />
+              <Form.Control.Feedback type='invalid'>
+                {errors.city}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId='settings-postcode-input'>
+              <Form.Label>PSČ</Form.Label>
+              <Form.Control
+                type='text'
+                autoComplete='postal-code'
+                isInvalid={touched.postCode && errors.postCode}
+                {...getFieldProps('postCode')}
+              />
+              <Form.Control.Feedback type='invalid'>
+                {errors.postCode}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId='settings-country-select'>
+              <Form.Label>Země</Form.Label>
+              <Form.Control as='select' value={values.country} custom {...getFieldProps('country')}>
+                <option value='Czech'>Česká republika</option>
+                <option value='Slovakia'>Slovensko</option>
+              </Form.Control>
+            </Form.Group>
+            <Form.Group className='m-0' controlId='settings-address-button'>
+              <Button type='submit' variant='outline-primary'>
+                Potvrdit
+              </Button>
+            </Form.Group>
           </Form>
         )}
       </Formik>

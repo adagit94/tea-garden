@@ -1,40 +1,37 @@
 import Link from 'next/link';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Dropdown from 'react-bootstrap/Dropdown';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Table from 'react-bootstrap/Table';
 
-import { updateProduct, deleteProduct } from 'helpers/products';
+import { updateProduct, deleteProduct, updateAmount } from 'helpers/products';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
 import styles from './ShoppingCart.module.scss';
 
-function updateAmount(id, operation) {
-  let amount = Number(document.querySelector(`#${id}`).value);
+export default function ShoppingCart() {
+  const [showCart, setShowCart] = useState(false);
 
-  if (operation === 'add') {
-    amount += 1;
-  } else if (operation === 'subtract') {
-    amount -= 1;
-  }
-
-  return amount;
-}
-
-export default function ShoppingCart({ cart }) {
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
   const { shoppingCart } = userState;
 
-  const cartItems = Object.getOwnPropertyNames(cart);
+  const cartItems = Object.getOwnPropertyNames(shoppingCart);
   let subtotal = 0;
 
   return (
-    <Dropdown alignRight>
+    <Dropdown
+      onToggle={() => {
+        console.log(showCart);
+        setShowCart(!showCart);
+      }}
+      show={showCart}
+      alignRight
+    >
       <Dropdown.Toggle
         className='p-2'
         id='dropdown-shopping-cart'
@@ -58,7 +55,7 @@ export default function ShoppingCart({ cart }) {
             </thead>
             <tbody>
               {cartItems.map(itemID => {
-                const { name, image, pack, price, url } = cart[itemID];
+                const { name, image, pack, price, url } = shoppingCart[itemID];
 
                 const [weight, amount] = pack;
                 const amountInputID = `cart-amount-input-${itemID}`;
@@ -189,7 +186,13 @@ export default function ShoppingCart({ cart }) {
               <tr className='border border-top-0 border-primary'>
                 <td className='text-right' colSpan='3'>
                   <Link href='/objednavka' passHref>
-                    <Button as='a' variant='primary'>
+                    <Button
+                      onClick={() => {
+                        setShowCart(false);
+                      }}
+                      as='a'
+                      variant='primary'
+                    >
                       K objednávce
                     </Button>
                   </Link>

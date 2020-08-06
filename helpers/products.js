@@ -41,3 +41,15 @@ export function updateProduct(operation, id, shoppingCart, stateUpdater, data) {
     });
   }
 }
+
+export function updateAmount(id, operation) {
+  let amount = Number(document.querySelector(`#${id}`).value);
+
+  if (operation === 'add') {
+    amount += 1;
+  } else if (operation === 'subtract') {
+    amount -= 1;
+  }
+
+  return amount;
+}

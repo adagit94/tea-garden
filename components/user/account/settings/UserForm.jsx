@@ -50,59 +50,47 @@ export default function UserForm() {
             onSubmit={handleSubmit}
             noValidate
           >
-            <Form.Row>
-              <Form.Group as={Col} controlId='settings-name-input'>
-                <Form.Label>Jméno</Form.Label>
-                <Form.Control
-                  type='text'
-                  autoComplete='name'
-                  isInvalid={touched.name && errors.name}
-                  {...getFieldProps('name')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.name}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group as={Col} controlId='settings-email-input'>
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type='email'
-                  autoComplete='email'
-                  isInvalid={touched.email && errors.email}
-                  {...getFieldProps('email')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.email}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group as={Col} controlId='settings-password-input'>
-                <Form.Label>Heslo</Form.Label>
-                <Form.Control
-                  type='password'
-                  autoComplete='new-password'
-                  isInvalid={touched.password && errors.password}
-                  {...getFieldProps('password')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.password}
-                </Form.Control.Feedback>
-              </Form.Group>
-            </Form.Row>
-            <Form.Row>
-              <Form.Group
-                as={Col}
-                className='m-0'
-                controlId='settings-user-button'
-              >
-                <Button type='submit' variant='outline-primary'>
-                  Potvrdit
-                </Button>
-              </Form.Group>
-            </Form.Row>
+            <Form.Group controlId='settings-name-input'>
+              <Form.Label>Jméno</Form.Label>
+              <Form.Control
+                type='text'
+                autoComplete='name'
+                isInvalid={touched.name && errors.name}
+                {...getFieldProps('name')}
+              />
+              <Form.Control.Feedback type='invalid'>
+                {errors.name}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId='settings-email-input'>
+              <Form.Label>Email</Form.Label>
+              <Form.Control
+                type='email'
+                autoComplete='email'
+                isInvalid={touched.email && errors.email}
+                {...getFieldProps('email')}
+              />
+              <Form.Control.Feedback type='invalid'>
+                {errors.email}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group controlId='settings-password-input'>
+              <Form.Label>Heslo</Form.Label>
+              <Form.Control
+                type='password'
+                autoComplete='new-password'
+                isInvalid={touched.password && errors.password}
+                {...getFieldProps('password')}
+              />
+              <Form.Control.Feedback type='invalid'>
+                {errors.password}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Form.Group className='m-0'>
+              <Button type='submit' variant='outline-primary'>
+                Potvrdit
+              </Button>
+            </Form.Group>
           </Form>
         )}
       </Formik>

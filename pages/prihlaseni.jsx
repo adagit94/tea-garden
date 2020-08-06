@@ -54,54 +54,46 @@ export default function LogIn() {
               onSubmit={handleSubmit}
               noValidate
             >
-              <Form.Row>
-                <Form.Group as={Col} controlId='login-email-input'>
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type='email'
-                    autoComplete='email'
-                    isInvalid={touched.email && errors.email}
-                    {...getFieldProps('email')}
-                  />
-                  <Form.Control.Feedback type='invalid'>
-                    {errors.email}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-              <Form.Row>
-                <Form.Group as={Col} controlId='login-password-input'>
-                  <Form.Label>Heslo</Form.Label>
-                  <Form.Control
-                    type='password'
-                    autoComplete='current-password'
-                    isInvalid={touched.password && errors.password}
-                    {...getFieldProps('password')}
-                  />
-                  <Form.Control.Feedback type='invalid'>
-                    {errors.password}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-              <Form.Row>
-                <Form.Group as={Col} className='m-0 d-flex justify-content-center justify-content-lg-start align-items-end' controlId='login-button'>
-                  <Button type='submit' variant='outline-primary'>
-                    Přihlásit
-                  </Button>
-                </Form.Group>
-                <Form.Group
-                  as={Col}
-                  className='m-0 text-left d-flex justify-content-center justify-content-lg-end'
-                >
-                  <div className='d-flex flex-column'>
-                    <Link href='/registrace'>
-                      <a>Registrace</a>
-                    </Link>
-                    <Link href='/zapomenute-heslo'>
-                      <a>Zapomenuté heslo</a>
-                    </Link>
-                  </div>
-                </Form.Group>
-              </Form.Row>
+              <Form.Group controlId='login-email-input'>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type='email'
+                  autoComplete='email'
+                  isInvalid={touched.email && errors.email}
+                  {...getFieldProps('email')}
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.email}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId='login-password-input'>
+                <Form.Label>Heslo</Form.Label>
+                <Form.Control
+                  type='password'
+                  autoComplete='current-password'
+                  isInvalid={touched.password && errors.password}
+                  {...getFieldProps('password')}
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.password}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group
+                className='m-0 d-flex justify-content-around align-items-center'
+                controlId='login-button'
+              >
+                <Button type='submit' variant='outline-primary'>
+                  Přihlásit
+                </Button>
+                <div className='d-flex flex-column text-left'>
+                  <Link href='/registrace'>
+                    <a>Registrace</a>
+                  </Link>
+                  <Link href='/zapomenute-heslo'>
+                    <a>Zapomenuté heslo</a>
+                  </Link>
+                </div>
+              </Form.Group>
             </Form>
           )}
         </Formik>

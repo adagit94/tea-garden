@@ -30,7 +30,7 @@ export async function initFirestoreListeners(user, syncData) {
             streetGouseNo: '',
             city: '',
             postCode: '',
-            country: '',
+            country: 'Czech',
           })
           .catch(err => {
             console.error(err);
@@ -39,6 +39,7 @@ export async function initFirestoreListeners(user, syncData) {
         addressRef
           .doc('delivery')
           .set({
+            name: '',
             streetHouseNo: '',
             city: '',
             postCode: '',
@@ -159,15 +160,23 @@ export async function getProduct(param) {
   return productData;
 }
 
-export async function saveOrder(order) {
-/*ordersRef
-          .doc()
-          .set({
-            date: firebase.firestore.FieldValue.serverTimestamp(),
-            status: 'Založená',
-            price: '1500 Kč',
-          })
-          .catch(err => {
-            console.error(err);
-          });*/
+export async function saveOrder(uid, formValues, shoppingCart) {
+  let ordersRef = firebase.firestore();
+
+  if (uid) {
+    ordersRef = ordersRef.collection('users').doc(uid).collection('orders');
+  } else {
+    ordersRef = ordersRef.collection('orders');
+  }
+
+  ordersRef
+    .doc()
+    .set({
+      date: firebase.firestore.FieldValue.serverTimestamp(),
+      status: 'pending',
+      price: '1500 Kč',
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }

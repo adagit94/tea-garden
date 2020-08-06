@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 
 import { saveProduct, updateProduct } from 'helpers/products';
 import { useBtnPopover } from 'custom-hooks/product';
-import { ProductBtnPopover } from 'components/ui/Popovers';
+import { BtnPopover } from 'components/ui/Popovers';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
@@ -51,12 +51,15 @@ export default function ProductCard({
               {packsWeight[0]}g
             </div>
             <div className='py-2 py-lg-0' ref={btnContainerRef}>
-              <ProductBtnPopover
+              <BtnPopover
+                bg='success'
                 show={btnPopover.show}
                 target={btnPopover.target}
                 container={btnContainerRef.current}
                 popoverID={`card-btn-popover-${id}`}
-              />
+              >
+                Zboží bylo přidáno do košíku.
+              </BtnPopover>
               <Button
                 onClick={e => {
                   if (id in shoppingCart) {

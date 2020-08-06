@@ -60,50 +60,37 @@ export default function Registration() {
               onSubmit={handleSubmit}
               noValidate
             >
-              <Form.Row>
-                <Form.Group as={Col} controlId='registration-email-input'>
-                  <Form.Label>Email</Form.Label>
-                  <Form.Control
-                    type='email'
-                    autoComplete='email'
-                    isValid={touched.email && !errors.email}
-                    isInvalid={touched.email && errors.email}
-                    {...getFieldProps('email')}
-                  />
-                  <Form.Control.Feedback type='invalid'>
-                    {errors.email}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-              <Form.Row>
-                <Form.Group as={Col} controlId='registration-password-input'>
-                  <Form.Label>Heslo</Form.Label>
-                  <Form.Control
-                    type='password'
-                    autoComplete='new-password'
-                    isValid={touched.password && !errors.password}
-                    isInvalid={touched.password && errors.password}
-                    {...getFieldProps('password')}
-                  />
-                  <Form.Control.Feedback type='invalid'>
-                    {errors.password}
-                  </Form.Control.Feedback>
-                </Form.Group>
-              </Form.Row>
-              <Form.Row>
-                <Form.Group
-                  as={Col}
-                  className='m-0'
-                  controlId='registration-button'
-                >
-                  <Button
-                    type='submit'
-                    variant='outline-primary'
-                  >
-                    Registrovat
-                  </Button>
-                </Form.Group>
-              </Form.Row>
+              <Form.Group controlId='registration-email-input'>
+                <Form.Label>Email</Form.Label>
+                <Form.Control
+                  type='email'
+                  autoComplete='email'
+                  isValid={touched.email && !errors.email}
+                  isInvalid={touched.email && errors.email}
+                  {...getFieldProps('email')}
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.email}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group controlId='registration-password-input'>
+                <Form.Label>Heslo</Form.Label>
+                <Form.Control
+                  type='password'
+                  autoComplete='new-password'
+                  isValid={touched.password && !errors.password}
+                  isInvalid={touched.password && errors.password}
+                  {...getFieldProps('password')}
+                />
+                <Form.Control.Feedback type='invalid'>
+                  {errors.password}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Form.Group className='m-0' controlId='registration-button'>
+                <Button type='submit' variant='outline-primary'>
+                  Registrovat
+                </Button>
+              </Form.Group>
             </Form>
           )}
         </Formik>
