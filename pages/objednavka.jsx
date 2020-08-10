@@ -14,6 +14,7 @@ import { saveOrder } from 'firebase/db';
 import { updateProduct, deleteProduct, updateAmount } from 'helpers/products';
 import { useBtnPopover } from 'custom-hooks/product';
 import { BtnPopover } from 'components/ui/Popovers';
+import { PageLoading } from 'components/ui/Indicators';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
@@ -22,7 +23,7 @@ import styles from 'components/order/Order.module.scss';
 const OrderSchema = Yup.object({
   email: Yup.string()
     .email('Zadejte e-mailovou adresu ve správném formátu.')
-    .required('Zadejte e-mailovou adresu pro zaslání informací objednávky.'),
+    .required('Zadejte e-mailovou adresu.'),
 
   nameInvoice: Yup.string()
     .matches(/([a-zA-Z]\s[a-zA-Z])+/, 'Jména musí být oddělená mezerou.')
@@ -36,6 +37,7 @@ const OrderSchema = Yup.object({
     .matches(/[a-zA-Z]{2,}/, 'Zadejte název města nebo obce.')
     .required('Zadejte název města nebo obce.'),
   postCodeInvoice: Yup.string()
+    .max(6, 'Zadejte PSČ.')
     .matches(/([0-9]{5})|([0-9]{3}\s[0-9]{2})/, 'Zadejte PSČ.')
     .matches(/[^a-zA-Z]/, 'Zadejte PSČ.')
     .required('Zadejte PSČ.'),
@@ -52,6 +54,7 @@ const OrderSchema = Yup.object({
     .matches(/[a-zA-Z]{2,}/, 'Zadejte název města nebo obce.')
     .required('Zadejte název města nebo obce.'),
   postCodeDelivery: Yup.string()
+    .max(6, 'Zadejte PSČ.')
     .matches(/([0-9]{5})|([0-9]{3}\s[0-9]{2})/, 'Zadejte PSČ.')
     .matches(/[^a-zA-Z]/, 'Zadejte PSČ.')
     .required('Zadejte PSČ.'),
@@ -69,22 +72,38 @@ const PRICES = {
   },
 };
 
-const addPayments = (subtotal, payments) => {
-  if (payments.delivery === 'post') subtotal += PRICES.delivery.post;
-  if (payments.payment === 'post') subtotal += PRICES.payment.post;
+function calculatePrice(subtotal, payments) {
+  let price = { total: subtotal, products: subtotal };
 
-  return subtotal;
-};
+  if (payments.delivery === 'post') {
+    price.total += PRICES.delivery.post;
+    price.delivery = PRICES.delivery.post;
+  }
+
+  if (payments.payment === 'post') {
+    price.total += PRICES.payment.post;
+    price.payment = PRICES.payment.post;
+  }
+
+  return price;
+}
 
 export default function Order() {
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
   const btnContainerRef = useRef(null);
+  const priceRef = useRef(null);
 
   const [btnPopover, setBtnPopover] = useBtnPopover();
 
-  const { firebase, address, shoppingCart } = userState;
+  const {
+    firebase,
+    loading,
+    isAuthenticated,
+    address,
+    shoppingCart,
+  } = userState;
 
   const cartItems = Object.getOwnPropertyNames(shoppingCart);
 
@@ -101,6 +120,8 @@ export default function Order() {
       });
     }
   }, [cartItems.length, setBtnPopover]);
+
+  if (loading || (isAuthenticated && !address)) return <PageLoading />;
 
   return (
     <Row className='p-3'>
@@ -129,8 +150,15 @@ export default function Order() {
           }}
           validationSchema={OrderSchema}
           onSubmit={values => {
-            console.log(values);
-            saveOrder(firebase.uid, values, shoppingCart);
+            if (cartItems.length === 0) return;
+
+            saveOrder(
+              firebase?.uid,
+              values,
+              shoppingCart,
+              priceRef.current,
+              userDispatch
+            );
           }}
         >
           {({ handleSubmit, getFieldProps, touched, values, errors }) => {
@@ -260,7 +288,11 @@ export default function Order() {
                         type='text'
                         autoComplete='name'
                         disabled={values.sameAsInvoice}
-                        isInvalid={touched.nameDelivery && errors.nameDelivery}
+                        isInvalid={
+                          !values.sameAsInvoice &&
+                          touched.nameDelivery &&
+                          errors.nameDelivery
+                        }
                         {...getFieldProps('nameDelivery')}
                       />
                       <Form.Control.Feedback type='invalid'>
@@ -274,6 +306,7 @@ export default function Order() {
                         autoComplete='street-address'
                         disabled={values.sameAsInvoice}
                         isInvalid={
+                          !values.sameAsInvoice &&
                           touched.streetHouseNoDelivery &&
                           errors.streetHouseNoDelivery
                         }
@@ -289,7 +322,11 @@ export default function Order() {
                         type='text'
                         autoComplete='address-level1'
                         disabled={values.sameAsInvoice}
-                        isInvalid={touched.cityDelivery && errors.cityDelivery}
+                        isInvalid={
+                          !values.sameAsInvoice &&
+                          touched.cityDelivery &&
+                          errors.cityDelivery
+                        }
                         {...getFieldProps('cityDelivery')}
                       />
                       <Form.Control.Feedback type='invalid'>
@@ -303,7 +340,9 @@ export default function Order() {
                         autoComplete='postal-code'
                         disabled={values.sameAsInvoice}
                         isInvalid={
-                          touched.postCodeDelivery && errors.postCodeDelivery
+                          !values.sameAsInvoice &&
+                          touched.postCodeDelivery &&
+                          errors.postCodeDelivery
                         }
                         {...getFieldProps('postCodeDelivery')}
                       />
@@ -332,7 +371,12 @@ export default function Order() {
                     <Form.Group>
                       <Field
                         as={Form.Check}
-                        isInvalid={touched.delivery && errors.delivery}
+                        disabled={values.payment === 'cash'}
+                        isInvalid={
+                          touched.delivery &&
+                          errors.delivery &&
+                          !document.querySelector('#delivery-post').disabled
+                        }
                         label={`Česká pošta - ${PRICES.delivery.post} Kč`}
                         value='post'
                         name='delivery'
@@ -342,7 +386,12 @@ export default function Order() {
                       />
                       <Field
                         as={Form.Check}
-                        isInvalid={touched.delivery && errors.delivery}
+                        disabled={values.payment === 'post'}
+                        isInvalid={
+                          touched.delivery &&
+                          errors.delivery &&
+                          !document.querySelector('#delivery-personal').disabled
+                        }
                         label='Osobní vyzvednutí'
                         value='personal'
                         name='delivery'
@@ -357,7 +406,14 @@ export default function Order() {
                     <Form.Group>
                       <Field
                         as={Form.Check}
-                        isInvalid={touched.payment && errors.payment}
+                        disabled={
+                          values.delivery !== '' && values.delivery !== 'post'
+                        }
+                        isInvalid={
+                          touched.payment &&
+                          errors.payment &&
+                          !document.querySelector('#payment-post').disabled
+                        }
                         label={`Dobírkou - ${PRICES.payment.post} Kč`}
                         name='payment'
                         value='post'
@@ -377,7 +433,12 @@ export default function Order() {
                       />
                       <Field
                         as={Form.Check}
-                        isInvalid={touched.payment && errors.payment}
+                        disabled={values.delivery === 'post'}
+                        isInvalid={
+                          touched.payment &&
+                          errors.payment &&
+                          !document.querySelector('#payment-cash').disabled
+                        }
                         label='Hotově'
                         name='payment'
                         value='cash'
@@ -423,15 +484,23 @@ export default function Order() {
                                   passHref
                                 >
                                   <a>
-                                    <img
-                                      className='border rounded'
-                                      width='75'
-                                      height='75'
-                                      src={image}
-                                      alt={name}
-                                    />{' '}
-                                    <b className='d-none d-lg-inline'>{name}</b>{' '}
-                                    {weight}g
+                                    <div className='d-flex align-items-center'>
+                                      <div>
+                                        <img
+                                          className='border rounded'
+                                          width='75'
+                                          height='75'
+                                          src={image}
+                                          alt={name}
+                                        />
+                                      </div>
+                                      <div className='pl-2'>
+                                        <b className='d-none d-lg-inline'>
+                                          {name}
+                                        </b>{' '}
+                                        {weight}g
+                                      </div>
+                                    </div>
                                   </a>
                                 </Link>
                               </td>
@@ -526,25 +595,27 @@ export default function Order() {
                                   </InputGroup>
                                 </div>
                               </td>
-                              <td className='align-middle'>{itemPrice} Kč</td>
+                              <td className='text-right align-middle'>
+                                {itemPrice} Kč
+                              </td>
                             </tr>
                           );
                         })}
                         <tr>
-                          <td colSpan='2'>
+                          <td className='text-left'>
                             <b>Doprava</b>
                           </td>
-                          <td>
+                          <td className='text-right' colSpan='2'>
                             {values.delivery === 'post'
                               ? `${PRICES.delivery.post} Kč`
                               : 'Zdarma'}
                           </td>
                         </tr>
                         <tr>
-                          <td colSpan='2'>
+                          <td className='text-left'>
                             <b>Platba</b>
                           </td>
-                          <td>
+                          <td className='text-right' colSpan='2'>
                             {values.payment === 'post'
                               ? `${PRICES.payment.post} Kč`
                               : 'Zdarma'}
@@ -553,15 +624,21 @@ export default function Order() {
                       </tbody>
                       <tfoot>
                         <tr>
-                          <td colSpan='2'>
+                          <td className='text-left'>
                             <b>Celkem</b>
                           </td>
-                          <td>
+                          <td className='text-right' colSpan='2'>
                             <b>
-                              {addPayments(subtotal, {
-                                delivery: values.delivery,
-                                payment: values.payment,
-                              }).toLocaleString('cs-CZ')}
+                              {(() => {
+                                const price = calculatePrice(subtotal, {
+                                  delivery: values.delivery,
+                                  payment: values.payment,
+                                });
+
+                                priceRef.current = price;
+
+                                return price.total.toLocaleString('cs-CZ');
+                              })()}{' '}
                               Kč
                             </b>
                           </td>

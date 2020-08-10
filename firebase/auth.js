@@ -49,7 +49,7 @@ export async function loginEmail(email, password, setAlert) {
 
       switch (err.code) {
         case 'auth/invalid-email':
-          msg = 'Neplatná e-mailová adresa';
+          msg = 'Neplatná e-mailová adresa.';
           break;
 
         case 'auth/user-disabled':
@@ -70,6 +70,8 @@ export async function loginEmail(email, password, setAlert) {
 }
 
 export async function loginProvider(provider) {
+  const auth = firebase.auth();
+
   let providerObj;
 
   switch (provider) {
@@ -84,20 +86,16 @@ export async function loginProvider(provider) {
 
   window.localStorage.setItem('userLoading', 'true');
 
-  await firebase
-    .auth()
+  await auth
     .signInWithRedirect(providerObj)
     .then()
     .catch(err => {
       console.error(err);
     });
 
-  await firebase
-    .auth()
-    .getRedirectResult()
-    .catch(err => {
-      console.error(err);
-    });
+  await auth.getRedirectResult().catch(err => {
+    console.error(err);
+  });
 }
 
 export async function logout(route) {
@@ -136,24 +134,13 @@ export async function createUser(email, password, setAlert) {
     });
 }
 
-export async function resetPassword(email) {
-  firebase
-    .auth()
-    .sendPasswordResetEmail(email)
-    .then(() => window.history.back())
-    .catch(err => {
-      console.error(err);
-    });
-}
-
 export async function updateUser(user, values, setAlert) {
   const { name, email, password } = values;
 
   let updated;
+  let error;
 
   if (email !== '' && email !== user.email) {
-    let error;
-
     await user
       .updateEmail(email)
       .then(() => {
@@ -172,15 +159,24 @@ export async function updateUser(user, values, setAlert) {
             break;
 
           case 'auth/requires-recent-login':
-            logout('/prihlaseni');
+            setAlert({
+              variant: 'danger',
+              show: true,
+              msg:
+                'Je nutné se znovu přihlásit. Budete přesměrováni na stránku přihlášení.',
+            });
+
+            setTimeout(() => {
+              logout('/prihlaseni');
+            }, 4000);
             break;
         }
 
         error = true;
       });
-
-    if (error) return;
   }
+
+  if (error) return;
 
   if (password !== '') {
     await user
@@ -193,11 +189,24 @@ export async function updateUser(user, values, setAlert) {
 
         switch (err.code) {
           case 'auth/requires-recent-login':
-            logout('/prihlaseni');
+            setAlert({
+              variant: 'danger',
+              show: true,
+              msg:
+                'Je nutné se znovu přihlásit. Budete přesměrováni na stránku přihlášení.',
+            });
+
+            setTimeout(() => {
+              logout('/prihlaseni');
+            }, 4000);
             break;
         }
+
+        error = true;
       });
   }
+
+  if (error) return;
 
   if (name !== '' && name !== user.displayName) {
     await user
@@ -225,4 +234,104 @@ export async function updateUser(user, values, setAlert) {
       msg: 'Nebyla provedena zádná změna.',
     });
   }
+}
+
+export async function sendPasswordReset(email, setAlert) {
+  firebase
+    .auth()
+    .sendPasswordResetEmail(email)
+    .then(() => {
+      setAlert({
+        variant: 'success',
+        show: true,
+        msg: 'Email s odkazem pro reset hesla byl odeslán.',
+      });
+    })
+    .catch(err => {
+      console.error(err.code);
+
+      switch (err.code) {
+        case 'auth/user-not-found':
+          setAlert({
+            variant: 'danger',
+            show: true,
+            msg: 'Uživatel neexistuje.',
+          });
+          break;
+      }
+    });
+}
+export async function resetPassword(password, actionCode, setAlert) {
+  const auth = firebase.auth();
+
+  auth
+    .verifyPasswordResetCode(actionCode)
+    .then(() => {
+      auth
+        .confirmPasswordReset(actionCode, password)
+        .then(() => {
+          Router.push('/prihlaseni');
+        })
+        .catch(err => {
+          console.error(err);
+
+          let msg;
+
+          switch (err.code) {
+            case 'auth/expired-action-code':
+              msg = 'Odkaz pro reset hesla vypršel.';
+              break;
+
+            case 'auth/invalid-action-code':
+              msg = 'Odkaz pro reset hesla byl již použitý.';
+              break;
+          }
+
+          setAlert({ variant: 'danger', show: true, msg });
+        });
+    })
+    .catch(err => {
+      console.error(err);
+
+      let msg;
+
+      switch (err.code) {
+        case 'auth/expired-action-code':
+          msg = 'Odkaz pro reset hesla vypršel.';
+          break;
+
+        case 'auth/invalid-action-code':
+          msg = 'Odkaz pro reset hesla byl již použitý.';
+          break;
+      }
+
+      setAlert({ variant: 'danger', show: true, msg });
+    });
+}
+
+export async function deleteUser(user, setShowModal, setAlert) {
+  user
+    .delete()
+    .then(() => {
+      Router.push('/');
+    })
+    .catch(err => {
+      console.error(err);
+
+      switch (err.code) {
+        case 'auth/requires-recent-login':
+          setShowModal(false);
+          setAlert({
+            variant: 'danger',
+            show: true,
+            msg:
+              'Je nutné se znovu přihlásit. Budete přesměrováni na stránku přihlášení.',
+          });
+
+          setTimeout(() => {
+            logout('/prihlaseni');
+          }, 4000);
+          break;
+      }
+    });
 }

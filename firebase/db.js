@@ -1,7 +1,10 @@
+import Router from 'next/router';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
 import { collectionTranslator } from './helpers';
+
+const teas = ['puErh', 'oolong', 'red', 'green'];
 
 export let detachAddressListener;
 export let detachOrdersListener;
@@ -120,25 +123,66 @@ export async function updateAddress(uid, formValues, stateValues, setAlert) {
 }
 
 export async function getProducts(param) {
+  const firestore = firebase.firestore();
+
   const [category, subcategory] = param;
 
-  let productsData;
-  let productsRef = firebase
-    .firestore()
-    .collection(collectionTranslator(category));
+  let products;
 
-  if (subcategory) {
-    productsRef = productsRef.where('url.subcategory', '==', subcategory);
+  if (category === 'cerstve' || category === 'archivni') {
+    let operator;
+    let year;
+
+    switch (category) {
+      case 'cerstve':
+        operator = '==';
+        year = 2020;
+        break;
+
+      case 'archivni':
+        operator = '<=';
+        year = 2005;
+        break;
+    }
+
+    products = [];
+
+    const promises = teas.map(tea =>
+      firestore
+        .collection(tea)
+        .where('harvest.year', operator, year)
+        .get()
+        .then(data =>
+          data.docs.forEach(doc => {
+            products.push({ id: doc.id, ...doc.data() });
+          })
+        )
+        .catch(err => {
+          console.error(err);
+        })
+    );
+
+    await Promise.all(promises)
+      .then()
+      .catch(err => {
+        console.error(err);
+      });
+  } else {
+    let productsRef = firestore.collection(collectionTranslator(category));
+
+    if (subcategory) {
+      productsRef = productsRef.where('url.subcategory', '==', subcategory);
+    }
+
+    products = await productsRef
+      .get()
+      .then(data => data.docs.map(doc => ({ id: doc.id, ...doc.data() })))
+      .catch(err => {
+        console.error(err);
+      });
   }
 
-  productsData = await productsRef
-    .get()
-    .then(data => data.docs.map(doc => ({ id: doc.id, ...doc.data() })))
-    .catch(err => {
-      console.error(err);
-    });
-
-  return productsData;
+  return products;
 }
 
 export async function getProduct(param) {
@@ -160,21 +204,69 @@ export async function getProduct(param) {
   return productData;
 }
 
-export async function saveOrder(uid, formValues, shoppingCart) {
-  let ordersRef = firebase.firestore();
+export async function saveOrder(
+  uid,
+  formValues,
+  shoppingCart,
+  price,
+  stateUpdater
+) {
+  let ref = firebase.firestore();
+  let order;
 
   if (uid) {
-    ordersRef = ordersRef.collection('users').doc(uid).collection('orders');
+    ref = ref.collection('users').doc(uid).collection('orders');
   } else {
-    ordersRef = ordersRef.collection('orders');
+    ref = ref.collection('orders');
   }
 
-  ordersRef
+  order = {
+    status: 'pending',
+    payment: formValues.payment,
+    delivery: formValues.delivery,
+    email: formValues.email,
+    address: {
+      invoice: {
+        name: formValues.nameInvoice,
+        streetHouseNo: formValues.streetHouseNoInvoice,
+        city: formValues.cityInvoice,
+        postCode: formValues.postCodeInvoice,
+        country: formValues.countryInvoice,
+      },
+    },
+    note: formValues.note,
+    price,
+  };
+
+  if (!formValues.sameAsInvoice) {
+    order.address.delivery = {
+      name: formValues.nameDelivery,
+      streetHouseNo: formValues.streetHouseNoDelivery,
+      city: formValues.cityDelivery,
+      postCode: formValues.postCodeDelivery,
+      country: formValues.countryDelivery,
+    };
+  }
+
+  order.products = Object.getOwnPropertyNames(shoppingCart).map(itemID => {
+    const product = shoppingCart[itemID];
+
+    return {
+      name: product.name,
+      weight: product.pack[0],
+      amount: product.pack[1],
+    };
+  });
+
+  ref
     .doc()
-    .set({
-      date: firebase.firestore.FieldValue.serverTimestamp(),
-      status: 'pending',
-      price: '1500 Kč',
+    .set({ date: firebase.firestore.FieldValue.serverTimestamp(), ...order })
+    .then(() => {
+      Router.push('/');
+
+      window.localStorage.removeItem('shoppingCart');
+
+      stateUpdater({ type: 'clearCart' });
     })
     .catch(err => {
       console.error(err);

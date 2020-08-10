@@ -20,6 +20,7 @@ const AddressSchema = Yup.object({
     .matches(/[a-zA-Z]{2,}/, 'Zadejte název města nebo obce.')
     .required('Zadejte název města nebo obce.'),
   postCode: Yup.string()
+    .max(6, 'Zadejte PSČ.')
     .matches(/([0-9]{5})|([0-9]{3}\s[0-9]{2})/, 'Zadejte PSČ.')
     .matches(/[^a-zA-Z]/, 'Zadejte PSČ.')
     .required('Zadejte PSČ.'),
@@ -33,7 +34,7 @@ export default function AddressForm() {
 
   return (
     <>
-      <h2 className='text-center text-lg-left'>Fakturační adresa</h2>
+      <h2>Fakturační adresa</h2>
       <Formik
         initialValues={{
           streetHouseNo: address.invoicing.streetHouseNo,
@@ -43,13 +44,11 @@ export default function AddressForm() {
         }}
         validationSchema={AddressSchema}
         onSubmit={values => {
-          console.log(values);
           updateAddress(firebase.uid, values, address.invoicing, setAlert);
         }}
       >
         {({ handleSubmit, getFieldProps, touched, values, errors }) => (
           <Form
-            className='text-center text-lg-left'
             onSubmit={handleSubmit}
             noValidate
           >
@@ -91,7 +90,12 @@ export default function AddressForm() {
             </Form.Group>
             <Form.Group controlId='settings-country-select'>
               <Form.Label>Země</Form.Label>
-              <Form.Control as='select' value={values.country} custom {...getFieldProps('country')}>
+              <Form.Control
+                as='select'
+                value={values.country}
+                custom
+                {...getFieldProps('country')}
+              >
                 <option value='Czech'>Česká republika</option>
                 <option value='Slovakia'>Slovensko</option>
               </Form.Control>

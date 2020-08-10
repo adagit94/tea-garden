@@ -17,7 +17,6 @@ import styles from './Product.module.scss';
 function Carousel({ images }) {
   return (
     <Carous
-      className='border rounded'
       indicators={false}
       controls={false}
       keyboard={false}
@@ -68,7 +67,7 @@ export default function Product({ param }) {
     if (productData === null && packs === null) initProduct();
   });
 
-  if (productData === null) return <></>;
+  if (productData === null) return null;
 
   return (
     <Row className='pb-md-3'>
@@ -85,29 +84,44 @@ export default function Product({ param }) {
         <div className='py-3'>
           <p>
             <b>Sklizeň: </b>
-            {productData.harvest}
+            {productData.harvest.exact}
           </p>
           <p>
             <b>Oblast: </b>
             {productData.location.detail}
           </p>
-          <p>
-            <b>Zpracování: </b>
-            {productData.processing}
-          </p>
+          {productData.processing && (
+            <p>
+              <b>Zpracování: </b>
+              {productData.processing}
+            </p>
+          )}
         </div>
-        <Form className='justify-content-around' inline>
+        <div>
+          {productData.stock > 0 && (
+            <span className='text-success'>
+              Skladem{productData.stock > 5 && ' > 5'}
+            </span>
+          )}
+
+          {productData.stock === 0 && (
+            <span className='text-danger'>Není skladem</span>
+          )}
+        </div>
+        <Form className='justify-content-around' ref={btnContainerRef} inline>
           <div className='d-flex flex-column'>
             <Form.Group
               className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
               controlId='product-weight'
             >
               <Form.Label className='mr-sm-3'>Balení:</Form.Label>
+
               <Form.Control
                 onChange={e => {
                   setWeightInput(e.target.value);
                 }}
                 className={styles.formInput}
+                disabled={productData.stock === 0 ? true : false}
                 as='select'
                 custom
               >
@@ -118,62 +132,85 @@ export default function Product({ param }) {
                 ))}
               </Form.Control>
             </Form.Group>
+
             <Form.Group
               className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
               controlId='product-amount'
               ref={btnContainerRef}
             >
               <Form.Label className='mr-sm-3'>Množství:</Form.Label>
+
               <Form.Control
                 onChange={e => {
                   if (e.target.value < 1) return;
 
-                  setAmountInput(e.target.value);
+                  setAmountInput(Number(e.target.value));
                 }}
                 className={styles.formInput}
+                disabled={productData.stock === 0 ? true : false}
                 value={amountInput}
                 type='number'
               />
             </Form.Group>
-            <BtnPopover
-              bg='success'
-              show={btnPopover.show}
-              target={btnPopover.target}
-              container={btnContainerRef.current}
-              popoverID='product-btn-popover'
+
+            <Form.Group
+              className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
+              controlId='product-price'
             >
-              Zboží bylo přidáno do košíku.
-            </BtnPopover>
+              <Form.Label className='mr-sm-3'>Cena:</Form.Label>
+
+              <Form.Control
+                className={styles.formInput}
+                value={`${productData.packs[weightInput] * amountInput} Kč`}
+                plaintext
+                readOnly
+              />
+            </Form.Group>
           </div>
-          <Button
-            onClick={e => {
-              const { id, name, packs, images, url } = productData;
 
-              saveProduct(id, shoppingCart, userDispatch, {
-                name,
-                url,
-                image: images.main,
-                pack: [weightInput, amountInput],
-                price: packs[weightInput],
-              });
+          {productData.stock > 0 && (
+            <>
+              <BtnPopover
+                bg='success'
+                show={btnPopover.show}
+                target={btnPopover.target}
+                container={btnContainerRef.current}
+                popoverID='product-btn-popover'
+              >
+                Zboží bylo přidáno do košíku.
+              </BtnPopover>
 
-              setBtnPopover({
-                show: true,
-                target: e.target,
-              });
+              <Button
+                onClick={e => {
+                  const { id, name, packs, images, url } = productData;
 
-              setTimeout(() => {
-                setBtnPopover({
-                  show: false,
-                  target: null,
-                });
-              }, 2000);
-            }}
-            className='m-2'
-            variant='primary'
-          >
-            Do košíku
-          </Button>
+                  saveProduct(id, shoppingCart, userDispatch, {
+                    name,
+                    url,
+                    image: images.main,
+                    pack: [weightInput, amountInput],
+                    price: packs[weightInput],
+                  });
+
+                  setBtnPopover({
+                    show: true,
+                    target: e.target,
+                  });
+
+                  setTimeout(() => {
+                    setBtnPopover({
+                      show: false,
+                      target: null,
+                    });
+                  }, 2000);
+                }}
+                className='m-2 align-self-end'
+                variant='primary'
+              >
+                Do košíku
+              </Button>
+            </>
+          )}
         </Form>
       </Col>
     </Row>

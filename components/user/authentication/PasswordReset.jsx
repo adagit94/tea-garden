@@ -1,5 +1,4 @@
-import { useRouter } from 'next/router';
-import React, { useEffect, useContext } from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -7,16 +6,11 @@ import Button from 'react-bootstrap/Button';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
-import { createUser } from '../firebase/auth';
+import { resetPassword } from '../../../firebase/auth';
 import { useFirebaseAlert } from 'custom-hooks/error-handling';
-import { PageLoading } from 'components/ui/Indicators';
 import { FirebaseAlert } from 'components/ui/Alerts';
-import { UserStateContext } from 'components/user/UserDataProvider';
 
-const RegistrationSchema = Yup.object({
-  email: Yup.string()
-    .email('Zadejte e-mailovou adresu ve správném formátu.')
-    .required('Zadejte e-mailovou adresu.'),
+const PasswordResetSchema = Yup.object({
   password: Yup.string()
     .min(8, ({ min }) => `Heslo musí být minimálně ${min} znaků dlouhé.`)
     .matches(/[a-z]+/, 'Heslo musí obsahovat minimálně jedno malé písmeno.')
@@ -33,37 +27,19 @@ const RegistrationSchema = Yup.object({
     .required('Zadejte heslo.'),
 });
 
-export default function Registration() {
-  const router = useRouter();
-
-  const userState = useContext(UserStateContext);
-
+export default function PasswordReset({ actionCode }) {
   const [alert, setAlert] = useFirebaseAlert();
-
-  const { firebase, isAuthenticated, loading } = userState;
-
-  useEffect(() => {
-    router.prefetch('/[uid]/nastaveni');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (isAuthenticated)
-      router.push('/[uid]/nastaveni', `/${firebase.uid}/nastaveni`);
-  });
-
-  if (loading || isAuthenticated) return <PageLoading />;
 
   return (
     <Row className='p-3' lg={2}>
       <Col>
         <Formik
-          initialValues={{ email: '', password: '', passwordConfirmation: '' }}
-          validationSchema={RegistrationSchema}
+          initialValues={{ password: '', passwordConfirmation: '' }}
+          validationSchema={PasswordResetSchema}
           onSubmit={values => {
             if (values.password !== values.passwordConfirmation) return;
 
-            createUser(values.email, values.password, setAlert);
+            resetPassword(values.password, actionCode, setAlert);
           }}
         >
           {({ handleSubmit, getFieldProps, touched, values, errors }) => (
@@ -72,20 +48,7 @@ export default function Registration() {
               onSubmit={handleSubmit}
               noValidate
             >
-              <Form.Group controlId='registration-email-input'>
-                <Form.Label>Email</Form.Label>
-                <Form.Control
-                  type='email'
-                  autoComplete='email'
-                  isValid={touched.email && !errors.email}
-                  isInvalid={touched.email && errors.email}
-                  {...getFieldProps('email')}
-                />
-                <Form.Control.Feedback type='invalid'>
-                  {errors.email}
-                </Form.Control.Feedback>
-              </Form.Group>
-              <Form.Group controlId='registration-password-input'>
+              <Form.Group controlId='password-reset-password-input'>
                 <Form.Label>Heslo</Form.Label>
                 <Form.Control
                   type='password'
@@ -98,7 +61,7 @@ export default function Registration() {
                   {errors.password}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group controlId='registration-password-confirmation-input'>
+              <Form.Group controlId='password-reset-password-confirmation-input'>
                 <Form.Label>Potvrzení hesla</Form.Label>
                 <Form.Control
                   type='password'
@@ -119,9 +82,9 @@ export default function Registration() {
                   {errors.passwordConfirmation || 'Hesla se neshodují.'}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group className='m-0' controlId='registration-button'>
+              <Form.Group className='m-0' controlId='password-reset-button'>
                 <Button type='submit' variant='outline-primary'>
-                  Registrovat
+                  Změnit heslo
                 </Button>
               </Form.Group>
             </Form>

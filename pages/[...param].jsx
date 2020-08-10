@@ -7,13 +7,13 @@ import Product from 'components/products/product/Product';
 export default function Param() {
   const router = useRouter();
 
-  const { query } = router;
+  const { param } = router.query;
 
-  if (!query.param) return <></>;
+  if (!param) return null;
 
-  if (query.param.length === 3) {
-    return <Product param={query.param} />;
+  if (param.length === 3) {
+    return <Product param={param} />;
   } else {
-    return <ProductPage param={query.param} />;
+    return <ProductPage param={param} />;
   }
 }

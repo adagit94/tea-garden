@@ -17,31 +17,33 @@ export default function Orders() {
     <AccountLayout activeItem='orders'>
       <Row>
         <Col className='pr-0'>
-          {ordersID?.length > 0 ? (
-            <Table responsive>
+          {orders && ordersID.length > 0 && (
+            <Table hover responsive>
               <thead>
                 <tr>
                   <th>Objednávka</th>
-                  <th>Datum</th>
-                  <th>Stav</th>
-                  <th>Cena</th>
+                  <th className='text-center'>Datum</th>
+                  <th className='text-center'>Stav</th>
+                  <th className='text-center'>Cena</th>
                 </tr>
               </thead>
               <tbody>
-                {ordersID.map(id => {
-                  return (
-                    <tr key={id}>
-                      <td>{id}</td>
-                      <td>{orders[id].date}</td>
-                      <td>{orders[id].status}</td>
-                      <td>{orders[id].price}</td>
-                    </tr>
-                  );
-                })}
+                {ordersID.map(id => (
+                  <tr key={id}>
+                    <td>{id}</td>
+                    <td className='text-center'>{orders[id].date}</td>
+                    <td className='text-center'>{orders[id].status}</td>
+                    <td className='text-center'>{orders[id].price.total} Kč</td>
+                  </tr>
+                ))}
               </tbody>
             </Table>
-          ) : (
-            'Nebyly vytvořeny žádné objednávky.'
+          )}
+
+          {orders && ordersID.length === 0 && (
+            <div className='text-center'>
+              Nebyly vytvořeny žádné objednávky.
+            </div>
           )}
         </Col>
       </Row>

@@ -31,6 +31,11 @@ export default function LogIn() {
   const { firebase, isAuthenticated, loading } = userState;
 
   useEffect(() => {
+    router.prefetch('/[uid]/nastaveni');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
     if (isAuthenticated) {
       router.push('/[uid]/nastaveni', `/${firebase.uid}/nastaveni`);
     }

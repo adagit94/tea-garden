@@ -15,6 +15,7 @@ export default function ProductCard({
   url,
   name,
   packs,
+  stock,
   describtion,
   images,
 }) {
@@ -29,7 +30,7 @@ export default function ProductCard({
   const packsWeight = Object.getOwnPropertyNames(packs);
 
   return (
-    <Col className='py-3'>
+    <Col className='p-3'>
       <Card>
         <Link
           href='/[...param]'
@@ -37,7 +38,19 @@ export default function ProductCard({
           passHref
         >
           <a className='flex-grow-1'>
-            <Card.Img variant='top' src={images.main} />
+            <Card.Img
+              onMouseEnter={e => {
+                if (images.infusion) {
+                  e.target.src = images.infusion;
+                }
+              }}
+              onMouseLeave={e => {
+                e.target.src = images.main;
+              }}
+              className='w-100'
+              variant='top'
+              src={images.main}
+            />
             <Card.Body className='d-flex flex-column'>
               <Card.Title className='text-center'>{name}</Card.Title>
               <Card.Text>{describtion}</Card.Text>
@@ -45,70 +58,83 @@ export default function ProductCard({
           </a>
         </Link>
         <Card.Body className='flex-grow-0'>
-          <div className='w-100 d-flex flex-column flex-lg-row justify-content-lg-around align-items-center'>
+          <div className='text-center'>
+            {stock > 0 && (
+              <span className='text-success'>Skladem{stock > 5 && ' > 5'}</span>
+            )}
+
+            {stock === 0 && <span className='text-danger'>Není skladem</span>}
+          </div>
+          <div className='w-100 d-flex flex-column flex-xl-row justify-content-xl-around align-items-center'>
             <div>
               {packsWeight.length > 1 && 'Od'} {packs[packsWeight[0]]} Kč za{' '}
               {packsWeight[0]}g
             </div>
-            <div className='py-2 py-lg-0' ref={btnContainerRef}>
-              <BtnPopover
-                bg='success'
-                show={btnPopover.show}
-                target={btnPopover.target}
-                container={btnContainerRef.current}
-                popoverID={`card-btn-popover-${id}`}
-              >
-                Zboží bylo přidáno do košíku.
-              </BtnPopover>
-              <Button
-                onClick={e => {
-                  if (id in shoppingCart) {
-                    const [weight, amount] = shoppingCart[id].pack;
 
-                    updateProduct(
-                      'updateAmount',
-                      id,
-                      shoppingCart,
-                      userDispatch,
-                      {
-                        pack: [weight, amount + 1],
+            {stock > 0 && (
+              <>
+                <div className='py-2 py-lg-0' ref={btnContainerRef}>
+                  <BtnPopover
+                    bg='success'
+                    show={btnPopover.show}
+                    target={btnPopover.target}
+                    container={btnContainerRef.current}
+                    popoverID={`card-btn-popover-${id}`}
+                  >
+                    Zboží bylo přidáno do košíku.
+                  </BtnPopover>
+
+                  <Button
+                    onClick={e => {
+                      if (
+                        Object.prototype.hasOwnProperty.call(shoppingCart, id)
+                      ) {
+                        const [weight, amount] = shoppingCart[id].pack;
+                        updateProduct(
+                          'updateAmount',
+                          id,
+                          shoppingCart,
+                          userDispatch,
+                          {
+                            pack: [weight, amount + 1],
+                          }
+                        );
+                      } else {
+                        saveProduct(id, shoppingCart, userDispatch, {
+                          name,
+                          url,
+                          image: images.main,
+                          pack: [packsWeight[0], 1],
+                          price: packs[packsWeight[0]],
+                        });
                       }
-                    );
-                  } else {
-                    saveProduct(id, shoppingCart, userDispatch, {
-                      name,
-                      url,
-                      image: images.main,
-                      pack: [packsWeight[0], 1],
-                      price: packs[packsWeight[0]],
-                    });
-                  }
 
-                  setBtnPopover({
-                    show: true,
-                    target: e.target,
-                  });
+                      setBtnPopover({
+                        show: true,
+                        target: e.target,
+                      });
 
-                  setTimeout(() => {
-                    setBtnPopover({
-                      show: false,
-                      target: null,
-                    });
-                  }, 2000);
-                }}
-                variant='primary'
-              >
-                Do košíku
-              </Button>
-            </div>
-            <div>
-              {id in shoppingCart && (
-                <img
-                  src='/icons/shopping-cart-product-card.svg'
-                  alt='košík ikona'
-                />
-              )}
-            </div>
+                      setTimeout(() => {
+                        setBtnPopover({
+                          show: false,
+                          target: null,
+                        });
+                      }, 2000);
+                    }}
+                    variant='primary'
+                  >
+                    Do košíku
+                  </Button>
+                  {' '}
+                  {Object.prototype.hasOwnProperty.call(shoppingCart, id) && (
+                    <img
+                      src='/icons/shopping-cart-product-card.svg'
+                      alt='košík ikona'
+                    />
+                  )}
+                </div>
+              </>
+            )}
           </div>
         </Card.Body>
       </Card>

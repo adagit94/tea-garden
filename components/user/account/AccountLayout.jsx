@@ -38,9 +38,9 @@ export default function AccountLayout({ activeItem, children }) {
 
   return (
     <>
-      <Row className='p-3'>
+      <Row className='py-3'>
         <Col
-          className={`d-flex flex-lg-column justify-content-between p-0 pb-3 pb-lg-0 pr-lg-3 ${styles.accountNavCol}`}
+          className={`d-flex flex-lg-column justify-content-between pl-0 pb-3 pb-lg-0 pr-lg-3 ${styles.accountNavCol}`}
           xs={12}
           lg={2}
         >

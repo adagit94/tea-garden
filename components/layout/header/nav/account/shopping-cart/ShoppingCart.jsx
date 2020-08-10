@@ -26,7 +26,6 @@ export default function ShoppingCart() {
   return (
     <Dropdown
       onToggle={() => {
-        console.log(showCart);
         setShowCart(!showCart);
       }}
       show={showCart}
@@ -44,7 +43,7 @@ export default function ShoppingCart() {
         />
       </Dropdown.Toggle>
       <Dropdown.Menu className={styles.dropdownMenu}>
-        {cartItems.length > 0 ? (
+        {cartItems.length > 0 && (
           <Table className='m-0' size='sm' borderless responsive>
             <thead>
               <tr className='border border-top-0 border-primary'>
@@ -200,7 +199,9 @@ export default function ShoppingCart() {
               </tr>
             </tfoot>
           </Table>
-        ) : (
+        )}
+
+        {cartItems.length === 0 && (
           <div className='text-center p-3 border border-top-0 border-primary'>
             Košík je prázdný
           </div>

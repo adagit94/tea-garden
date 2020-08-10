@@ -53,6 +53,12 @@ function reducer(state, action) {
         shoppingCart: action.payload,
       };
 
+    case 'clearCart':
+      return {
+        ...state,
+        shoppingCart: {},
+      };
+
     case 'updateCart':
       return {
         ...state,
@@ -117,7 +123,6 @@ export default function UserDataProvider({ children }) {
   }, []);
 
 //console.log(userState.products, 'products');
-console.log(userState.shoppingCart, 'shoppingCart');
 
   return (
     <UserStateContext.Provider value={userState}>
