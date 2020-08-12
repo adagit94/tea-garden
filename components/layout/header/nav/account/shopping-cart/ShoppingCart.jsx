@@ -18,7 +18,7 @@ export default function ShoppingCart() {
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
-  const { shoppingCart } = userState;
+  const { products, shoppingCart } = userState;
 
   const cartItems = Object.getOwnPropertyNames(shoppingCart);
   let subtotal = 0;
@@ -54,7 +54,7 @@ export default function ShoppingCart() {
             </thead>
             <tbody>
               {cartItems.map(itemID => {
-                const { name, image, pack, price, url } = shoppingCart[itemID];
+                const { title, image, pack, price, url } = shoppingCart[itemID];
 
                 const [weight, amount] = pack;
                 const amountInputID = `cart-amount-input-${itemID}`;
@@ -80,7 +80,8 @@ export default function ShoppingCart() {
                             src={image}
                             alt={name}
                           />{' '}
-                          <b className='d-none d-lg-inline'>{name}</b> {weight}g
+                          <b className='d-none d-lg-inline'>{title.full}</b>{' '}
+                          {weight}g
                         </a>
                       </Link>
                     </td>
@@ -116,7 +117,14 @@ export default function ShoppingCart() {
                           className={`border-primary ${styles.amountInput}`}
                           id={amountInputID}
                           onChange={e => {
-                            if (e.target.value < 1) return;
+                            const amount = Number(e.target.value);
+
+                            if (
+                              amount < 1 ||
+                              products[itemID].stock < weight * amount
+                            ) {
+                              return;
+                            }
 
                             updateProduct(
                               'updateAmount',
@@ -124,7 +132,7 @@ export default function ShoppingCart() {
                               shoppingCart,
                               userDispatch,
                               {
-                                pack: [weight, e.target.value],
+                                pack: [weight, amount],
                               }
                             );
                           }}
@@ -136,6 +144,10 @@ export default function ShoppingCart() {
                             className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(amountInputID, 'add');
+
+                              if (products[itemID].stock < weight * amount) {
+                                return;
+                              }
 
                               updateProduct(
                                 'updateAmount',

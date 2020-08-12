@@ -77,6 +77,8 @@ export default function ProductPage({ param }) {
 
   const { products } = userState;
 
+  const productsID = Object.getOwnPropertyNames(products);
+
   useEffect(() => {
     async function initPage() {
       const products = await getProducts(param);
@@ -98,8 +100,8 @@ export default function ProductPage({ param }) {
       </Col>
       <Col xs={12} lg={10} className='px-0'>
         <Row className='m-0' xs={1} sm={2} md={3}>
-          {products.map(product => (
-            <ProductCard key={product.id} {...product} />
+          {productsID.map(productID => (
+            <ProductCard key={productID} id={productID} {...products[productID]} />
           ))}
         </Row>
         {/* pagination */}

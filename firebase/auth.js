@@ -3,6 +3,7 @@ import * as firebase from 'firebase/app';
 import 'firebase/firebase-auth';
 import 'firebase/firestore';
 
+import { auth } from './init-firebase';
 import {
   initFirestoreListeners,
   detachAddressListener,
@@ -10,7 +11,7 @@ import {
 } from './db';
 
 export function initAuthObserver(initUser, clearUser, syncData) {
-  firebase.auth().onAuthStateChanged(
+  auth.onAuthStateChanged(
     user => {
       if (user) {
         initFirestoreListeners(user, syncData);
@@ -36,8 +37,7 @@ export function initAuthObserver(initUser, clearUser, syncData) {
 }
 
 export async function loginEmail(email, password, setAlert) {
-  firebase
-    .auth()
+  auth
     .signInWithEmailAndPassword(email, password)
     .then(() => {
       window.localStorage.setItem('userLoading', 'true');
@@ -70,8 +70,6 @@ export async function loginEmail(email, password, setAlert) {
 }
 
 export async function loginProvider(provider) {
-  const auth = firebase.auth();
-
   let providerObj;
 
   switch (provider) {
@@ -99,8 +97,7 @@ export async function loginProvider(provider) {
 }
 
 export async function logout(route) {
-  firebase
-    .auth()
+  auth
     .signOut()
     .then(() => {
       window.localStorage.removeItem('userLoading');
@@ -113,8 +110,7 @@ export async function logout(route) {
 }
 
 export async function createUser(email, password, setAlert) {
-  firebase
-    .auth()
+  auth
     .createUserWithEmailAndPassword(email, password)
     .then(() => {
       window.localStorage.setItem('userLoading', 'true');
@@ -237,8 +233,7 @@ export async function updateUser(user, values, setAlert) {
 }
 
 export async function sendPasswordReset(email, setAlert) {
-  firebase
-    .auth()
+  auth
     .sendPasswordResetEmail(email)
     .then(() => {
       setAlert({
@@ -262,8 +257,6 @@ export async function sendPasswordReset(email, setAlert) {
     });
 }
 export async function resetPassword(password, actionCode, setAlert) {
-  const auth = firebase.auth();
-
   auth
     .verifyPasswordResetCode(actionCode)
     .then(() => {

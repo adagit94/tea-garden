@@ -37,7 +37,7 @@ function Carousel({ images }) {
 
 export default function Product({ param }) {
   const [productData, setProductData] = useState(null);
-  const [packs, setPacks] = useState(null);
+  const [packsWeight, setPacksWeight] = useState(null);
   const [weightInput, setWeightInput] = useState(null);
   const [amountInput, setAmountInput] = useState(1);
 
@@ -52,19 +52,31 @@ export default function Product({ param }) {
 
   useEffect(() => {
     async function initProduct() {
-      const productData =
-        products.length > 0
-          ? products.find(product => product.url.product === param[2])
-          : await getProduct(param);
+      const productsID = Object.getOwnPropertyNames(products);
 
-      const packs = Object.getOwnPropertyNames(productData.packs);
+      let productData;
+      let packsWeight;
 
-      setPacks(packs);
-      setWeightInput(packs[0]);
+      if (productsID.length > 0) {
+        for (const productID of productsID) {
+          if (products[productID].metadata.url.product === param[2]) {
+            productData = products[productID];
+
+            break;
+          }
+        }
+      } else {
+        productData = await getProduct(param[2]);
+      }
+
+      packsWeight = Object.getOwnPropertyNames(productData.packs);
+
+      setPacksWeight(packsWeight);
+      setWeightInput(packsWeight[0]);
       setProductData(productData);
     }
 
-    if (productData === null && packs === null) initProduct();
+    if (productData === null && packsWeight === null) initProduct();
   });
 
   if (productData === null) return null;
@@ -72,10 +84,10 @@ export default function Product({ param }) {
   return (
     <Row className='pb-md-3'>
       <Col xs={12}>
-        <h1 className='text-center text-md-left'>{productData.name}</h1>
+        <h1 className='text-center text-md-left'>{productData.title.full}</h1>
       </Col>
       <Col className={`pb-3 pb-md-0 ${styles.carouselCol}`} xs={12} md={6}>
-        <Carousel images={productData.images} />
+        <Carousel images={productData.metadata.images} />
       </Col>
       <Col className='pt-3 pt-md-0' xs={12} md={6}>
         <div>
@@ -98,13 +110,9 @@ export default function Product({ param }) {
           )}
         </div>
         <div>
-          {productData.stock > 0 && (
-            <span className='text-success'>
-              Skladem{productData.stock > 5 && ' > 5'}
-            </span>
-          )}
-
-          {productData.stock === 0 && (
+          {productData.stock >= Number(packsWeight[0]) ? (
+            <span className='text-success'>Skladem</span>
+          ) : (
             <span className='text-danger'>Není skladem</span>
           )}
         </div>
@@ -118,14 +126,24 @@ export default function Product({ param }) {
 
               <Form.Control
                 onChange={e => {
+                  if (
+                    Number(e.target.value) * amountInput >
+                    productData.stock
+                  ) {
+                    return;
+                  }
+
                   setWeightInput(e.target.value);
                 }}
                 className={styles.formInput}
-                disabled={productData.stock === 0 ? true : false}
+                disabled={
+                  productData.stock < Number(packsWeight[0]) ? true : false
+                }
+                value={weightInput}
                 as='select'
                 custom
               >
-                {packs.map(pack => (
+                {packsWeight.map(pack => (
                   <option key={pack} value={pack}>
                     {pack}g
                   </option>
@@ -142,12 +160,19 @@ export default function Product({ param }) {
 
               <Form.Control
                 onChange={e => {
-                  if (e.target.value < 1) return;
+                  if (
+                    e.target.value < 1 ||
+                    Number(e.target.value) * weightInput > productData.stock
+                  ) {
+                    return;
+                  }
 
                   setAmountInput(Number(e.target.value));
                 }}
                 className={styles.formInput}
-                disabled={productData.stock === 0 ? true : false}
+                disabled={
+                  productData.stock < Number(packsWeight[0]) ? true : false
+                }
                 value={amountInput}
                 type='number'
               />
@@ -168,7 +193,7 @@ export default function Product({ param }) {
             </Form.Group>
           </div>
 
-          {productData.stock > 0 && (
+          {productData.stock >= Number(packsWeight[0]) && (
             <>
               <BtnPopover
                 bg='success'
@@ -182,12 +207,12 @@ export default function Product({ param }) {
 
               <Button
                 onClick={e => {
-                  const { id, name, packs, images, url } = productData;
+                  const { id, metadata, title, packs } = productData;
 
                   saveProduct(id, shoppingCart, userDispatch, {
-                    name,
-                    url,
-                    image: images.main,
+                    title,
+                    url: metadata.url,
+                    image: metadata.images.main,
                     pack: [weightInput, amountInput],
                     price: packs[weightInput],
                   });

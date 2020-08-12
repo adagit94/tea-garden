@@ -13,7 +13,7 @@ export default function CategoryTiles() {
           <a className='stretched-link'>
             <h1 className='text-center'>Čerstvé čaje</h1>
             <div className='overflow-hidden rounded-circle mx-auto'>
-              <img src='/teas/_hp/sencha-meiryoku-2020.jpg' alt='čerstvý čaj' />
+              <img src='/teas/fresh.jpg' alt='čerstvý čaj' />
             </div>
           </a>
         </Link>
@@ -24,7 +24,7 @@ export default function CategoryTiles() {
             <h1 className='text-center'>Archivní čaje</h1>
             <div className='overflow-hidden rounded-circle mx-auto'>
               <img
-                src='/teas/_hp/bu-lang-mountain-shu-puerh-beeng-cha-2015.jpg'
+                src='/teas/archive.jpg'
                 alt='archivní čaj'
               />
             </div>

@@ -2,15 +2,13 @@ import Router from 'next/router';
 import * as firebase from 'firebase/app';
 import 'firebase/firestore';
 
-import { collectionTranslator } from './helpers';
-
-const teas = ['puErh', 'oolong', 'red', 'green'];
+import { firestore } from './init-firebase';
 
 export let detachAddressListener;
 export let detachOrdersListener;
 
 export async function initFirestoreListeners(user, syncData) {
-  const userRef = firebase.firestore().collection('users').doc(user.uid);
+  const userRef = firestore.collection('users').doc(user.uid);
 
   const addressRef = userRef.collection('address');
   const ordersRef = userRef.collection('orders');
@@ -102,8 +100,7 @@ export async function updateAddress(uid, formValues, stateValues, setAlert) {
       msg: 'Nebyla provedena zádná změna.',
     });
   } else {
-    firebase
-      .firestore()
+    firestore
       .collection('users')
       .doc(uid)
       .collection('address')
@@ -122,81 +119,59 @@ export async function updateAddress(uid, formValues, stateValues, setAlert) {
   }
 }
 
-export async function getProducts(param) {
-  const firestore = firebase.firestore();
-
-  const [category, subcategory] = param;
+export async function getProducts(spec) {
+  let productsRef = firestore.collection('products');
 
   let products;
 
-  if (category === 'cerstve' || category === 'archivni') {
-    let operator;
-    let year;
-
-    switch (category) {
-      case 'cerstve':
-        operator = '==';
-        year = 2020;
-        break;
-
-      case 'archivni':
-        operator = '<=';
-        year = 2005;
-        break;
-    }
-
-    products = [];
-
-    const promises = teas.map(tea =>
-      firestore
-        .collection(tea)
-        .where('harvest.year', operator, year)
-        .get()
-        .then(data =>
-          data.docs.forEach(doc => {
-            products.push({ id: doc.id, ...doc.data() });
-          })
-        )
-        .catch(err => {
-          console.error(err);
-        })
-    );
-
-    await Promise.all(promises)
-      .then()
-      .catch(err => {
-        console.error(err);
-      });
+  if (spec === 'new') {
+    productsRef = productsRef.orderBy('metadata.created', 'desc').limit(5);
+  } else if (spec === 'topSelling') {
+    productsRef = productsRef.orderBy('stats.orderedAmount', 'desc').limit(5);
   } else {
-    let productsRef = firestore.collection(collectionTranslator(category));
+    const [category, subcategory] = spec;
 
-    if (subcategory) {
-      productsRef = productsRef.where('url.subcategory', '==', subcategory);
+    if (category === 'cerstve') {
+      productsRef = productsRef.where('harvest.year', '==', 2020);
+    } else if (category === 'archivni') {
+      productsRef = productsRef.where('harvest.year', '<=', 2005);
+    } else {
+      productsRef = productsRef.where('metadata.url.category', '==', category);
+
+      if (subcategory) {
+        productsRef = productsRef.where(
+          'metadata.url.subcategory',
+          '==',
+          subcategory
+        );
+      }
     }
-
-    products = await productsRef
-      .get()
-      .then(data => data.docs.map(doc => ({ id: doc.id, ...doc.data() })))
-      .catch(err => {
-        console.error(err);
-      });
   }
+
+  products = await productsRef
+    .get()
+    .then(data => {
+      let products = {};
+
+      data.docs.forEach(doc => {
+        products[doc.id] = doc.data();
+      });
+
+      return products;
+    })
+    .catch(err => {
+      console.error(err);
+    });
 
   return products;
 }
 
-export async function getProduct(param) {
-  const [category, subcategory, product] = param;
-
-  let productData;
-  const productRef = firebase
-    .firestore()
-    .collection(collectionTranslator(category))
-    .where('url.product', '==', product);
-
-  productData = await productRef
+export async function getProduct(product) {
+  const productData = await firestore
+    .collection('products')
+    .where('metadata.url.product', '==', product)
     .get()
-    .then(data => data.docs.map(doc => ({ id: doc.id, ...doc.data() }))[0])
+    .then(data => ({ id: data.docs[0].id, ...data.docs[0].data() }))
     .catch(err => {
       console.error(err);
     });
@@ -208,20 +183,25 @@ export async function saveOrder(
   uid,
   formValues,
   shoppingCart,
+  cartItems,
   price,
   stateUpdater
 ) {
-  let ref = firebase.firestore();
+  let orderRef;
   let order;
 
   if (uid) {
-    ref = ref.collection('users').doc(uid).collection('orders');
+    orderRef = firestore
+      .collection('users')
+      .doc(uid)
+      .collection('orders')
+      .doc();
   } else {
-    ref = ref.collection('orders');
+    orderRef = firestore.collection('orders').doc();
   }
 
   order = {
-    status: 'pending',
+    status: 'čeká na vyřízení',
     payment: formValues.payment,
     delivery: formValues.delivery,
     email: formValues.email,
@@ -248,27 +228,42 @@ export async function saveOrder(
     };
   }
 
-  order.products = Object.getOwnPropertyNames(shoppingCart).map(itemID => {
+  order.products = cartItems.map(itemID => {
     const product = shoppingCart[itemID];
+    const [weight, amount] = product.pack;
+
+    firestore
+      .collection('products')
+      .doc(itemID)
+      .update({
+        stock: firebase.firestore.FieldValue - Number(weight) * amount,
+        'stats.orderedAmount': firebase.firestore.FieldValue.increment(
+          Number(weight) * amount
+        ),
+      });
 
     return {
-      name: product.name,
-      weight: product.pack[0],
-      amount: product.pack[1],
+      id: itemID,
+      name: product.title.full,
+      weight,
+      amount,
     };
   });
 
-  ref
-    .doc()
+  orderRef
     .set({ date: firebase.firestore.FieldValue.serverTimestamp(), ...order })
     .then(() => {
-      Router.push('/');
-
       window.localStorage.removeItem('shoppingCart');
 
-      stateUpdater({ type: 'clearCart' });
+      setTimeout(() => {
+        stateUpdater({ type: 'clearCart' });
+      }, 200);
+
+      //Router.push('/');
     })
     .catch(err => {
       console.error(err);
     });
+
+  return orderRef.id;
 }

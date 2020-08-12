@@ -8,6 +8,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.2.3",
     "bootstrap": "^4.5.0",
     "firebase": "^7.17.1",
     "formik": "^2.1.5",

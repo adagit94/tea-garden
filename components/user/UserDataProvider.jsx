@@ -4,17 +4,24 @@ import { initFirebase } from 'firebase/init-firebase';
 import { initAuthObserver } from '../../firebase/auth';
 
 const inits = {
+  firebaseReady: false,
   firebase: undefined,
   isAuthenticated: false,
   loading: false,
   address: undefined,
   orders: undefined,
-  products: [],
+  products: {},
   shoppingCart: {},
 };
 
 function reducer(state, action) {
   switch (action.type) {
+    case 'setFirebaseReady':
+      return {
+        ...state,
+        firebaseReady: true,
+      };
+
     case 'initUser':
       return {
         ...state,
@@ -47,6 +54,18 @@ function reducer(state, action) {
         products: action.payload,
       };
 
+    case 'updateProduct':
+      return {
+        ...state,
+        products: {
+          ...state.products,
+          [action.id]: {
+            ...state.products[action.id],
+            ...action.payload,
+          },
+        },
+      };
+
     case 'setCart':
       return {
         ...state,
@@ -75,7 +94,7 @@ function reducer(state, action) {
           ...state.shoppingCart,
           [action.id]: {
             ...state.shoppingCart[action.id],
-            ...action.payload
+            ...action.payload,
           },
         },
       };
@@ -94,7 +113,11 @@ export default function UserDataProvider({ children }) {
   useEffect(() => {
     const userLoading = window.localStorage.getItem('userLoading');
     const shoppingCartStr = window.localStorage.getItem('shoppingCart');
-    
+
+    function setFirebaseReady() {
+      userDispatch({ type: 'setFirebaseReady' });
+    }
+
     function initUser(user) {
       userDispatch({ type: 'initUser', payload: user });
     }
@@ -106,7 +129,7 @@ export default function UserDataProvider({ children }) {
     function syncData(collection, data) {
       userDispatch({ type: 'syncData', collection, payload: data });
     }
-    
+
     if (userLoading) {
       userDispatch({ type: 'setLoading', value: true });
     }
@@ -117,12 +140,12 @@ export default function UserDataProvider({ children }) {
       userDispatch({ type: 'setCart', payload: shoppingCartObj });
     }
 
-    initFirebase();
+    initFirebase(setFirebaseReady);
     initAuthObserver(initUser, clearUser, syncData);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-//console.log(userState.products, 'products');
+  //console.log(userState.app);
 
   return (
     <UserStateContext.Provider value={userState}>

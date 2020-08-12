@@ -149,16 +149,24 @@ export default function Order() {
             note: '',
           }}
           validationSchema={OrderSchema}
-          onSubmit={values => {
+          onSubmit={async values => {
             if (cartItems.length === 0) return;
 
-            saveOrder(
+            const orderID = await saveOrder(
               firebase?.uid,
               values,
               shoppingCart,
+              cartItems,
               priceRef.current,
               userDispatch
             );
+
+            sendOrderMail(values.email, {
+              id: orderID,
+              delivery: values.delivery,
+              payment: values.payment,
+              price: priceRef.current,
+            });
           }}
         >
           {({ handleSubmit, getFieldProps, touched, values, errors }) => {
@@ -375,7 +383,7 @@ export default function Order() {
                         isInvalid={
                           touched.delivery &&
                           errors.delivery &&
-                          !document.querySelector('#delivery-post').disabled
+                          values.payment !== 'cash'
                         }
                         label={`Česká pošta - ${PRICES.delivery.post} Kč`}
                         value='post'
@@ -390,7 +398,7 @@ export default function Order() {
                         isInvalid={
                           touched.delivery &&
                           errors.delivery &&
-                          !document.querySelector('#delivery-personal').disabled
+                          values.payment !== 'post'
                         }
                         label='Osobní vyzvednutí'
                         value='personal'
@@ -406,13 +414,11 @@ export default function Order() {
                     <Form.Group>
                       <Field
                         as={Form.Check}
-                        disabled={
-                          values.delivery !== '' && values.delivery !== 'post'
-                        }
+                        disabled={values.delivery === 'personal'}
                         isInvalid={
                           touched.payment &&
                           errors.payment &&
-                          !document.querySelector('#payment-post').disabled
+                          values.delivery !== 'personal'
                         }
                         label={`Dobírkou - ${PRICES.payment.post} Kč`}
                         name='payment'
@@ -437,7 +443,7 @@ export default function Order() {
                         isInvalid={
                           touched.payment &&
                           errors.payment &&
-                          !document.querySelector('#payment-cash').disabled
+                          values.delivery !== 'post'
                         }
                         label='Hotově'
                         name='payment'
@@ -463,7 +469,7 @@ export default function Order() {
                       <tbody>
                         {cartItems.map(itemID => {
                           const {
-                            name,
+                            title,
                             image,
                             pack,
                             price,
@@ -496,7 +502,7 @@ export default function Order() {
                                       </div>
                                       <div className='pl-2'>
                                         <b className='d-none d-lg-inline'>
-                                          {name}
+                                          {title.full}
                                         </b>{' '}
                                         {weight}g
                                       </div>
