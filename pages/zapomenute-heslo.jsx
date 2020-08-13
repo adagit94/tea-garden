@@ -20,8 +20,8 @@ export default function ForgottenPassword() {
   const [alert, setAlert] = useFirebaseAlert();
 
   return (
-    <Row className='p-3' lg={2}>
-      <Col>
+    <Row lg={2}>
+      <Col className='p-3'>
         <Formik
           initialValues={{ email: '' }}
           validationSchema={PasswordResetSchema}

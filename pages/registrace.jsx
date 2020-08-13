@@ -55,8 +55,8 @@ export default function Registration() {
   if (loading || isAuthenticated) return <PageLoading />;
 
   return (
-    <Row className='p-3' lg={2}>
-      <Col>
+    <Row lg={2}>
+      <Col className='p-3'>
         <Formik
           initialValues={{ email: '', password: '', passwordConfirmation: '' }}
           validationSchema={RegistrationSchema}

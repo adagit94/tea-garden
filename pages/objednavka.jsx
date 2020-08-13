@@ -88,7 +88,56 @@ function calculatePrice(subtotal, payments) {
   return price;
 }
 
-export default function Order() {
+function customizeText(order) {
+  let text = `Objednávka ${order.id} byla vytvořena.`;
+
+  switch (order.payment) {
+    case 'post':
+      text += ` Dobírku ${PRICES.delivery.post} Kč uhradíte pří předání.`;
+      break;
+
+    case 'bank-transfer':
+      text += ` Pro úspěšné dokončení objednávky prosíme o uhrazení částky ve výši ${order.price} Kč na účet xxxxxxxxx/xxxx.`;
+
+      switch (order.delivery) {
+        case 'personal':
+          text += ` Po přijetí platby si objednávku můžete vyvednout v naší prodejně v době otvíracích hodin.`;
+          break;
+
+        case 'post':
+          text += ` Při předání nic neplatíte.`;
+          break;
+      }
+      break;
+
+    case 'cash':
+      text += ` Objednávku v hodnotě ${order.price} Kč zaplatíte v hotovosti nebo kartou v naší prodejně v době otvíracích hodin.`;
+      break;
+  }
+
+  return text;
+}
+
+async function handleOrder(recipient, order) {
+  const text = customizeText(order);
+
+  const mail = { recipient, text, orderID: order.id };
+
+  const res = await fetch('/api/sendOrder', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(mail),
+  });
+
+  const txt = await res.text();
+
+  console.log(txt, 'txt');
+  console.log(res.status, 'status');
+}
+
+export default function OrderForm() {
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
@@ -122,7 +171,7 @@ export default function Order() {
   }, [cartItems.length, setBtnPopover]);
 
   if (loading || (isAuthenticated && !address)) return <PageLoading />;
-
+console.log(address);
   return (
     <Row className='p-3'>
       <Col>
@@ -161,11 +210,11 @@ export default function Order() {
               userDispatch
             );
 
-            sendOrderMail(values.email, {
+            handleOrder(values.email, {
               id: orderID,
               delivery: values.delivery,
               payment: values.payment,
-              price: priceRef.current,
+              price: priceRef.current.total,
             });
           }}
         >
@@ -385,7 +434,7 @@ export default function Order() {
                           errors.delivery &&
                           values.payment !== 'cash'
                         }
-                        label={`Česká pošta - ${PRICES.delivery.post} Kč`}
+                        label={`Česká pošta: ${PRICES.delivery.post} Kč`}
                         value='post'
                         name='delivery'
                         type='radio'
@@ -420,7 +469,7 @@ export default function Order() {
                           errors.payment &&
                           values.delivery !== 'personal'
                         }
-                        label={`Dobírkou - ${PRICES.payment.post} Kč`}
+                        label={`Dobírkou: ${PRICES.payment.post} Kč`}
                         name='payment'
                         value='post'
                         type='radio'
@@ -471,9 +520,10 @@ export default function Order() {
                           const {
                             title,
                             image,
+                            url,
                             pack,
                             price,
-                            url,
+                            stock,
                           } = shoppingCart[itemID];
 
                           const [weight, amount] = pack;
@@ -501,7 +551,7 @@ export default function Order() {
                                         />
                                       </div>
                                       <div className='pl-2'>
-                                        <b className='d-none d-lg-inline'>
+                                        <b>
                                           {title.full}
                                         </b>{' '}
                                         {weight}g
@@ -543,7 +593,14 @@ export default function Order() {
                                       className={`border-primary ${styles.amountInput}`}
                                       id={amountInputID}
                                       onChange={e => {
-                                        if (e.target.value < 1) return;
+                                        const amount = Number(e.target.value);
+
+                                        if (
+                                          amount < 1 ||
+                                          stock < weight * amount
+                                        ) {
+                                          return;
+                                        }
 
                                         updateProduct(
                                           'updateAmount',
@@ -551,7 +608,7 @@ export default function Order() {
                                           shoppingCart,
                                           userDispatch,
                                           {
-                                            pack: [weight, e.target.value],
+                                            pack: [weight, amount],
                                           }
                                         );
                                       }}
@@ -566,6 +623,10 @@ export default function Order() {
                                             amountInputID,
                                             'add'
                                           );
+
+                                          if (stock < weight * amount) {
+                                            return;
+                                          }
 
                                           updateProduct(
                                             'updateAmount',

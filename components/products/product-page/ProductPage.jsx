@@ -22,10 +22,10 @@ function Sidebar({ category, subcategory }) {
       {category === 'pu-erh' && (
         <>
           <Link href='/[...param]' as='/pu-erh/sheng' passHref>
-            <Nav.Link eventKey='sheng'>Active</Nav.Link>
+            <Nav.Link eventKey='sheng'>Sheng</Nav.Link>
           </Link>
           <Link href='/[...param]' as='/pu-erh/shu' passHref>
-            <Nav.Link eventKey='shu'>Link</Nav.Link>
+            <Nav.Link eventKey='shu'>Shu</Nav.Link>
           </Link>
         </>
       )}
@@ -78,6 +78,7 @@ export default function ProductPage({ param }) {
   const { products } = userState;
 
   const productsID = Object.getOwnPropertyNames(products);
+  const includeSidebar = param[0] !== 'cerstve' && param[0] !== 'archivni';
 
   useEffect(() => {
     async function initPage() {
@@ -90,18 +91,20 @@ export default function ProductPage({ param }) {
   }, [param, userDispatch]);
 
   return (
-    <Row className='py-3'>
-      <Col
-        xs={12}
-        lg={2}
-        className={`p-0 pb-3 pb-lg-0 pr-lg-3 ${styles.sidebarCol}`}
-      >
-        <Sidebar category={param[0]} subcategory={param[1]} />
-      </Col>
-      <Col xs={12} lg={10} className='px-0'>
+    <Row className='px-3 px-lg-0 py-lg-3'>
+      {includeSidebar && (
+        <Col
+          xs={12}
+          lg={2}
+          className={`p-3 ${styles.sidebarCol}`}
+        >
+          <Sidebar category={param[0]} subcategory={param[1]} />
+        </Col>
+      )}
+      <Col xs={12} lg={includeSidebar ? 10 : 12} className='px-0'>
         <Row className='m-0' xs={1} sm={2} md={3}>
           {productsID.map(productID => (
-            <ProductCard key={productID} id={productID} {...products[productID]} />
+            <ProductCard key={productID} {...products[productID]} />
           ))}
         </Row>
         {/* pagination */}

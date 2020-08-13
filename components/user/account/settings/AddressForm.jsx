@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { Formik } from 'formik';
@@ -56,7 +55,7 @@ export default function AddressForm() {
               <Form.Label>Ulice a č.p.</Form.Label>
               <Form.Control
                 type='text'
-                autoComplete='street-address'
+                autoComplete='off'
                 isInvalid={touched.streetHouseNo && errors.streetHouseNo}
                 {...getFieldProps('streetHouseNo')}
               />

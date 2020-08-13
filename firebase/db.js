@@ -154,7 +154,7 @@ export async function getProducts(spec) {
       let products = {};
 
       data.docs.forEach(doc => {
-        products[doc.id] = doc.data();
+        products[doc.id] = { id: doc.id, ...doc.data() };
       });
 
       return products;
@@ -228,27 +228,7 @@ export async function saveOrder(
     };
   }
 
-  order.products = cartItems.map(itemID => {
-    const product = shoppingCart[itemID];
-    const [weight, amount] = product.pack;
-
-    firestore
-      .collection('products')
-      .doc(itemID)
-      .update({
-        stock: firebase.firestore.FieldValue - Number(weight) * amount,
-        'stats.orderedAmount': firebase.firestore.FieldValue.increment(
-          Number(weight) * amount
-        ),
-      });
-
-    return {
-      id: itemID,
-      name: product.title.full,
-      weight,
-      amount,
-    };
-  });
+  order.products = shoppingCart;
 
   orderRef
     .set({ date: firebase.firestore.FieldValue.serverTimestamp(), ...order })
@@ -259,11 +239,30 @@ export async function saveOrder(
         stateUpdater({ type: 'clearCart' });
       }, 200);
 
-      //Router.push('/');
+      Router.push('/');
     })
     .catch(err => {
       console.error(err);
     });
+
+  const updateBatch = firestore.batch();
+  const productsRef = firestore.collection('products');
+
+  cartItems.forEach(itemID => {
+    const product = shoppingCart[itemID];
+    const [weight, amount] = product.pack;
+
+    updateBatch.update(productsRef.doc(itemID), {
+      stock: firebase.firestore.FieldValue.increment(-(weight * amount)),
+      'stats.orderedAmount': firebase.firestore.FieldValue.increment(
+        weight * amount
+      ),
+    });
+  });
+
+  updateBatch.commit().catch(err => {
+    console.error(err);
+  });
 
   return orderRef.id;
 }

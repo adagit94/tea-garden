@@ -26,7 +26,7 @@ export default function Settings() {
   return (
     <AccountLayout activeItem='settings'>
       <Row xs={1} lg={2}>
-        <Col className='p-0 py-3 py-lg-0 px-lg-3 text-center text-lg-left'>
+        <Col className='p-3 text-center text-lg-left'>
           <UserForm />
 
           <Button
@@ -82,7 +82,7 @@ export default function Settings() {
         </Col>
 
         <Col
-          className={`p-0 pt-3 pt-lg-0 pl-lg-3 text-center text-lg-left ${styles.addressForm}`}
+          className={`p-3 text-center text-lg-left ${styles.addressForm}`}
         >
           <AddressForm />
         </Col>

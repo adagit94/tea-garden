@@ -18,7 +18,7 @@ export default function ShoppingCart() {
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
-  const { products, shoppingCart } = userState;
+  const { shoppingCart } = userState;
 
   const cartItems = Object.getOwnPropertyNames(shoppingCart);
   let subtotal = 0;
@@ -54,7 +54,9 @@ export default function ShoppingCart() {
             </thead>
             <tbody>
               {cartItems.map(itemID => {
-                const { title, image, pack, price, url } = shoppingCart[itemID];
+                const { title, image, url, pack, price, stock } = shoppingCart[
+                  itemID
+                ];
 
                 const [weight, amount] = pack;
                 const amountInputID = `cart-amount-input-${itemID}`;
@@ -119,10 +121,7 @@ export default function ShoppingCart() {
                           onChange={e => {
                             const amount = Number(e.target.value);
 
-                            if (
-                              amount < 1 ||
-                              products[itemID].stock < weight * amount
-                            ) {
+                            if (amount < 1 || stock < weight * amount) {
                               return;
                             }
 
@@ -145,7 +144,7 @@ export default function ShoppingCart() {
                             onClick={() => {
                               const amount = updateAmount(amountInputID, 'add');
 
-                              if (products[itemID].stock < weight * amount) {
+                              if (stock < weight * amount) {
                                 return;
                               }
 

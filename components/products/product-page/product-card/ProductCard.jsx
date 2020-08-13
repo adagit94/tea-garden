@@ -27,7 +27,9 @@ export default function ProductCard({
 
   const { shoppingCart } = userState;
 
-  const packsWeight = Object.getOwnPropertyNames(packs);
+  const packsWeight = Object.getOwnPropertyNames(packs).map(pack =>
+    Number(pack)
+  );
 
   return (
     <Col className='p-3'>
@@ -59,7 +61,7 @@ export default function ProductCard({
         </Link>
         <Card.Body className='flex-grow-0 text-center'>
           <div>
-            {stock >= Number(packsWeight[0]) ? (
+            {stock >= packsWeight[0] ? (
               <span className='text-success'>Skladem</span>
             ) : (
               <span className='text-danger'>Není skladem</span>
@@ -69,7 +71,7 @@ export default function ProductCard({
             {packsWeight.length > 1 && 'Od'} {packs[packsWeight[0]]} Kč za{' '}
             {packsWeight[0]}g
           </div>
-          {stock >= Number(packsWeight[0]) && (
+          {stock >= packsWeight[0] && (
             <div ref={btnContainerRef}>
               <BtnPopover
                 bg='success'
@@ -84,6 +86,7 @@ export default function ProductCard({
                 onClick={e => {
                   saveProduct(id, shoppingCart, userDispatch, {
                     title,
+                    stock,
                     url: metadata.url,
                     image: metadata.images.main,
                     pack: [packsWeight[0], 1],
@@ -106,7 +109,7 @@ export default function ProductCard({
               >
                 Do košíku
               </Button>
-              {Object.prototype.hasOwnProperty.call(shoppingCart, id) && (
+              {id in shoppingCart && (
                 <img
                   className='ml-2'
                   src='/icons/shopping-cart-product-card.svg'

@@ -69,7 +69,9 @@ export default function Product({ param }) {
         productData = await getProduct(param[2]);
       }
 
-      packsWeight = Object.getOwnPropertyNames(productData.packs);
+      packsWeight = Object.getOwnPropertyNames(productData.packs).map(pack =>
+        Number(pack)
+      );
 
       setPacksWeight(packsWeight);
       setWeightInput(packsWeight[0]);
@@ -110,7 +112,7 @@ export default function Product({ param }) {
           )}
         </div>
         <div>
-          {productData.stock >= Number(packsWeight[0]) ? (
+          {productData.stock >= packsWeight[0] ? (
             <span className='text-success'>Skladem</span>
           ) : (
             <span className='text-danger'>Není skladem</span>
@@ -126,19 +128,16 @@ export default function Product({ param }) {
 
               <Form.Control
                 onChange={e => {
-                  if (
-                    Number(e.target.value) * amountInput >
-                    productData.stock
-                  ) {
+                  const weight = Number(e.target.value);
+
+                  if (weight * amountInput > productData.stock) {
                     return;
                   }
 
-                  setWeightInput(e.target.value);
+                  setWeightInput(weight);
                 }}
                 className={styles.formInput}
-                disabled={
-                  productData.stock < Number(packsWeight[0]) ? true : false
-                }
+                disabled={productData.stock < packsWeight[0] ? true : false}
                 value={weightInput}
                 as='select'
                 custom
@@ -160,32 +159,29 @@ export default function Product({ param }) {
 
               <Form.Control
                 onChange={e => {
-                  if (
-                    e.target.value < 1 ||
-                    Number(e.target.value) * weightInput > productData.stock
-                  ) {
+                  const amount = Number(e.target.value);
+
+                  if (amount < 1 || amount * weightInput > productData.stock) {
                     return;
                   }
 
-                  setAmountInput(Number(e.target.value));
+                  setAmountInput(amount);
                 }}
                 className={styles.formInput}
-                disabled={
-                  productData.stock < Number(packsWeight[0]) ? true : false
-                }
+                disabled={productData.stock < packsWeight[0] ? true : false}
                 value={amountInput}
                 type='number'
               />
             </Form.Group>
 
             <Form.Group
-              className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
+              className='m-2 d-flex'
               controlId='product-price'
             >
-              <Form.Label className='mr-sm-3'>Cena:</Form.Label>
+              <Form.Label className='mb-0 mr-3'>Cena:</Form.Label>
 
               <Form.Control
-                className={styles.formInput}
+                className={`p-0 ${styles.formInput}`}
                 value={`${productData.packs[weightInput] * amountInput} Kč`}
                 plaintext
                 readOnly
@@ -193,7 +189,7 @@ export default function Product({ param }) {
             </Form.Group>
           </div>
 
-          {productData.stock >= Number(packsWeight[0]) && (
+          {productData.stock >= packsWeight[0] && (
             <>
               <BtnPopover
                 bg='success'
@@ -207,10 +203,11 @@ export default function Product({ param }) {
 
               <Button
                 onClick={e => {
-                  const { id, metadata, title, packs } = productData;
+                  const { id, metadata, title, packs, stock } = productData;
 
                   saveProduct(id, shoppingCart, userDispatch, {
                     title,
+                    stock,
                     url: metadata.url,
                     image: metadata.images.main,
                     pack: [weightInput, amountInput],

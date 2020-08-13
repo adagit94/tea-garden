@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import React, { useContext } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -9,16 +10,16 @@ import { UserStateContext } from 'components/user/UserDataProvider';
 export default function Orders() {
   const userState = useContext(UserStateContext);
 
-  const { orders } = userState;
+  const { firebase, orders } = userState;
 
   const ordersID = orders && Object.getOwnPropertyNames(orders);
-
+console.log(orders);
   return (
     <AccountLayout activeItem='orders'>
       <Row>
         <Col className='pr-0'>
           {orders && ordersID.length > 0 && (
-            <Table hover responsive>
+            <Table responsive>
               <thead>
                 <tr>
                   <th>Objednávka</th>
@@ -30,7 +31,16 @@ export default function Orders() {
               <tbody>
                 {ordersID.map(id => (
                   <tr key={id}>
-                    <td>{id}</td>
+                    <td>
+                      <Link
+                        href='/[uid]/objednavky/[id]'
+                        as={`/${firebase.uid}/objednavky/${id}`}
+                      >
+                        <a>
+                          <b>{id}</b>
+                        </a>
+                      </Link>
+                    </td>
                     <td className='text-center'>{orders[id].date}</td>
                     <td className='text-center'>{orders[id].status}</td>
                     <td className='text-center'>{orders[id].price.total} Kč</td>

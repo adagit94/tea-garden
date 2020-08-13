@@ -44,8 +44,8 @@ export default function LogIn() {
   if (loading || isAuthenticated) return <PageLoading />;
 
   return (
-    <Row className='p-3' xs={1} lg={2}>
-      <Col className='p-0 pb-3 pb-lg-0 pr-lg-3'>
+    <Row className='px-3 px-lg-0 py-lg-3' xs={1} lg={2}>
+      <Col className='p-3'>
         <Formik
           initialValues={{ email: '', password: '' }}
           validationSchema={LogInSchema}
@@ -109,7 +109,7 @@ export default function LogIn() {
         />
       </Col>
       <Col
-        className={`p-0 pt-3 pt-lg-0 pl-lg-3 d-flex flex-column justify-content-center align-items-center align-items-lg-start ${styles.authProviders}`}
+        className={`p-3 d-flex flex-column justify-content-center align-items-center align-items-lg-start ${styles.authProviders}`}
       >
         <button
           onClick={() => {
