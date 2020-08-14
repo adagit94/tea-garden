@@ -13,5 +13,5 @@ export function initFirebase(setFirebaseReady) {
   firestore = firebase.firestore();
   auth = firebase.auth();
 
-  setFirebaseReady();
+  setFirebaseReady(true);
 }

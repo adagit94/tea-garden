@@ -1,13 +1,12 @@
-import React, { useReducer, useEffect, createContext } from 'react';
+import React, { useReducer, useEffect, createContext, useContext } from 'react';
 
-import { initFirebase } from 'firebase/init-firebase';
 import { initAuthObserver } from '../../firebase/auth';
+import { AppStateContext } from 'pages/_app';
 
 const inits = {
-  firebaseReady: false,
   firebase: undefined,
   isAuthenticated: false,
-  loading: false,
+  loading: true,
   address: undefined,
   orders: undefined,
   products: {},
@@ -16,12 +15,6 @@ const inits = {
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'setFirebaseReady':
-      return {
-        ...state,
-        firebaseReady: true,
-      };
-
     case 'initUser':
       return {
         ...state,
@@ -33,6 +26,7 @@ function reducer(state, action) {
     case 'clearUser':
       return {
         ...inits,
+        loading: false,
         shoppingCart: state.shoppingCart,
       };
 
@@ -110,13 +104,10 @@ export const UserDispatchContext = createContext();
 export default function UserDataProvider({ children }) {
   const [userState, userDispatch] = useReducer(reducer, inits);
 
-  useEffect(() => {
-    const userLoading = window.localStorage.getItem('userLoading');
-    const shoppingCartStr = window.localStorage.getItem('shoppingCart');
+  const firebaseReady = useContext(AppStateContext);
 
-    function setFirebaseReady() {
-      userDispatch({ type: 'setFirebaseReady' });
-    }
+  useEffect(() => {
+    const shoppingCartStr = window.localStorage.getItem('shoppingCart');
 
     function initUser(user) {
       userDispatch({ type: 'initUser', payload: user });
@@ -130,20 +121,14 @@ export default function UserDataProvider({ children }) {
       userDispatch({ type: 'syncData', collection, payload: data });
     }
 
-    if (userLoading) {
-      userDispatch({ type: 'setLoading', value: true });
-    }
-
     if (shoppingCartStr) {
       const shoppingCartObj = JSON.parse(shoppingCartStr);
 
       userDispatch({ type: 'setCart', payload: shoppingCartObj });
     }
 
-    initFirebase(setFirebaseReady);
-    initAuthObserver(initUser, clearUser, syncData);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (firebaseReady) initAuthObserver(initUser, clearUser, syncData);
+  }, [firebaseReady]);
 
   //console.log(userState.app);
 

@@ -17,8 +17,6 @@ export function initAuthObserver(initUser, clearUser, syncData) {
         initFirestoreListeners(user, syncData);
         initUser(user);
       } else {
-        window.localStorage.removeItem('userLoading');
-
         if (typeof detachAddressListener === 'function') {
           detachAddressListener();
         }
@@ -37,36 +35,31 @@ export function initAuthObserver(initUser, clearUser, syncData) {
 }
 
 export async function loginEmail(email, password, setAlert) {
-  auth
-    .signInWithEmailAndPassword(email, password)
-    .then(() => {
-      window.localStorage.setItem('userLoading', 'true');
-    })
-    .catch(err => {
-      console.error(err);
+  auth.signInWithEmailAndPassword(email, password).catch(err => {
+    console.error(err);
 
-      let msg;
+    let msg;
 
-      switch (err.code) {
-        case 'auth/invalid-email':
-          msg = 'Neplatná e-mailová adresa.';
-          break;
+    switch (err.code) {
+      case 'auth/invalid-email':
+        msg = 'Neplatná e-mailová adresa.';
+        break;
 
-        case 'auth/user-disabled':
-          msg = 'Uživatel byl deaktivován.';
-          break;
+      case 'auth/user-disabled':
+        msg = 'Uživatel byl deaktivován.';
+        break;
 
-        case 'auth/user-not-found':
-          msg = 'Uživatel neexistuje.';
-          break;
+      case 'auth/user-not-found':
+        msg = 'Uživatel neexistuje.';
+        break;
 
-        case 'auth/wrong-password':
-          msg = 'Neplatné heslo.';
-          break;
-      }
+      case 'auth/wrong-password':
+        msg = 'Neplatné heslo.';
+        break;
+    }
 
-      setAlert({ variant: 'danger', show: true, msg });
-    });
+    setAlert({ variant: 'danger', show: true, msg });
+  });
 }
 
 export async function loginProvider(provider) {
@@ -81,8 +74,6 @@ export async function loginProvider(provider) {
       providerObj = new firebase.auth.GoogleAuthProvider();
       break;
   }
-
-  window.localStorage.setItem('userLoading', 'true');
 
   await auth
     .signInWithRedirect(providerObj)
@@ -100,8 +91,6 @@ export async function logout(route) {
   auth
     .signOut()
     .then(() => {
-      window.localStorage.removeItem('userLoading');
-
       Router.push(route);
     })
     .catch(err => {
@@ -110,24 +99,19 @@ export async function logout(route) {
 }
 
 export async function createUser(email, password, setAlert) {
-  auth
-    .createUserWithEmailAndPassword(email, password)
-    .then(() => {
-      window.localStorage.setItem('userLoading', 'true');
-    })
-    .catch(err => {
-      console.error(err);
+  auth.createUserWithEmailAndPassword(email, password).catch(err => {
+    console.error(err);
 
-      switch (err.code) {
-        case 'auth/email-already-in-use':
-          setAlert({
-            variant: 'danger',
-            show: true,
-            msg: 'E-mailová adresa je již registrována.',
-          });
-          break;
-      }
-    });
+    switch (err.code) {
+      case 'auth/email-already-in-use':
+        setAlert({
+          variant: 'danger',
+          show: true,
+          msg: 'E-mailová adresa je již registrována.',
+        });
+        break;
+    }
+  });
 }
 
 export async function updateUser(user, values, setAlert) {

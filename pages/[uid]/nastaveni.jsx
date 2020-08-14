@@ -81,9 +81,7 @@ export default function Settings() {
           </Modal>
         </Col>
 
-        <Col
-          className={`p-3 text-center text-lg-left ${styles.addressForm}`}
-        >
+        <Col className={`p-3 text-center text-lg-left ${styles.addressForm}`}>
           <AddressForm />
         </Col>
       </Row>

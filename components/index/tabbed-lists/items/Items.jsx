@@ -5,16 +5,14 @@ import Col from 'react-bootstrap/Col';
 import Figure from 'react-bootstrap/Figure';
 
 import { getProducts } from 'firebase/db';
-import { UserStateContext } from 'components/user/UserDataProvider';
+import { AppStateContext } from 'pages/_app';
 
 import styles from './Items.module.scss';
 
 export default function Items({ list }) {
   const [products, setProducts] = useState({});
 
-  const userState = useContext(UserStateContext);
-
-  const { firebaseReady } = userState;
+  const firebaseReady = useContext(AppStateContext);
 
   const productsID = Object.getOwnPropertyNames(products);
 

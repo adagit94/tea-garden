@@ -17,24 +17,29 @@ export default function AccountLayout({ activeItem, children }) {
   const userState = useContext(UserStateContext);
 
   const { query } = router;
-  const { firebase, isAuthenticated, address, orders } = userState;
+  const { firebase, isAuthenticated, loading, address, orders } = userState;
 
   useEffect(() => {
-    if (firebase && query.uid !== firebase.uid) {
-      const page = /\w+$/.exec(router.pathname);
+    if (!loading && !isAuthenticated) {
+      router.push('/prihlaseni');
+    }
+    
+    if (isAuthenticated && query.uid !== firebase.uid) {
+      if (query.oid) {
+        router.push('/[uid]/objednavky', `/${firebase.uid}/objednavky`);
+      } else {
+        const page = /\w+$/.exec(router.pathname);
 
-      router.push(`/[uid]/${page}`, `/${firebase.uid}/${page}`);
+        router.push(`/[uid]/${page}`, `/${firebase.uid}/${page}`);
+      }
+    }
+
+    if (orders && query.oid && !(query.oid in orders)) {
+      router.push('/[uid]/objednavky', `/${firebase.uid}/objednavky`);
     }
   });
 
-  useEffect(() => {
-    if (window.localStorage.getItem('userLoading') === null) {
-      router.push('/prihlaseni');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (!isAuthenticated || !address || !orders) return <PageLoading />;
+  if (!firebase || !address || !orders) return <PageLoading />;
 
   return (
     <Row className='px-3 px-lg-0 py-lg-3'>

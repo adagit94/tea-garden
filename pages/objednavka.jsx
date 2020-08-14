@@ -123,7 +123,7 @@ async function handleOrder(recipient, order) {
 
   const mail = { recipient, text, orderID: order.id };
 
-  const res = await fetch('/api/sendOrder', {
+  const res = await fetch('/api/send-order', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
