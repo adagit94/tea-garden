@@ -3,9 +3,9 @@ import React, { useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import Nav from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
-import Form from 'react-bootstrap/Form';
 
 import Account from './account/Account';
+import Search from 'components/algolia/Search';
 
 export default function Header() {
   const [showPuErhDropdown, setShowPuErhDropdown] = useState(false);
@@ -14,7 +14,7 @@ export default function Header() {
   const [showGreenDropdown, setShowGreenDropdown] = useState(false);
 
   return (
-    <Navbar className='border-bottom border-primary' bg='secondary' expand='lg' collapseOnSelect>
+    <Navbar expand='lg' collapseOnSelect>
       <Navbar.Brand>
         <Link href='/'>
           <a>HP</a>
@@ -23,12 +23,7 @@ export default function Header() {
       <Navbar.Toggle aria-controls='responsive-nav' />
       <Navbar.Collapse id='responsive-nav'>
         <div className='order-lg-1 flex-grow-1 d-flex justify-content-between'>
-          <Form inline>
-            <Form.Group controlId='nav-search-field'>
-              <Form.Label srOnly>Vyhledávač</Form.Label>
-              <Form.Control type='search' placeholder='Hledat' />
-            </Form.Group>
-          </Form>
+          <Search />
           <Account />
         </div>
         <div className='order-lg-0'>

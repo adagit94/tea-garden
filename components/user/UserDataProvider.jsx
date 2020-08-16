@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect, createContext, useContext } from 'react';
 
+import { uploadIndexRecords } from 'algolia/indexing';
 import { initAuthObserver } from '../../firebase/auth';
 import { AppStateContext } from 'pages/_app';
 
@@ -127,7 +128,10 @@ export default function UserDataProvider({ children }) {
       userDispatch({ type: 'setCart', payload: shoppingCartObj });
     }
 
-    if (firebaseReady) initAuthObserver(initUser, clearUser, syncData);
+    if (firebaseReady) {
+      initAuthObserver(initUser, clearUser, syncData);
+      //uploadIndexRecords();
+    }
   }, [firebaseReady]);
 
   //console.log(userState.app);

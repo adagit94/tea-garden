@@ -78,8 +78,9 @@ export default function Product({ param }) {
       setProductData(productData);
     }
 
-    if (productData === null && packsWeight === null) initProduct();
-  });
+    initProduct();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [param]);
 
   if (productData === null) return null;
 

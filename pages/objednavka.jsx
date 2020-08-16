@@ -171,7 +171,7 @@ export default function OrderForm() {
   }, [cartItems.length, setBtnPopover]);
 
   if (loading || (isAuthenticated && !address)) return <PageLoading />;
-console.log(address);
+
   return (
     <Row className='p-3'>
       <Col>
@@ -543,7 +543,6 @@ console.log(address);
                                     <div className='d-flex align-items-center'>
                                       <div>
                                         <img
-                                          className='border rounded'
                                           width='75'
                                           height='75'
                                           src={image}
@@ -551,10 +550,7 @@ console.log(address);
                                         />
                                       </div>
                                       <div className='pl-2'>
-                                        <b>
-                                          {title.full}
-                                        </b>{' '}
-                                        {weight}g
+                                        <b>{title.full}</b> {weight}g
                                       </div>
                                     </div>
                                   </a>

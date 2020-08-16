@@ -233,13 +233,13 @@ export async function saveOrder(
   orderRef
     .set({ date: firebase.firestore.FieldValue.serverTimestamp(), ...order })
     .then(() => {
+      Router.push('/');
+
       window.localStorage.removeItem('shoppingCart');
 
       setTimeout(() => {
         stateUpdater({ type: 'clearCart' });
-      }, 200);
-
-      Router.push('/');
+      }, 500);
     })
     .catch(err => {
       console.error(err);
@@ -265,4 +265,30 @@ export async function saveOrder(
   });
 
   return orderRef.id;
+}
+
+export async function getIndexRecords() {
+  const records = await firestore
+    .collection('products')
+    .get()
+    .then(data =>
+      data.docs.map(doc => {
+        const product = doc.data();
+        const pack = Object.getOwnPropertyNames(product.packs)[0];
+
+        return {
+          objectID: doc.id,
+          title: product.title.full,
+          url: product.metadata.url,
+          image: product.metadata.images.main,
+          weight: pack,
+          price: product.packs[pack],
+        };
+      })
+    )
+    .catch(err => {
+      console.error(err);
+    });
+
+  return records;
 }

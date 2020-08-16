@@ -42,11 +42,11 @@ export default function ShoppingCart() {
           alt='nákupní košík'
         />
       </Dropdown.Toggle>
-      <Dropdown.Menu className={styles.dropdownMenu}>
+      <Dropdown.Menu className={`border-bottom border-primary ${styles.dropdownMenu}`}>
         {cartItems.length > 0 && (
           <Table className='m-0' size='sm' borderless responsive>
             <thead>
-              <tr className='border border-top-0 border-primary'>
+              <tr className='border-bottom border-primary'>
                 <th>Čaj</th>
                 <th className='text-center'>Množství</th>
                 <th className='text-center'>Cena</th>
@@ -66,7 +66,7 @@ export default function ShoppingCart() {
 
                 return (
                   <tr
-                    className='text-nowrap border border-top-0 border-primary'
+                    className='text-nowrap border-bottom border-primary'
                     key={itemID}
                   >
                     <td>
@@ -75,13 +75,7 @@ export default function ShoppingCart() {
                         passHref
                       >
                         <a>
-                          <img
-                            className='border rounded'
-                            width='50'
-                            height='50'
-                            src={image}
-                            alt={name}
-                          />{' '}
+                          <img width='50' height='50' src={image} alt={name} />{' '}
                           <b className='d-none d-lg-inline'>{title.full}</b>{' '}
                           {weight}g
                         </a>
@@ -183,17 +177,17 @@ export default function ShoppingCart() {
               })}
             </tbody>
             <tfoot>
-              <tr className='border border-top-0 border-primary'>
+              <tr className='border-bottom border-primary'>
                 <td className='text-right' colSpan='3'>
                   <b>Celkem</b>
                 </td>
               </tr>
-              <tr className='border border-top-0 border-bottom-0 border-primary'>
+              <tr className='border-bottom border-primary'>
                 <td className='text-right' colSpan='3'>
                   {subtotal} Kč
                 </td>
               </tr>
-              <tr className='border border-top-0 border-primary'>
+              <tr>
                 <td className='text-right' colSpan='3'>
                   <Link href='/objednavka' passHref>
                     <Button
@@ -213,7 +207,7 @@ export default function ShoppingCart() {
         )}
 
         {cartItems.length === 0 && (
-          <div className='text-center p-3 border border-top-0 border-primary'>
+          <div className='text-center p-3 border-bottom border-primary'>
             Košík je prázdný
           </div>
         )}
