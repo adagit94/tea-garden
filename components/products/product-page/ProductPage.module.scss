@@ -1,12 +1,12 @@
 @media (min-width: 0) {
   .sidebarCol {
-    border-bottom: $border-width solid $primary;
+    border-bottom: 1px solid #000000;
   }
 }
 
 @media (min-width: 992px) {
   .sidebarCol {
-    border-right: $border-width solid $primary;
+    border-right: 1px solid #000000;
     border-bottom: none;
   }
 }
