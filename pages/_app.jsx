@@ -1,4 +1,5 @@
 import React, { useState, createContext, useEffect } from 'react';
+import Container from 'react-bootstrap/Container';
 
 import UserDataProvider from '../components/user/UserDataProvider';
 import Layout from '../components/layout/Layout';
@@ -19,7 +20,13 @@ export default function MyApp({ Component, pageProps }) {
     <AppStateContext.Provider value={firebaseReady}>
       <UserDataProvider>
         <Layout>
-          <Component {...pageProps} />
+          {Component.name === 'Index' && <Component {...pageProps} />}
+
+          {Component.name !== 'Index' && (
+            <Container>
+              <Component {...pageProps} />
+            </Container>
+          )}
         </Layout>
       </UserDataProvider>
     </AppStateContext.Provider>

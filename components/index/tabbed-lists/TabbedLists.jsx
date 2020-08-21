@@ -11,7 +11,7 @@ import styles from './TabbedLists.module.scss';
 export default function TabbedLists() {
   return (
     <Row>
-      <Col className='py-1'>
+      <Col>
         <Tabs
           className={`justify-content-center ${styles.tabs}`}
           defaultActiveKey='new'

@@ -115,7 +115,7 @@ export default function LogIn() {
           onClick={() => {
             loginProvider('fb');
           }}
-          className={`border-0 rounded p-2 mb-1 text-light text-center text-lg-left w-50 ${styles.authProviderFacebook}`}
+          className={`border-0 rounded p-2 mb-1 text-light text-center text-lg-left ${styles.authProviderFacebook}`}
           type='button'
         >
           <img src='/icons/facebook.svg' alt='facebook účet' /> Příhlásit
@@ -125,10 +125,10 @@ export default function LogIn() {
           onClick={() => {
             loginProvider('google');
           }}
-          className={`border-0 rounded p-2 mt-1 text-light text-center text-lg-left w-50 ${styles.authProviderGoogle}`}
+          className={`border-0 rounded p-2 mt-1 text-light text-center text-lg-left ${styles.authProviderGoogle}`}
           type='button'
         >
-          <img src='/icons/facebook.svg' alt='facebook účet' /> Příhlásit Google
+          <img src='/icons/google.svg' alt='google účet' /> Příhlásit Google
           účtem
         </button>
       </Col>

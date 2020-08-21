@@ -27,7 +27,7 @@ export default function Items({ list }) {
   });
 
   return (
-    <Row xs={1} sm={2} md={3} lg={4} xl={5}>
+    <Row xs={2} sm={3} md={4} lg={5}>
       {productsID.map(productID => {
         const { title, metadata } = products[productID];
         const { url, images } = metadata;
@@ -46,7 +46,7 @@ export default function Items({ list }) {
                   <div className='overflow-hidden rounded-circle mx-auto'>
                     <Figure.Image src={images.detail} alt={title.short} />
                   </div>
-                  <Figure>{title.short}</Figure>
+                  <Figure.Caption className='text-center'>{title.short}</Figure.Caption>
                 </Figure>
               </a>
             </Link>

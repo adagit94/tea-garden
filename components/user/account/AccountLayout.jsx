@@ -51,7 +51,7 @@ export default function AccountLayout({ activeItem, children }) {
         <Nav
           as='nav'
           className='flex-lg-column'
-          variant='pills'
+          variant='tabs'
           activeKey={activeItem}
         >
           <Link
@@ -82,7 +82,7 @@ export default function AccountLayout({ activeItem, children }) {
           </Button>
         </div>
       </Col>
-      <Col xs={12} lg={10}>
+      <Col className='py-md-3 py-lg-0' xs={12} lg={10}>
         {children}
       </Col>
     </Row>

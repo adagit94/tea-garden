@@ -29,7 +29,6 @@ export default function ShoppingCart() {
         setShowCart(!showCart);
       }}
       show={showCart}
-      alignRight
     >
       <Dropdown.Toggle
         className='p-2'
@@ -42,16 +41,9 @@ export default function ShoppingCart() {
           alt='nákupní košík'
         />
       </Dropdown.Toggle>
-      <Dropdown.Menu className={`border-bottom border-primary ${styles.dropdownMenu}`}>
+      <Dropdown.Menu className='position-absolute' alignRight>
         {cartItems.length > 0 && (
           <Table className='m-0' size='sm' borderless responsive>
-            <thead>
-              <tr className='border-bottom border-primary'>
-                <th>Čaj</th>
-                <th className='text-center'>Množství</th>
-                <th className='text-center'>Cena</th>
-              </tr>
-            </thead>
             <tbody>
               {cartItems.map(itemID => {
                 const { title, image, url, pack, price, stock } = shoppingCart[
@@ -177,18 +169,14 @@ export default function ShoppingCart() {
               })}
             </tbody>
             <tfoot>
-              <tr className='border-bottom border-primary'>
-                <td className='text-right' colSpan='3'>
+              <tr>
+                <td colSpan='2'>
                   <b>Celkem</b>
                 </td>
-              </tr>
-              <tr className='border-bottom border-primary'>
-                <td className='text-right' colSpan='3'>
-                  {subtotal} Kč
-                </td>
+                <td>{subtotal} Kč</td>
               </tr>
               <tr>
-                <td className='text-right' colSpan='3'>
+                <td className='text-center text-lg-right' colSpan='3'>
                   <Link href='/objednavka' passHref>
                     <Button
                       onClick={() => {
@@ -207,7 +195,7 @@ export default function ShoppingCart() {
         )}
 
         {cartItems.length === 0 && (
-          <div className='text-center p-3 border-bottom border-primary'>
+          <div className='text-center p-3'>
             Košík je prázdný
           </div>
         )}

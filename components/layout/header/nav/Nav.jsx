@@ -1,20 +1,22 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import Navbar from 'react-bootstrap/Navbar';
-import Nav from 'react-bootstrap/Nav';
+import NavMenu from 'react-bootstrap/Nav';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import Account from './account/Account';
 import Search from 'components/algolia/Search';
 
-export default function Header() {
+import styles from './Nav.module.scss';
+
+export default function Nav() {
   const [showPuErhDropdown, setShowPuErhDropdown] = useState(false);
   const [showOolongDropdown, setShowOolongDropdown] = useState(false);
   const [showRedDropdown, setShowRedDropdown] = useState(false);
   const [showGreenDropdown, setShowGreenDropdown] = useState(false);
 
   return (
-    <Navbar expand='lg' collapseOnSelect>
+    <Navbar className={styles.nav} expand='lg' collapseOnSelect>
       <Navbar.Brand>
         <Link href='/'>
           <a>HP</a>
@@ -27,7 +29,7 @@ export default function Header() {
           <Account />
         </div>
         <div className='order-lg-0'>
-          <Nav>
+          <NavMenu>
             <Dropdown
               onMouseEnter={() => {
                 setShowPuErhDropdown(true);
@@ -39,7 +41,7 @@ export default function Header() {
               className='mx-auto text-center'
             >
               <Link href='/[...param]' as='/pu-erh' passHref>
-                <Dropdown.Toggle as={Nav.Link} id='dropdown-puerh'>
+                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-puerh'>
                   Pu erh
                 </Dropdown.Toggle>
               </Link>
@@ -67,7 +69,7 @@ export default function Header() {
               className='mx-auto text-center'
             >
               <Link href='/[...param]' as='/oolong' passHref>
-                <Dropdown.Toggle as={Nav.Link} id='dropdown-oolong'>
+                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-oolong'>
                   Oolong
                 </Dropdown.Toggle>
               </Link>
@@ -105,7 +107,7 @@ export default function Header() {
               className='mx-auto text-center'
             >
               <Link href='/[...param]' as='/cerveny' passHref>
-                <Dropdown.Toggle as={Nav.Link} id='dropdown-red'>
+                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-red'>
                   Červený
                 </Dropdown.Toggle>
               </Link>
@@ -128,7 +130,7 @@ export default function Header() {
               className='mx-auto text-center'
             >
               <Link href='/[...param]' as='/zeleny' passHref>
-                <Dropdown.Toggle as={Nav.Link} id='dropdown-green'>
+                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-green'>
                   Zelený
                 </Dropdown.Toggle>
               </Link>
@@ -145,7 +147,7 @@ export default function Header() {
                 </Link>
               </Dropdown.Menu>
             </Dropdown>
-          </Nav>
+          </NavMenu>
         </div>
       </Navbar.Collapse>
     </Navbar>

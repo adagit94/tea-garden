@@ -18,7 +18,7 @@ export default function Orders() {
     <AccountLayout activeItem='orders'>
       {orders && (
         <Row>
-          <Col className='pr-0'>
+          <Col className='p-3'>
             {ordersID.length > 0 && (
               <Table responsive>
                 <thead>

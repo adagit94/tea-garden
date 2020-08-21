@@ -14,7 +14,7 @@ import styles from './ProductPage.module.scss';
 function Sidebar({ category, subcategory }) {
   return (
     <Nav
-      variant='pills'
+      variant='tabs'
       as='nav'
       activeKey={subcategory}
       className='flex-lg-column'

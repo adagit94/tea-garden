@@ -5,6 +5,18 @@
 @media (min-width: map-get($grid-breakpoints, 'xs')) {
   .authProviders {
     border-top: $border-width solid $border-color;
+
+    button {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: map-get($grid-breakpoints, 'sm')) {
+  .authProviders {
+    button {
+      width: 50%;
+    }
   }
 }
 
@@ -21,10 +33,6 @@
   &:hover {
     background-color: #334d84;
     cursor: not-allowed;
-  }
-
-  &:focus {
-    outline: none;
   }
 }
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
@@ -8,19 +7,13 @@ import Contact from './contact/Contact';
 
 export default function Footer() {
   return (
-    <Container className='bg-light' fluid>
-      <Container>
-        <footer>
-          <Row xs={1} lg={2}>
-            <Col className='d-lg-flex flex-lg-column justify-content-lg-center'>
-              <Newsletter />
-            </Col>
-            <Col className='d-flex'>
-              <Contact />
-            </Col>
-          </Row>
-        </footer>
-      </Container>
-    </Container>
+    <Row className='bg-light' as='footer' xs={1} lg={2}>
+      <Col className='d-flex flex-column justify-content-center'>
+        <Newsletter />
+      </Col>
+      <Col className='d-flex justify-content-between justify-content-lg-center'>
+        <Contact />
+      </Col>
+    </Row>
   );
 }

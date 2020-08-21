@@ -122,10 +122,10 @@ export default function Product({ param }) {
         <Form className='justify-content-around' ref={btnContainerRef} inline>
           <div className='d-flex flex-column'>
             <Form.Group
-              className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
+              className='m-2 d-flex justify-content-between align-items-center'
               controlId='product-weight'
             >
-              <Form.Label className='mr-sm-3'>Balení:</Form.Label>
+              <Form.Label className='mr-3'>Balení:</Form.Label>
 
               <Form.Control
                 onChange={e => {
@@ -152,11 +152,11 @@ export default function Product({ param }) {
             </Form.Group>
 
             <Form.Group
-              className='m-2 d-flex flex-column flex-sm-row justify-content-sm-between align-items-center'
+              className='m-2 d-flex justify-content-between align-items-center'
               controlId='product-amount'
               ref={btnContainerRef}
             >
-              <Form.Label className='mr-sm-3'>Množství:</Form.Label>
+              <Form.Label className='mr-3'>Množství:</Form.Label>
 
               <Form.Control
                 onChange={e => {
@@ -176,7 +176,7 @@ export default function Product({ param }) {
             </Form.Group>
 
             <Form.Group
-              className='m-2 d-flex'
+              className='m-2 d-flex justify-content-between align-items-center'
               controlId='product-price'
             >
               <Form.Label className='mb-0 mr-3'>Cena:</Form.Label>

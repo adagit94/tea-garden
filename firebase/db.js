@@ -239,7 +239,7 @@ export async function saveOrder(
 
       setTimeout(() => {
         stateUpdater({ type: 'clearCart' });
-      }, 500);
+      }, 750);
     })
     .catch(err => {
       console.error(err);
