@@ -5,7 +5,7 @@ import UserDataProvider from '../components/user/UserDataProvider';
 import Layout from '../components/layout/Layout';
 import { initFirebase } from 'firebase/init-firebase';
 
-import 'scss/app.css';
+import 'scss/bootstrap.css';
 
 export const AppStateContext = createContext();
 
