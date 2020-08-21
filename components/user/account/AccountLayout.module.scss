@@ -1,16 +1,12 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
-
-@media (min-width: map-get($grid-breakpoints, 'xs')) {
+@media (min-width: 0) {
   .accountNavCol {
-    border-bottom: $border-width solid $primary;
+    border-bottom: 1px solid #000000;
   }
 }
 
-@media (min-width: map-get($grid-breakpoints, 'lg')) {
+@media (min-width: 992px) {
   .accountNavCol {
-    border-right: $border-width solid $primary;
+    border-right: 1px solid #000000;
     border-bottom: none;
   }
 }

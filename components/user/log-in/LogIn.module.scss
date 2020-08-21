@@ -1,10 +1,6 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
-
-@media (min-width: map-get($grid-breakpoints, 'xs')) {
+@media (min-width: 0) {
   .authProviders {
-    border-top: $border-width solid $border-color;
+    border-top: 1px solid #000000;
 
     button {
       width: 100%;
@@ -12,7 +8,7 @@
   }
 }
 
-@media (min-width: map-get($grid-breakpoints, 'sm')) {
+@media (min-width: 576px) {
   .authProviders {
     button {
       width: 50%;
@@ -20,9 +16,9 @@
   }
 }
 
-@media (min-width: map-get($grid-breakpoints, 'lg')) {
+@media (min-width: 992px) {
   .authProviders {
-    border-left: $border-width solid $border-color;
+    border-left: 1px solid #000000;
     border-top: none;
   }
 }

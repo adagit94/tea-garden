@@ -1,14 +1,10 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
-
-@media (min-width: map-get($grid-breakpoints, 'xs')) {
+@media (min-width: 0) {
   .sidebarCol {
     border-bottom: $border-width solid $primary;
   }
 }
 
-@media (min-width: map-get($grid-breakpoints, 'lg')) {
+@media (min-width: 992px) {
   .sidebarCol {
     border-right: $border-width solid $primary;
     border-bottom: none;

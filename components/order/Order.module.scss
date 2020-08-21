@@ -1,13 +1,10 @@
-@import '~bootstrap/scss/functions';
-@import '~bootstrap/scss/variables';
-
-@media (min-width: map-get($grid-breakpoints, 'xs')) {
+@media (min-width: 0) {
   .singleInput {
     width: 100%;
   }
 }
 
-@media (min-width: map-get($grid-breakpoints, 'lg')) {
+@media (min-width: 992px) {
   .singleInput {
     width: 25%;
   }
@@ -25,9 +22,9 @@
 
 .cancelSymbol {
   opacity: unset !important;
-  color: $primary !important;
+  color: #000000 !important;
 
   &:hover {
-    color: $danger !important;
+    color: #dc3545 !important;
   }
 }
