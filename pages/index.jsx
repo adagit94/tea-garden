@@ -9,11 +9,11 @@ import CategoryTiles from 'components/index/category-tiles/CategoryTiles';
 export default function Index() {
   return (
     <>
-      <div className='row'>
+      <Row>
         <Col className='p-0'>
           <Carousel />
         </Col>
-      </div>
+      </Row>
       <Row>
         <Col>
           <TabbedLists />
