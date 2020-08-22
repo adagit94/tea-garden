@@ -125,9 +125,9 @@ export async function getProducts(spec) {
   let products;
 
   if (spec === 'new') {
-    productsRef = productsRef.orderBy('metadata.created', 'desc').limit(5);
+    productsRef = productsRef.orderBy('metadata.created', 'desc').limit(6);
   } else if (spec === 'topSelling') {
-    productsRef = productsRef.orderBy('stats.orderedAmount', 'desc').limit(5);
+    productsRef = productsRef.orderBy('stats.orderedAmount', 'desc').limit(6);
   } else {
     const [category, subcategory] = spec;
 

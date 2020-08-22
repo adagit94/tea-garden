@@ -3149,7 +3149,7 @@ input[type=button].btn-block {
 .dropdown-item.active, .dropdown-item:active {
   color: #000000;
   text-decoration: none;
-  background-color: #ffffff;
+  background-color: transparent;
 }
 .dropdown-item.disabled, .dropdown-item:disabled {
   color: #6c757d;
@@ -9906,4 +9906,4 @@ h3 {
   }
 }
 
-/*# sourceMappingURL=app.css.map */
+/*# sourceMappingURL=bootstrap.css.map */

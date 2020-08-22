@@ -24,11 +24,11 @@ function Carousel({ images }) {
       fade={true}
     >
       <Carous.Item>
-        <img className='d-block w-100' src={images.main} alt='Půlený' />
+        <img className='d-block w-100 border border-secondary rounded' src={images.main} alt='Půlený' />
       </Carous.Item>
       {images.infusion && (
         <Carous.Item>
-          <img className='d-block w-100' src={images.infusion} alt='Nálev' />
+          <img className='d-block w-100 border border-secondary rounded' src={images.infusion} alt='Nálev' />
         </Carous.Item>
       )}
     </Carous>
@@ -85,7 +85,7 @@ export default function Product({ param }) {
   if (productData === null) return null;
 
   return (
-    <Row className='px-3 px-md-0 py-md-3'>
+    <Row className='px-3 px-md-0 pb-md-3'>
       <Col xs={12}>
         <h1 className='text-center text-md-left'>{productData.title.full}</h1>
       </Col>

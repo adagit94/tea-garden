@@ -30,22 +30,22 @@ export default function Orders() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ordersID.map(id => (
-                    <tr key={id}>
+                  {ordersID.map(oid => (
+                    <tr key={oid}>
                       <td>
                         <Link
-                          href='/[uid]/objednavky/[id]'
-                          as={`/${firebase.uid}/objednavky/${id}`}
+                          href='/[uid]/objednavky/[oid]'
+                          as={`/${firebase.uid}/objednavky/${oid}`}
                         >
                           <a>
-                            <b>{id}</b>
+                            <b>{oid}</b>
                           </a>
                         </Link>
                       </td>
-                      <td className='text-center'>{orders[id].date}</td>
-                      <td className='text-center'>{orders[id].status}</td>
+                      <td className='text-center'>{orders[oid].date}</td>
+                      <td className='text-center'>{orders[oid].status}</td>
                       <td className='text-center'>
-                        {orders[id].price.total} Kč
+                        {orders[oid].price.total} Kč
                       </td>
                     </tr>
                   ))}

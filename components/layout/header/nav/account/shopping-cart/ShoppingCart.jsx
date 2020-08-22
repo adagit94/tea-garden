@@ -67,7 +67,7 @@ export default function ShoppingCart() {
                         passHref
                       >
                         <a>
-                          <img width='50' height='50' src={image} alt={name} />{' '}
+                          <img className='border border-secondary rounded' width='50' height='50' src={image} alt={name} />{' '}
                           <b className='d-none d-lg-inline'>{title.full}</b>{' '}
                           {weight}g
                         </a>

@@ -543,6 +543,7 @@ export default function OrderForm() {
                                     <div className='d-flex align-items-center'>
                                       <div>
                                         <img
+                                          className='border border-secondary rounded'
                                           width='75'
                                           height='75'
                                           src={image}

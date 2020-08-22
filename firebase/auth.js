@@ -87,15 +87,10 @@ export async function loginProvider(provider) {
   });
 }
 
-export async function logout(route) {
-  auth
-    .signOut()
-    .then(() => {
-      Router.push(route);
-    })
-    .catch(err => {
-      console.error(err);
-    });
+export async function logout() {
+  auth.signOut().catch(err => {
+    console.error(err);
+  });
 }
 
 export async function createUser(email, password, setAlert) {
@@ -147,7 +142,7 @@ export async function updateUser(user, values, setAlert) {
             });
 
             setTimeout(() => {
-              logout('/prihlaseni');
+              logout();
             }, 4000);
             break;
         }
@@ -177,7 +172,7 @@ export async function updateUser(user, values, setAlert) {
             });
 
             setTimeout(() => {
-              logout('/prihlaseni');
+              logout();
             }, 4000);
             break;
         }
@@ -306,7 +301,7 @@ export async function deleteUser(user, setShowModal, setAlert) {
           });
 
           setTimeout(() => {
-            logout('/prihlaseni');
+            logout();
           }, 4000);
           break;
       }

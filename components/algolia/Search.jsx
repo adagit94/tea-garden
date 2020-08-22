@@ -65,7 +65,13 @@ function CustomHits({ hits, clearSearch }) {
             className='d-flex justify-content-between align-items-center'
           >
             <div>
-              <img src={hit.image} alt={hit.title} width='50' height='50' />{' '}
+              <img
+                className='border border-secondary rounded'
+                src={hit.image}
+                alt={hit.title}
+                width='50'
+                height='50'
+              />{' '}
               {hit.title} {hit.weight}g
             </div>
             <div>{hit.price} Kč</div>

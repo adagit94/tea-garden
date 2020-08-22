@@ -23,7 +23,7 @@ export default function AccountLayout({ activeItem, children }) {
     if (!loading && !isAuthenticated) {
       router.push('/prihlaseni');
     }
-    
+
     if (isAuthenticated && query.uid !== firebase.uid) {
       if (query.oid) {
         router.push('/[uid]/objednavky', `/${firebase.uid}/objednavky`);
@@ -72,8 +72,10 @@ export default function AccountLayout({ activeItem, children }) {
         <div className='text-center'>
           <Button
             className='text-primary'
-            onClick={() => {
-              logout('/');
+            onClick={async () => {
+              await router.push('/');
+
+              logout();
             }}
             variant='outline-secondary'
           >

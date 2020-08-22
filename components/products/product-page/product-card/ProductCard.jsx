@@ -33,7 +33,7 @@ export default function ProductCard({
 
   return (
     <Col className='p-3'>
-      <Card>
+      <Card className='overflow-hidden' border='primary'>
         <Link
           href='/[...param]'
           as={`/${metadata.url.category}/${metadata.url.subcategory}/${metadata.url.product}`}

@@ -77,6 +77,7 @@ export default function Order() {
                               <div className='d-flex align-items-center'>
                                 <div>
                                   <img
+                                    className='border border-secondary rounded'
                                     width='50'
                                     height='50'
                                     src={image}

@@ -27,7 +27,7 @@ export default function Items({ list }) {
   });
 
   return (
-    <Row xs={2} sm={3} md={4} lg={5}>
+    <Row xs={2} sm={3} lg={6}>
       {productsID.map(productID => {
         const { title, metadata } = products[productID];
         const { url, images } = metadata;
