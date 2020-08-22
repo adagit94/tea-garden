@@ -89,10 +89,10 @@ export default function Product({ param }) {
       <Col xs={12}>
         <h1 className='text-center text-md-left'>{productData.title.full}</h1>
       </Col>
-      <Col className={`pb-3 pb-md-0 ${styles.carouselCol}`} xs={12} md={6} xl={3}>
+      <Col className={`pb-3 pb-md-0 ${styles.carouselCol}`} xs={12} md={6}>
         <Carousel images={productData.metadata.images} />
       </Col>
-      <Col className='pt-3 pt-md-0' xs={12} md={6} xl={9}>
+      <Col className='pt-3 pt-md-0' xs={12} md={6}>
         <div>
           <p>{productData.describtion}</p>
         </div>
