@@ -9,9 +9,7 @@ export default function Layout({ children }) {
   return (
     <Container fluid>
       <Header />
-      <Container>
-        <Main>{children}</Main>
-      </Container>
+      <Main>{children}</Main>
       <Footer />
     </Container>
   );
