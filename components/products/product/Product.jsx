@@ -24,11 +24,11 @@ function Carousel({ images }) {
       fade={true}
     >
       <Carous.Item>
-        <img className='d-block w-100' src={images.main} alt='Půlený' />
+        <img className={styles.carouselItem} src={images.main} alt='Půlený' />
       </Carous.Item>
       {images.infusion && (
         <Carous.Item>
-          <img className='d-block w-100' src={images.infusion} alt='Nálev' />
+          <img className={styles.carouselItem} src={images.infusion} alt='Nálev' />
         </Carous.Item>
       )}
     </Carous>

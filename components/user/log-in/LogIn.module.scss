@@ -20,6 +20,10 @@
   .authProviders {
     border-left: 1px solid #000000;
     border-top: none;
+
+    button {
+      max-width: 300px;
+    }
   }
 }
 
