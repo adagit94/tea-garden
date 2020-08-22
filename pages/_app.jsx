@@ -1,5 +1,4 @@
 import React, { useState, createContext, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
 
 import UserDataProvider from '../components/user/UserDataProvider';
 import Layout from '../components/layout/Layout';
