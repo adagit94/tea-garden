@@ -20,13 +20,7 @@ export default function MyApp({ Component, pageProps }) {
     <AppStateContext.Provider value={firebaseReady}>
       <UserDataProvider>
         <Layout>
-          {Component.name === 'Index' && <Component {...pageProps} />}
-
-          {Component.name !== 'Index' && (
-            <Container>
-              <Component {...pageProps} />
-            </Container>
-          )}
+          <Component {...pageProps} />
         </Layout>
       </UserDataProvider>
     </AppStateContext.Provider>
