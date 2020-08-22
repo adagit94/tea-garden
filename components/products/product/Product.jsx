@@ -79,13 +79,13 @@ export default function Product({ param }) {
     }
 
     initProduct();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]);
 
   if (productData === null) return null;
 
   return (
-    <Row className='pb-md-3'>
+    <Row className='px-3 px-md-0 py-md-3'>
       <Col xs={12}>
         <h1 className='text-center text-md-left'>{productData.title.full}</h1>
       </Col>
@@ -119,13 +119,13 @@ export default function Product({ param }) {
             <span className='text-danger'>Není skladem</span>
           )}
         </div>
-        <Form className='justify-content-around' ref={btnContainerRef} inline>
+        <Form className='mt-3' ref={btnContainerRef} inline>
           <div className='d-flex flex-column'>
             <Form.Group
               className='m-2 d-flex justify-content-between align-items-center'
               controlId='product-weight'
             >
-              <Form.Label className='mr-3'>Balení:</Form.Label>
+              <Form.Label className='mb-0 mr-3'>Balení:</Form.Label>
 
               <Form.Control
                 onChange={e => {
@@ -156,7 +156,7 @@ export default function Product({ param }) {
               controlId='product-amount'
               ref={btnContainerRef}
             >
-              <Form.Label className='mr-3'>Množství:</Form.Label>
+              <Form.Label className='mb-0  mr-3'>Množství:</Form.Label>
 
               <Form.Control
                 onChange={e => {
@@ -188,52 +188,52 @@ export default function Product({ param }) {
                 readOnly
               />
             </Form.Group>
-          </div>
 
-          {productData.stock >= packsWeight[0] && (
-            <>
-              <BtnPopover
-                bg='success'
-                show={btnPopover.show}
-                target={btnPopover.target}
-                container={btnContainerRef.current}
-                popoverID='product-btn-popover'
-              >
-                Zboží bylo přidáno do košíku.
-              </BtnPopover>
+            {productData.stock >= packsWeight[0] && (
+              <>
+                <BtnPopover
+                  bg='success'
+                  show={btnPopover.show}
+                  target={btnPopover.target}
+                  container={btnContainerRef.current}
+                  popoverID='product-btn-popover'
+                >
+                  Zboží bylo přidáno do košíku.
+                </BtnPopover>
 
-              <Button
-                onClick={e => {
-                  const { id, metadata, title, packs, stock } = productData;
+                <Button
+                  onClick={e => {
+                    const { id, metadata, title, packs, stock } = productData;
 
-                  saveProduct(id, shoppingCart, userDispatch, {
-                    title,
-                    stock,
-                    url: metadata.url,
-                    image: metadata.images.main,
-                    pack: [weightInput, amountInput],
-                    price: packs[weightInput],
-                  });
-
-                  setBtnPopover({
-                    show: true,
-                    target: e.target,
-                  });
-
-                  setTimeout(() => {
-                    setBtnPopover({
-                      show: false,
-                      target: null,
+                    saveProduct(id, shoppingCart, userDispatch, {
+                      title,
+                      stock,
+                      url: metadata.url,
+                      image: metadata.images.main,
+                      pack: [weightInput, amountInput],
+                      price: packs[weightInput],
                     });
-                  }, 2000);
-                }}
-                className='m-2 align-self-end'
-                variant='primary'
-              >
-                Do košíku
-              </Button>
-            </>
-          )}
+
+                    setBtnPopover({
+                      show: true,
+                      target: e.target,
+                    });
+
+                    setTimeout(() => {
+                      setBtnPopover({
+                        show: false,
+                        target: null,
+                      });
+                    }, 2000);
+                  }}
+                  className='m-2 align-self-start'
+                  variant='primary'
+                >
+                  Do košíku
+                </Button>
+              </>
+            )}
+          </div>
         </Form>
       </Col>
     </Row>
