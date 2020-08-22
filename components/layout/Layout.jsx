@@ -7,9 +7,11 @@ import Footer from './footer/Footer';
 
 export default function Layout({ children }) {
   return (
-    <Container>
+    <Container fluid>
       <Header />
-      <Main>{children}</Main>
+      <Container>
+        <Main>{children}</Main>
+      </Container>
       <Footer />
     </Container>
   );
