@@ -9,10 +9,10 @@ import Contact from './contact/Contact';
 export default function Footer() {
   return (
     <footer className='bg-light p-3'>
-      <Row className='text-center text-sm-left' xs={1} sm={2}>
+      <Row className='text-center text-sm-left border-bottom' xs={1} sm={2}>
         <Links />
       </Row>
-      <Row xs={1} xl={2}>
+      <Row className='pt-3' xs={1} xl={2}>
         <Col className='d-flex flex-column justify-content-center'>
           <Newsletter />
         </Col>

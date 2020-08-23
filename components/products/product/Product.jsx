@@ -24,11 +24,19 @@ function Carousel({ images }) {
       fade={true}
     >
       <Carous.Item>
-        <img className='d-block w-100 border border-secondary rounded' src={images.main} alt='Půlený' />
+        <img
+          className='d-block w-100 border border-secondary rounded'
+          src={images.main}
+          alt='Půlený'
+        />
       </Carous.Item>
       {images.infusion && (
         <Carous.Item>
-          <img className='d-block w-100 border border-secondary rounded' src={images.infusion} alt='Nálev' />
+          <img
+            className='d-block w-100 border border-secondary rounded'
+            src={images.infusion}
+            alt='Nálev'
+          />
         </Carous.Item>
       )}
     </Carous>
@@ -57,17 +65,15 @@ export default function Product({ param }) {
       let productData;
       let packsWeight;
 
-      if (productsID.length > 0) {
-        for (const productID of productsID) {
-          if (products[productID].metadata.url.product === param[2]) {
-            productData = products[productID];
+      for (const productID of productsID) {
+        if (products[productID].metadata.url.product === param[2]) {
+          productData = products[productID];
 
-            break;
-          }
+          break;
         }
-      } else {
-        productData = await getProduct(param[2]);
       }
+
+      if (!productData) productData = await getProduct(param[2]);
 
       packsWeight = Object.getOwnPropertyNames(productData.packs).map(pack =>
         Number(pack)
@@ -82,7 +88,7 @@ export default function Product({ param }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]);
 
-  if (productData === null) return null;
+  if (!productData) return null;
 
   return (
     <Row className='px-3 px-md-0 pb-md-3'>
