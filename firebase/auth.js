@@ -35,31 +35,36 @@ export function initAuthObserver(initUser, clearUser, syncData) {
 }
 
 export async function loginEmail(email, password, setAlert) {
-  auth.signInWithEmailAndPassword(email, password).catch(err => {
-    console.error(err);
+  auth
+    .signInWithEmailAndPassword(email, password)
+    .then(() => {
+      window.localStorage.setItem('isLogged', 'true');
+    })
+    .catch(err => {
+      console.error(err);
 
-    let msg;
+      let msg;
 
-    switch (err.code) {
-      case 'auth/invalid-email':
-        msg = 'Neplatná e-mailová adresa.';
-        break;
+      switch (err.code) {
+        case 'auth/invalid-email':
+          msg = 'Neplatná e-mailová adresa.';
+          break;
 
-      case 'auth/user-disabled':
-        msg = 'Uživatel byl deaktivován.';
-        break;
+        case 'auth/user-disabled':
+          msg = 'Uživatel byl deaktivován.';
+          break;
 
-      case 'auth/user-not-found':
-        msg = 'Uživatel neexistuje.';
-        break;
+        case 'auth/user-not-found':
+          msg = 'Uživatel neexistuje.';
+          break;
 
-      case 'auth/wrong-password':
-        msg = 'Neplatné heslo.';
-        break;
-    }
+        case 'auth/wrong-password':
+          msg = 'Neplatné heslo.';
+          break;
+      }
 
-    setAlert({ variant: 'danger', show: true, msg });
-  });
+      setAlert({ variant: 'danger', show: true, msg });
+    });
 }
 
 export async function loginProvider(provider) {
@@ -75,38 +80,49 @@ export async function loginProvider(provider) {
       break;
   }
 
-  await auth
-    .signInWithRedirect(providerObj)
-    .then()
-    .catch(err => {
-      console.error(err);
-    });
+  window.localStorage.setItem('isLogged', 'true');
+
+  await auth.signInWithRedirect(providerObj).catch(err => {
+    console.error(err);
+  });
 
   await auth.getRedirectResult().catch(err => {
     console.error(err);
   });
 }
 
-export async function logout() {
-  auth.signOut().catch(err => {
-    console.error(err);
-  });
+export async function logout(route) {
+  auth
+    .signOut()
+    .then(() => {
+      window.localStorage.removeItem('isLogged');
+
+      Router.push(route);
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }
 
 export async function createUser(email, password, setAlert) {
-  auth.createUserWithEmailAndPassword(email, password).catch(err => {
-    console.error(err);
+  auth
+    .createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      window.localStorage.setItem('isLogged', 'true');
+    })
+    .catch(err => {
+      console.error(err);
 
-    switch (err.code) {
-      case 'auth/email-already-in-use':
-        setAlert({
-          variant: 'danger',
-          show: true,
-          msg: 'E-mailová adresa je již registrována.',
-        });
-        break;
-    }
-  });
+      switch (err.code) {
+        case 'auth/email-already-in-use':
+          setAlert({
+            variant: 'danger',
+            show: true,
+            msg: 'E-mailová adresa je již registrována.',
+          });
+          break;
+      }
+    });
 }
 
 export async function updateUser(user, values, setAlert) {
@@ -142,7 +158,7 @@ export async function updateUser(user, values, setAlert) {
             });
 
             setTimeout(() => {
-              logout();
+              logout('/prihlaseni');
             }, 4000);
             break;
         }
@@ -172,7 +188,7 @@ export async function updateUser(user, values, setAlert) {
             });
 
             setTimeout(() => {
-              logout();
+              logout('/prihlaseni');
             }, 4000);
             break;
         }
@@ -285,6 +301,8 @@ export async function deleteUser(user, setShowModal, setAlert) {
   user
     .delete()
     .then(() => {
+      window.localStorage.removeItem('isLogged');
+
       Router.push('/');
     })
     .catch(err => {
@@ -301,7 +319,7 @@ export async function deleteUser(user, setShowModal, setAlert) {
           });
 
           setTimeout(() => {
-            logout();
+            logout('/prihlaseni');
           }, 4000);
           break;
       }

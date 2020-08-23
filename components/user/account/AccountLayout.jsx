@@ -17,13 +17,9 @@ export default function AccountLayout({ activeItem, children }) {
   const userState = useContext(UserStateContext);
 
   const { query } = router;
-  const { firebase, isAuthenticated, loading, address, orders } = userState;
+  const { firebase, isAuthenticated, address, orders } = userState;
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
-      router.push('/prihlaseni');
-    }
-
     if (isAuthenticated && query.uid !== firebase.uid) {
       if (query.oid) {
         router.push('/[uid]/objednavky', `/${firebase.uid}/objednavky`);
@@ -38,6 +34,11 @@ export default function AccountLayout({ activeItem, children }) {
       router.push('/[uid]/objednavky', `/${firebase.uid}/objednavky`);
     }
   });
+
+  useEffect(() => {
+    if (!window.localStorage.getItem('isLogged')) router.push('/prihlaseni');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   if (!firebase || !address || !orders) return <PageLoading />;
 
@@ -72,10 +73,8 @@ export default function AccountLayout({ activeItem, children }) {
         <div className='text-center'>
           <Button
             className='text-primary'
-            onClick={async () => {
-              await router.push('/');
-
-              logout();
+            onClick={() => {
+              logout('/');
             }}
             variant='outline-secondary'
           >

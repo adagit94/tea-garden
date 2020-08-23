@@ -1,13 +1,12 @@
 import React, { useReducer, useEffect, createContext, useContext } from 'react';
 
-import { uploadIndexRecords } from 'algolia/indexing';
 import { initAuthObserver } from '../../firebase/auth';
 import { AppStateContext } from 'pages/_app';
 
 const inits = {
   firebase: undefined,
   isAuthenticated: false,
-  loading: true,
+  loading: false,
   address: undefined,
   orders: undefined,
   products: {},
@@ -27,7 +26,6 @@ function reducer(state, action) {
     case 'clearUser':
       return {
         ...inits,
-        loading: false,
         shoppingCart: state.shoppingCart,
       };
 
@@ -107,9 +105,9 @@ export default function UserDataProvider({ children }) {
 
   const firebaseReady = useContext(AppStateContext);
 
-  useEffect(() => {
-    const shoppingCartStr = window.localStorage.getItem('shoppingCart');
+  const { loading } = userState;
 
+  useEffect(() => {
     function initUser(user) {
       userDispatch({ type: 'initUser', payload: user });
     }
@@ -122,19 +120,24 @@ export default function UserDataProvider({ children }) {
       userDispatch({ type: 'syncData', collection, payload: data });
     }
 
-    if (shoppingCartStr) {
-      const shoppingCartObj = JSON.parse(shoppingCartStr);
-
-      userDispatch({ type: 'setCart', payload: shoppingCartObj });
-    }
-
     if (firebaseReady) {
       initAuthObserver(initUser, clearUser, syncData);
-      //uploadIndexRecords();
+
+      const shoppingCartStr = window.localStorage.getItem('shoppingCart');
+
+      if (shoppingCartStr) {
+        const shoppingCartObj = JSON.parse(shoppingCartStr);
+
+        userDispatch({ type: 'setCart', payload: shoppingCartObj });
+      }
     }
   }, [firebaseReady]);
 
-  //console.log(userState.app);
+  useEffect(() => {
+    if (window.localStorage.getItem('isLogged')) {
+      userDispatch({ type: 'setLoading', value: true });
+    }
+  }, []);
 
   return (
     <UserStateContext.Provider value={userState}>
