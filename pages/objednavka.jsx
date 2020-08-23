@@ -123,18 +123,13 @@ async function handleOrder(recipient, order) {
 
   const mail = { recipient, text, orderID: order.id };
 
-  const res = await fetch('/api/send-order', {
+  fetch('/api/send-order', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify(mail),
   });
-
-  const txt = await res.text();
-
-  console.log(txt, 'txt');
-  console.log(res.status, 'status');
 }
 
 export default function OrderForm() {

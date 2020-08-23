@@ -13,11 +13,7 @@ export default function (req, res) {
       text,
       html: '<strong>and easy to do anywhere, even with Node.js</strong>',
     })
-    .then(() => {
-      res.status(200).send('send successfully');
-    })
     .catch(err => {
       console.error(err);
-      res.status(400).send('not send');
     });
 }
