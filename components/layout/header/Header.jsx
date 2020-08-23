@@ -6,10 +6,12 @@ import Nav from './nav/Nav';
 
 export default function Header() {
   return (
-    <Row as='header'>
-      <Col className='p-0'>
-        <Nav />
-      </Col>
-    </Row>
+    <header>
+      <Row>
+        <Col className='p-0'>
+          <Nav />
+        </Col>
+      </Row>
+    </header>
   );
 }
