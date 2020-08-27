@@ -1,11 +1,11 @@
 import algoliasearch from 'algoliasearch';
 
-import { getIndexRecords } from 'firebase/db';
+export default function uploadIndexRecords(req, res) {
+  const index = algoliasearch(
+    process.env.ALGOLIA_APP_ID,
+    process.env.ALGOLIA_ADMIN_API_KEY
+  ).initIndex('tea-garden');
 
-const client = algoliasearch('XP39PLM1ZJ', '12555952397ae139cb994bbd7fb6a987');
-const index = client.initIndex('tea-garden');
-
-export async function uploadIndexRecords() {
   index
     .setSettings({
       searchableAttributes: ['title'],
@@ -25,9 +25,7 @@ export async function uploadIndexRecords() {
       console.error(err);
     });
 
-  const records = await getIndexRecords();
-
-  index.saveObjects(records).catch(err => {
+  index.saveObjects(req.body).catch(err => {
     console.error(err);
   });
 }

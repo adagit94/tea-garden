@@ -105,8 +105,6 @@ export default function UserDataProvider({ children }) {
 
   const firebaseReady = useContext(AppStateContext);
 
-  const { loading } = userState;
-
   useEffect(() => {
     function initUser(user) {
       userDispatch({ type: 'initUser', payload: user });

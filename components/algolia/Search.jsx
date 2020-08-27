@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Form from 'react-bootstrap/Form';
 import ListGroup from 'react-bootstrap/ListGroup';
 import algoliasearch from 'algoliasearch/lite';

@@ -7,7 +7,7 @@ import Footer from './footer/Footer';
 
 export default function Layout({ children }) {
   return (
-    <Container className='' fluid>
+    <Container fluid>
       <Header />
       <Main>{children}</Main>
       <Footer />

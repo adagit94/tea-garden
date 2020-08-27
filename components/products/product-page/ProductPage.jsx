@@ -93,11 +93,7 @@ export default function ProductPage({ param }) {
   return (
     <Row className='px-3 px-lg-0 py-lg-3'>
       {includeSidebar && (
-        <Col
-          xs={12}
-          lg={2}
-          className={`p-3 ${styles.sidebarCol}`}
-        >
+        <Col xs={12} lg={2} className={`p-3 ${styles.sidebarCol}`}>
           <Sidebar category={param[0]} subcategory={param[1]} />
         </Col>
       )}
