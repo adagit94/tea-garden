@@ -9,9 +9,9 @@ import { UserStateContext } from 'components/user/UserDataProvider';
 
 function Loading() {
   return (
-    <Button variant='outline-secondary' type='button'>
+    <Button variant='outline-header' type='button'>
       <Spinner
-        variant='primary'
+        variant='secondary'
         size='sm'
         animation='border'
         role='status'

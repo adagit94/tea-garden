@@ -31,9 +31,9 @@ export default function ShoppingCart() {
       show={showCart}
     >
       <Dropdown.Toggle
-        className='p-2'
+        className='p-2 border-0'
         id='dropdown-shopping-cart'
-        variant='outline-secondary'
+        variant='outline-header'
       >
         <img
           className='p-1'
@@ -41,9 +41,9 @@ export default function ShoppingCart() {
           alt='nákupní košík'
         />
       </Dropdown.Toggle>
-      <Dropdown.Menu className='position-absolute' alignRight>
+      <Dropdown.Menu className='px-3 position-absolute' alignRight>
         {cartItems.length > 0 && (
-          <Table className='m-0' size='sm' borderless responsive>
+          <Table className='m-0 text-white' size='sm' borderless responsive>
             <tbody>
               {cartItems.map(itemID => {
                 const { title, image, url, pack, price, stock } = shoppingCart[
@@ -58,16 +58,17 @@ export default function ShoppingCart() {
 
                 return (
                   <tr
-                    className='text-nowrap border-bottom border-primary'
+                    className={`text-nowrap ${styles.tr}`}
                     key={itemID}
                   >
                     <td>
                       <Link
-                        href={`/${url.category}/${url.subcategory}/${url.product}`}
+                        href='[...param]'
+                        as={`/${url.category}/${url.subcategory}/${url.product}`}
                         passHref
                       >
-                        <a>
-                          <img className='border border-secondary rounded' width='50' height='50' src={image} alt={name} />{' '}
+                        <a className='text-white'>
+                          <img className='border border-header rounded' width='50' height='50' src={image} alt={name} />{' '}
                           <b className='d-none d-lg-inline'>{title.full}</b>{' '}
                           {weight}g
                         </a>
@@ -77,7 +78,7 @@ export default function ShoppingCart() {
                       <InputGroup className='p-2 flex-nowrap'>
                         <InputGroup.Prepend>
                           <Button
-                            className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
+                            className={`d-flex justify-content-center align-items-center border border-white ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(
                                 amountInputID,
@@ -96,13 +97,13 @@ export default function ShoppingCart() {
                                 }
                               );
                             }}
-                            variant='primary'
+                            variant='header'
                           >
                             -
                           </Button>
                         </InputGroup.Prepend>
                         <FormControl
-                          className={`border-primary ${styles.amountInput}`}
+                          className={`border-secondary ${styles.amountInput}`}
                           id={amountInputID}
                           onChange={e => {
                             const amount = Number(e.target.value);
@@ -126,7 +127,7 @@ export default function ShoppingCart() {
                         />
                         <InputGroup.Append>
                           <Button
-                            className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
+                            className={`d-flex justify-content-center align-items-center border border-white ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(amountInputID, 'add');
 
@@ -144,7 +145,7 @@ export default function ShoppingCart() {
                                 }
                               );
                             }}
-                            variant='primary'
+                            variant='header'
                           >
                             +
                           </Button>
@@ -156,7 +157,7 @@ export default function ShoppingCart() {
                             deleteProduct(itemID, shoppingCart, userDispatch);
                           }}
                           className={`mb-1 close ${styles.cancelSymbol}`}
-                          variant='outline-secondary'
+                          variant='outline-header'
                           aria-label='Odstranit'
                         >
                           <span aria-hidden='true'>&times;</span>
@@ -182,8 +183,9 @@ export default function ShoppingCart() {
                       onClick={() => {
                         setShowCart(false);
                       }}
+                      className='border border-white'
                       as='a'
-                      variant='primary'
+                      variant='header'
                     >
                       K objednávce
                     </Button>

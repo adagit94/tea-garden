@@ -36,10 +36,11 @@ function CustomSearchBox({ currentRefinement, refine, clearSearchRef }) {
   }, []);
 
   return (
-    <Form inline>
+    <Form className='ml-2' inline>
       <Form.Group controlId='nav-search-field'>
         <Form.Label srOnly>Vyhledávač</Form.Label>
         <Form.Control
+          className='p-0 border-top-0 border-right-0 border-left-0 rounded-0 border-white bg-header text-white'
           value={currentRefinement}
           onChange={e => refine(e.currentTarget.value)}
           type='search'
@@ -52,7 +53,7 @@ function CustomSearchBox({ currentRefinement, refine, clearSearchRef }) {
 
 function CustomHits({ hits, clearSearch }) {
   return (
-    <ListGroup onSelect={clearSearch} className={styles.results}>
+    <ListGroup onSelect={clearSearch} className={`px-3 ${styles.results}`}>
       {hits.map(hit => (
         <Link
           key={hit.objectID}
@@ -66,13 +67,13 @@ function CustomHits({ hits, clearSearch }) {
           >
             <div>
               <img
-                className='border border-secondary rounded'
+                className='border border-header rounded'
                 src={hit.image}
                 alt={hit.title}
                 width='50'
                 height='50'
               />{' '}
-              {hit.title} {hit.weight}g
+              <b>{hit.title}</b> {hit.weight}g
             </div>
             <div>{hit.price} Kč</div>
           </ListGroup.Item>

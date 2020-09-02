@@ -16,10 +16,10 @@ export default function Nav() {
   const [showGreenDropdown, setShowGreenDropdown] = useState(false);
 
   return (
-    <Navbar className={styles.nav} expand='lg' collapseOnSelect>
+    <Navbar className={styles.nav} variant='dark' expand='lg' collapseOnSelect>
       <Navbar.Brand>
         <Link href='/'>
-          <a>HP</a>
+          <a className='text-white'>HP</a>
         </Link>
       </Navbar.Brand>
       <Navbar.Toggle aria-controls='responsive-nav' />

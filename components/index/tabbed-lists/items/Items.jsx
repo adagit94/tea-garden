@@ -17,13 +17,13 @@ export default function Items({ list }) {
   const productsID = Object.getOwnPropertyNames(products);
 
   useEffect(() => {
-    async function getNew() {
+    async function getItems() {
       const products = await getProducts(list);
 
       setProducts(products);
     }
 
-    if (firebaseReady && !productsID.length) getNew();
+    if (firebaseReady && !productsID.length) getItems();
   });
 
   return (

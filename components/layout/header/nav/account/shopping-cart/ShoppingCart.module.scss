@@ -1,3 +1,7 @@
+.tr {
+  border-bottom: 1.5px solid #ffffff;
+}
+
 .amountBtn {
   width: 30px;
   height: 30px;
@@ -10,7 +14,7 @@
 
 .cancelSymbol {
   opacity: unset !important;
-  color: #000000 !important;
+  color: #ffffff !important;
 
   &:hover {
     color: #dc3545 !important;

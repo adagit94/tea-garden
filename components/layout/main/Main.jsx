@@ -1,5 +1,5 @@
 import React from 'react';
 
-export default function Main({ children }) {
-  return <main>{children}</main>;
+export default function Main({ page }) {
+  return <main>{page}</main>;
 }

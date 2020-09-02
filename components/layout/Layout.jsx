@@ -1,16 +1,15 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 
 import Header from './header/Header';
 import Main from './main/Main';
 import Footer from './footer/Footer';
 
-export default function Layout({ children }) {
+export default function Layout({ page }) {
   return (
-    <Container fluid>
+    <>
       <Header />
-      <Main>{children}</Main>
+      <Main page={page} />
       <Footer />
-    </Container>
+    </>
   );
 }

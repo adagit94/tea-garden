@@ -2,12 +2,14 @@ import Link from 'next/link';
 import React from 'react';
 import Col from 'react-bootstrap/Col';
 
+import styles from './Links.module.scss';
+
 export default function Links() {
   return (
     <>
-      <Col className='d-flex flex-column align-items-sm-center'>
+      <Col className='d-flex flex-column align-items-center'>
         <h4>Infomace pro zákazníky</h4>
-        <ul className='list-unstyled'>
+        <ul className={`p-0 ${styles.list}`}>
           <li>
             <Link href='#'>
               <a>O nás</a>
@@ -25,9 +27,9 @@ export default function Links() {
           </li>
         </ul>
       </Col>
-      <Col className='d-flex flex-column align-items-sm-center'>
+      <Col className='d-flex flex-column align-items-center'>
         <h4>Užitečné info</h4>
-        <ul className='list-unstyled'>
+        <ul className={`p-0 ${styles.list}`}>
           <li>
             <Link href='#'>
               <a>Příprava čaje</a>

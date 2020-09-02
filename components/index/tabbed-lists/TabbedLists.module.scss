@@ -2,4 +2,9 @@
   a:focus {
     outline: none;
   }
+
+  > a {
+    text-align: center;
+    width: 150px;
+  }
 }
