@@ -10,13 +10,11 @@ import CategoryTiles from 'components/index/category-tiles/CategoryTiles';
 export default function Index() {
   return (
     <>
-      <Container fluid>
-        <Row>
-          <Col className='p-0'>
-            <Carousel />
-          </Col>
-        </Row>
-      </Container>
+      <Row>
+        <Col className='p-0'>
+          <Carousel />
+        </Col>
+      </Row>
       <Container>
         <Row>
           <Col>

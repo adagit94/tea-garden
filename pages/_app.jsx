@@ -1,5 +1,4 @@
 import React, { useState, createContext, useEffect } from 'react';
-import Container from 'react-bootstrap/Container';
 
 import UserDataProvider from '../components/user/UserDataProvider';
 import Layout from '../components/layout/Layout';
@@ -12,15 +11,6 @@ export const AppStateContext = createContext();
 export default function MyApp({ Component, pageProps }) {
   const [firebaseReady, setFirebaseReady] = useState(false);
 
-  const page =
-    Component.name === 'Index' ? (
-      <Component {...pageProps} />
-    ) : (
-      <Container>
-        <Component {...pageProps} />
-      </Container>
-    );
-
   useEffect(() => {
     initFirebase(setFirebaseReady);
   }, []);
@@ -28,7 +18,7 @@ export default function MyApp({ Component, pageProps }) {
   return (
     <AppStateContext.Provider value={firebaseReady}>
       <UserDataProvider>
-        <Layout page={page} />
+        <Layout page={<Component {...pageProps} />} />
       </UserDataProvider>
     </AppStateContext.Provider>
   );
