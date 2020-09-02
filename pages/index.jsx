@@ -1,5 +1,4 @@
 import React from 'react';
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
@@ -9,22 +8,20 @@ import CategoryTiles from 'components/index/category-tiles/CategoryTiles';
 
 export default function Index() {
   return (
-    <>
+    <div hp>
       <Row>
         <Col className='p-0'>
           <Carousel />
         </Col>
       </Row>
-      <Container>
-        <Row>
-          <Col>
-            <TabbedLists />
-          </Col>
-        </Row>
-        <Row xs={1} sm={2}>
-          <CategoryTiles />
-        </Row>
-      </Container>
-    </>
+      <Row>
+        <Col>
+          <TabbedLists />
+        </Col>
+      </Row>
+      <Row xs={1} sm={2}>
+        <CategoryTiles />
+      </Row>
+    </div>
   );
 }

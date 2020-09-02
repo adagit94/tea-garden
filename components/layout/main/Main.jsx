@@ -6,7 +6,7 @@ export default function Main({ page }) {
   
   return (
     <main>
-      <Container fluid={page.type.name === 'Index'}>{page}</Container>
+      <Container>{page}</Container>
     </main>
   );
 }
