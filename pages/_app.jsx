@@ -14,11 +14,13 @@ export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     initFirebase(setFirebaseReady);
   }, []);
-
+  
   return (
     <AppStateContext.Provider value={firebaseReady}>
       <UserDataProvider>
-        <Layout page={<Component {...pageProps} />} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </UserDataProvider>
     </AppStateContext.Provider>
   );
