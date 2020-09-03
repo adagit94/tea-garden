@@ -78,7 +78,7 @@ export default function ShoppingCart() {
                       <InputGroup className='p-2 flex-nowrap'>
                         <InputGroup.Prepend>
                           <Button
-                            className={`d-flex justify-content-center align-items-center border border-white ${styles.amountBtn}`}
+                            className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(
                                 amountInputID,
@@ -97,13 +97,13 @@ export default function ShoppingCart() {
                                 }
                               );
                             }}
-                            variant='header'
+                            variant='outline-secondary'
                           >
                             -
                           </Button>
                         </InputGroup.Prepend>
                         <FormControl
-                          className={`border-secondary ${styles.amountInput}`}
+                          className={`border-secondary bg-header text-white ${styles.amountInput}`}
                           id={amountInputID}
                           onChange={e => {
                             const amount = Number(e.target.value);
@@ -127,7 +127,7 @@ export default function ShoppingCart() {
                         />
                         <InputGroup.Append>
                           <Button
-                            className={`d-flex justify-content-center align-items-center border border-white ${styles.amountBtn}`}
+                            className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(amountInputID, 'add');
 
@@ -145,7 +145,7 @@ export default function ShoppingCart() {
                                 }
                               );
                             }}
-                            variant='header'
+                            variant='outline-secondary'
                           >
                             +
                           </Button>
@@ -183,9 +183,8 @@ export default function ShoppingCart() {
                       onClick={() => {
                         setShowCart(false);
                       }}
-                      className='border border-white'
                       as='a'
-                      variant='header'
+                      variant='outline-secondary'
                     >
                       K objednávce
                     </Button>
@@ -197,7 +196,7 @@ export default function ShoppingCart() {
         )}
 
         {cartItems.length === 0 && (
-          <div className='text-center p-3'>
+          <div className='text-nowrap text-center p-3'>
             Košík je prázdný
           </div>
         )}

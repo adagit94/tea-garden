@@ -7,7 +7,7 @@ import styles from './Links.module.scss';
 export default function Links() {
   return (
     <>
-      <Col className='d-flex flex-column align-items-center'>
+      <Col className='d-flex flex-column align-items-center text-center text-md-left'>
         <h4>Infomace pro zákazníky</h4>
         <ul className={`p-0 ${styles.list}`}>
           <li>
@@ -27,7 +27,7 @@ export default function Links() {
           </li>
         </ul>
       </Col>
-      <Col className='d-flex flex-column align-items-center'>
+      <Col className='d-flex flex-column align-items-center text-center text-md-left'>
         <h4>Užitečné info</h4>
         <ul className={`p-0 ${styles.list}`}>
           <li>

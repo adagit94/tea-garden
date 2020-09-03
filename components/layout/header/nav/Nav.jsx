@@ -41,7 +41,7 @@ export default function Nav() {
               className='mx-auto text-center'
             >
               <Link href='/[...param]' as='/pu-erh' passHref>
-                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-puerh'>
+                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-puerh' className={showPuErhDropdown && styles.borderTop}>
                   Pu erh
                 </Dropdown.Toggle>
               </Link>
@@ -69,7 +69,7 @@ export default function Nav() {
               className='mx-auto text-center'
             >
               <Link href='/[...param]' as='/oolong' passHref>
-                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-oolong'>
+                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-oolong' className={showOolongDropdown && styles.borderTop}>
                   Oolong
                 </Dropdown.Toggle>
               </Link>
@@ -107,7 +107,7 @@ export default function Nav() {
               className='mx-auto text-center'
             >
               <Link href='/[...param]' as='/cerveny' passHref>
-                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-red'>
+                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-red' className={showRedDropdown && styles.borderTop}>
                   Červený
                 </Dropdown.Toggle>
               </Link>
@@ -130,7 +130,7 @@ export default function Nav() {
               className='mx-auto text-center'
             >
               <Link href='/[...param]' as='/zeleny' passHref>
-                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-green'>
+                <Dropdown.Toggle as={NavMenu.Link} id='dropdown-green' className={showGreenDropdown && styles.borderTop}>
                   Zelený
                 </Dropdown.Toggle>
               </Link>

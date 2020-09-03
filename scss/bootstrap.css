@@ -3283,6 +3283,9 @@ input[type=button].btn-block {
   white-space: nowrap;
   background-color: transparent;
 }
+.dropdown-item:hover .dropdown-toggle {
+  border-top: 1px solid #fff;
+}
 .dropdown-item:first-child {
   border-top-left-radius: 0 0 0.25rem 0.25rem;
   border-top-right-radius: 0 0 0.25rem 0.25rem;

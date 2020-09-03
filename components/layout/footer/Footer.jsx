@@ -12,7 +12,7 @@ export default function Footer() {
     <Container className='bg-footer py-3' fluid>
       <Container>
         <footer>
-          <Row xs={1} sm={2}>
+          <Row xs={1} md={2}>
             <Links />
           </Row>
           <Row className='pt-3' xs={1} xl={2}>
