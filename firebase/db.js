@@ -44,7 +44,7 @@ export async function initFirestoreListeners(user, syncData) {
             streetHouseNo: '',
             city: '',
             postCode: '',
-            country: '',
+            country: 'Czech',
           })
           .catch(err => {
             console.error(err);

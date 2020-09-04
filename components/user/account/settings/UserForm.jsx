@@ -41,7 +41,7 @@ export default function UserForm() {
       <h2>Osobní údaje</h2>
       <Formik
         initialValues={{
-          name: firebase.displayName || '',
+          name: firebase.displayName ?? '',
           email: firebase.email,
           password: '',
           passwordConfirmation: '',

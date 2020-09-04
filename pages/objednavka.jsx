@@ -172,20 +172,20 @@ export default function OrderForm() {
       <Col>
         <Formik
           initialValues={{
-            email: firebase?.email || '',
+            email: firebase?.email ?? '',
 
-            nameInvoice: firebase?.displayName || '',
-            streetHouseNoInvoice: address?.invoicing.streetHouseNo || '',
-            cityInvoice: address?.invoicing.city || '',
-            postCodeInvoice: address?.invoicing.postCode || '',
-            countryInvoice: address?.invoicing.country || 'Czech',
+            nameInvoice: firebase?.displayName ?? '',
+            streetHouseNoInvoice: address?.invoicing.streetHouseNo ?? '',
+            cityInvoice: address?.invoicing.city ?? '',
+            postCodeInvoice: address?.invoicing.postCode ?? '',
+            countryInvoice: address?.invoicing.country ?? 'Czech',
 
             sameAsInvoice: false,
-            nameDelivery: address?.delivery.name || '',
-            streetHouseNoDelivery: address?.delivery.streetHouseNo || '',
-            cityDelivery: address?.delivery.city || '',
-            postCodeDelivery: address?.delivery.postCode || '',
-            countryDelivery: address?.delivery.country || 'Czech',
+            nameDelivery: address?.delivery.name ?? '',
+            streetHouseNoDelivery: address?.delivery.streetHouseNo ?? '',
+            cityDelivery: address?.delivery.city ?? '',
+            postCodeDelivery: address?.delivery.postCode ?? '',
+            countryDelivery: address?.delivery.country ?? 'Czech',
 
             delivery: '',
             payment: '',
