@@ -3155,9 +3155,6 @@ input[type=button].btn-block {
   white-space: nowrap;
   border-top: 1px solid transparent;
 }
-.dropdown-toggle:hover {
-  border-top: 1px solid #fff;
-}
 
 .dropdown-menu {
   position: absolute;
@@ -3282,9 +3279,6 @@ input[type=button].btn-block {
   text-align: inherit;
   white-space: nowrap;
   background-color: transparent;
-}
-.dropdown-item:hover .dropdown-toggle {
-  border-top: 1px solid #fff;
 }
 .dropdown-item:first-child {
   border-top-left-radius: 0 0 0.25rem 0.25rem;
@@ -5175,11 +5169,11 @@ a.badge-footer:focus, a.badge-footer.focus {
   z-index: 1;
   color: #fff;
   text-decoration: none;
-  background-color: #6D4C41;
+  background-color: transparent;
 }
 .list-group-item-action:active {
-  color: #000000;
-  background-color: #e9ecef;
+  color: #fff;
+  background-color: transparent;
 }
 
 .list-group-item {
@@ -5187,7 +5181,7 @@ a.badge-footer:focus, a.badge-footer.focus {
   display: block;
   padding: 0.75rem 1.25rem;
   color: #fff;
-  background-color: transparent;
+  background-color: #6D4C41;
   border-bottom: 1px solid #fff;
 }
 .list-group-item:hover {
@@ -5205,19 +5199,19 @@ a.badge-footer:focus, a.badge-footer.focus {
 .list-group-item.disabled, .list-group-item:disabled {
   color: #6c757d;
   pointer-events: none;
-  background-color: transparent;
+  background-color: #6D4C41;
 }
 .list-group-item.active {
   z-index: 2;
   color: #fff;
-  background-color: #6D4C41;
+  background-color: transparent;
   border-color: #fff;
 }
 .list-group-item + .list-group-item {
   border-top-width: 0;
 }
 .list-group-item + .list-group-item.active {
-  margin-top: -1px;
+  margin-top: 0;
   border-top-width: 1px;
 }
 
@@ -5240,7 +5234,7 @@ a.badge-footer:focus, a.badge-footer.focus {
   border-left-width: 0;
 }
 .list-group-horizontal > .list-group-item + .list-group-item.active {
-  margin-left: -1px;
+  margin-left: 0;
   border-left-width: 1px;
 }
 
@@ -5264,7 +5258,7 @@ a.badge-footer:focus, a.badge-footer.focus {
     border-left-width: 0;
   }
   .list-group-horizontal-sm > .list-group-item + .list-group-item.active {
-    margin-left: -1px;
+    margin-left: 0;
     border-left-width: 1px;
   }
 }
@@ -5288,7 +5282,7 @@ a.badge-footer:focus, a.badge-footer.focus {
     border-left-width: 0;
   }
   .list-group-horizontal-md > .list-group-item + .list-group-item.active {
-    margin-left: -1px;
+    margin-left: 0;
     border-left-width: 1px;
   }
 }
@@ -5312,7 +5306,7 @@ a.badge-footer:focus, a.badge-footer.focus {
     border-left-width: 0;
   }
   .list-group-horizontal-lg > .list-group-item + .list-group-item.active {
-    margin-left: -1px;
+    margin-left: 0;
     border-left-width: 1px;
   }
 }
@@ -5336,7 +5330,7 @@ a.badge-footer:focus, a.badge-footer.focus {
     border-left-width: 0;
   }
   .list-group-horizontal-xl > .list-group-item + .list-group-item.active {
-    margin-left: -1px;
+    margin-left: 0;
     border-left-width: 1px;
   }
 }

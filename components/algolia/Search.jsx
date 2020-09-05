@@ -45,6 +45,7 @@ function CustomSearchBox({ currentRefinement, refine, clearSearchRef }) {
           onChange={e => refine(e.currentTarget.value)}
           type='search'
           placeholder='Hledat'
+          autoComplete='off'
         />
       </Form.Group>
     </Form>
