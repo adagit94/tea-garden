@@ -1,0 +1,9 @@
+.formGroup {
+  width: 100%;
+}
+
+@media (min-width: 768px) {
+  .formGroup {
+    width: 50%;
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useState, createContext, useEffect } from 'react';
 
 import UserDataProvider from '../components/user/UserDataProvider';
+import PaymentProvider from 'components/stripe/PaymentProvider';
 import Layout from '../components/layout/Layout';
 import { initFirebase } from 'firebase/init-firebase';
 
@@ -14,13 +15,15 @@ export default function MyApp({ Component, pageProps }) {
   useEffect(() => {
     initFirebase(setFirebaseReady);
   }, []);
-  
+
   return (
     <AppStateContext.Provider value={firebaseReady}>
       <UserDataProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <PaymentProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </PaymentProvider>
       </UserDataProvider>
     </AppStateContext.Provider>
   );

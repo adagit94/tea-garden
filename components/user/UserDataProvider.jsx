@@ -11,6 +11,7 @@ const inits = {
   orders: undefined,
   products: {},
   shoppingCart: {},
+  orderData: {},
 };
 
 function reducer(state, action) {
@@ -92,6 +93,18 @@ function reducer(state, action) {
         },
       };
 
+    case 'setOrderData':
+      return {
+        ...state,
+        orderData: action.payload,
+      };
+
+    case 'clearOrderData':
+      return {
+        ...state,
+        orderData: {},
+      };
+
     default:
       return state;
   }
@@ -118,22 +131,24 @@ export default function UserDataProvider({ children }) {
       userDispatch({ type: 'syncData', collection, payload: data });
     }
 
-    if (firebaseReady) {
-      initAuthObserver(initUser, clearUser, syncData);
-
-      const shoppingCartStr = window.localStorage.getItem('shoppingCart');
-
-      if (shoppingCartStr) {
-        const shoppingCartObj = JSON.parse(shoppingCartStr);
-
-        userDispatch({ type: 'setCart', payload: shoppingCartObj });
-      }
-    }
+    if (firebaseReady) initAuthObserver(initUser, clearUser, syncData);
   }, [firebaseReady]);
 
   useEffect(() => {
-    if (window.localStorage.getItem('isLogged')) {
+    const isLogged = window.localStorage.getItem('isLogged');
+    const shoppingCart = window.localStorage.getItem('shoppingCart');
+    const orderData = window.localStorage.getItem('orderData');
+
+    if (isLogged) {
       userDispatch({ type: 'setLoading', value: true });
+    }
+
+    if (shoppingCart) {
+      userDispatch({ type: 'setCart', payload: JSON.parse(shoppingCart) });
+    }
+
+    if (orderData) {
+      userDispatch({ type: 'setOrderData', payload: JSON.parse(orderData) });
     }
   }, []);
 

@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import React, { useContext, useEffect, useRef } from 'react';
+import { useRouter } from 'next/router';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -10,7 +11,7 @@ import FormControl from 'react-bootstrap/FormControl';
 import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 
-import { saveOrder } from 'firebase/db';
+import { PRICES } from 'tea-garden-constants';
 import { updateProduct, deleteProduct, updateAmount } from 'helpers/products';
 import { useBtnPopover } from 'custom-hooks/product';
 import { BtnPopover } from 'components/ui/Popovers';
@@ -63,81 +64,24 @@ const OrderSchema = Yup.object({
   payment: Yup.string().required('Zvolte způsob platby.'),
 });
 
-const PRICES = {
-  delivery: {
-    post: 49,
-  },
-  payment: {
-    post: 30,
-  },
-};
-
 function calculatePrice(subtotal, payments) {
-  let price = { total: subtotal, products: subtotal };
+  let price = subtotal;
 
-  if (payments.delivery === 'post') {
-    price.total += PRICES.delivery.post;
-    price.delivery = PRICES.delivery.post;
-  }
-
-  if (payments.payment === 'post') {
-    price.total += PRICES.payment.post;
-    price.payment = PRICES.payment.post;
-  }
+  if (payments.payment === 'post') price += PRICES.payment.post;
+  if (payments.delivery === 'post') price += PRICES.delivery.post;
 
   return price;
 }
 
-function customizeText(order) {
-  let text = `Objednávka ${order.id} byla vytvořena.`;
+export default function Delivery() {
+  const router = useRouter();
 
-  switch (order.payment) {
-    case 'post':
-      text += ` Dobírku ${PRICES.delivery.post} Kč uhradíte pří předání.`;
-      break;
+  const [processing, setProcessing] = useState(false);
 
-    case 'bank-transfer':
-      text += ` Pro úspěšné dokončení objednávky prosíme o uhrazení částky ve výši ${order.price} Kč na účet xxxxxxxxx/xxxx.`;
-
-      switch (order.delivery) {
-        case 'personal':
-          text += ` Po přijetí platby si objednávku můžete vyvednout v naší prodejně v době otvíracích hodin.`;
-          break;
-
-        case 'post':
-          text += ` Při předání nic neplatíte.`;
-          break;
-      }
-      break;
-
-    case 'cash':
-      text += ` Objednávku v hodnotě ${order.price} Kč zaplatíte v hotovosti nebo kartou v naší prodejně v době otvíracích hodin.`;
-      break;
-  }
-
-  return text;
-}
-
-async function handleOrder(recipient, order) {
-  const text = customizeText(order);
-
-  const mail = { recipient, text, orderID: order.id };
-
-  fetch('/api/send-order', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(mail),
-  });
-}
-
-export default function OrderForm() {
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
   const btnContainerRef = useRef(null);
-  const priceRef = useRef(null);
 
   const [btnPopover, setBtnPopover] = useBtnPopover();
 
@@ -152,6 +96,8 @@ export default function OrderForm() {
   const cartItems = Object.getOwnPropertyNames(shoppingCart);
 
   useEffect(() => {
+    if (processing) return;
+
     if (cartItems.length === 0) {
       setBtnPopover({
         show: true,
@@ -163,7 +109,7 @@ export default function OrderForm() {
         target: null,
       });
     }
-  }, [cartItems.length, setBtnPopover]);
+  }, [cartItems.length, processing, setBtnPopover]);
 
   if (loading || (isAuthenticated && !address)) return <PageLoading />;
 
@@ -196,21 +142,44 @@ export default function OrderForm() {
           onSubmit={async values => {
             if (cartItems.length === 0) return;
 
-            const orderID = await saveOrder(
-              firebase?.uid,
-              values,
-              shoppingCart,
-              cartItems,
-              priceRef.current,
-              userDispatch
-            );
+            setProcessing(true);
 
-            handleOrder(values.email, {
-              id: orderID,
-              delivery: values.delivery,
-              payment: values.payment,
-              price: priceRef.current.total,
+            let orderData = {
+              uid: firebase?.uid,
+              formValues: values,
+              products: {},
+            };
+
+            cartItems.forEach(item => {
+              orderData.products[item] = shoppingCart[item].pack;
             });
+
+            if (values.payment === 'card') {
+              orderData.withPayment = true;
+              orderData.paymentConfirmed = false;
+
+              router.push('/objednavka/platba');
+            } else {
+              orderData.withPayment = false;
+
+              const res = await window.fetch('/api/handle-order', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData),
+              });
+
+              orderData = await res.json();
+
+              router.push('/objednavka/potvrzeni');
+            }
+
+            userDispatch({ type: 'setOrderData', payload: orderData });
+            window.localStorage.setItem('orderData', JSON.stringify(orderData));
+
+            userDispatch({ type: 'clearCart' });
+            window.localStorage.removeItem('shoppingCart');
           }}
         >
           {({ handleSubmit, getFieldProps, touched, values, errors }) => {
@@ -483,6 +452,16 @@ export default function OrderForm() {
                       />
                       <Field
                         as={Form.Check}
+                        isInvalid={touched.payment && errors.payment}
+                        label='Kartou'
+                        name='payment'
+                        value='card'
+                        type='radio'
+                        id='payment-card'
+                        custom
+                      />
+                      <Field
+                        as={Form.Check}
                         disabled={values.delivery === 'post'}
                         isInvalid={
                           touched.payment &&
@@ -688,16 +667,10 @@ export default function OrderForm() {
                           </td>
                           <td className='text-right' colSpan='2'>
                             <b>
-                              {(() => {
-                                const price = calculatePrice(subtotal, {
-                                  delivery: values.delivery,
-                                  payment: values.payment,
-                                });
-
-                                priceRef.current = price;
-
-                                return price.total.toLocaleString('cs-CZ');
-                              })()}{' '}
+                              {calculatePrice(subtotal, {
+                                delivery: values.delivery,
+                                payment: values.payment,
+                              }).toLocaleString('cs-CZ')}{' '}
                               Kč
                             </b>
                           </td>

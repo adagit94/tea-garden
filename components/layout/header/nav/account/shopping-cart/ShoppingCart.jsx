@@ -178,7 +178,7 @@ export default function ShoppingCart() {
               </tr>
               <tr>
                 <td className='text-center text-lg-right' colSpan='3'>
-                  <Link href='/objednavka' passHref>
+                  <Link href='/objednavka/doruceni' passHref>
                     <Button
                       onClick={() => {
                         setShowCart(false);

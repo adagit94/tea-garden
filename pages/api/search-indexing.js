@@ -2,7 +2,7 @@ import algoliasearch from 'algoliasearch';
 
 export default function uploadIndexRecords(req, res) {
   const index = algoliasearch(
-    process.env.ALGOLIA_APP_ID,
+    'XP39PLM1ZJ',
     process.env.ALGOLIA_ADMIN_API_KEY
   ).initIndex('tea-garden');
 
