@@ -8,6 +8,7 @@ import ProductCard from './product-card/ProductCard';
 import { getProducts } from 'firebase/db';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
+import { PageLoading } from 'components/ui/Indicators';
 
 import styles from './ProductPage.module.scss';
 
@@ -89,6 +90,8 @@ export default function ProductPage({ param }) {
 
     initPage();
   }, [param, userDispatch]);
+
+  if (productsID.length === 0) return <PageLoading />;
 
   return (
     <Row className='px-3 px-lg-0 py-lg-3'>

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -9,6 +9,7 @@ import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
+import { PageLoading } from 'components/ui/Indicators';
 
 import styles from 'components/stripe/Payment.module.scss';
 
@@ -92,7 +93,17 @@ export default function Payment() {
     setError(e.error ? e.error.message : '');
   }
 
-  if (!stripe || !elements || Object.getOwnPropertyNames(orderData).length === 0) return null;
+  useEffect(() => {
+    if (!window.localStorage.getItem('orderData')) router.push('/');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (
+    !stripe ||
+    !elements ||
+    Object.getOwnPropertyNames(orderData).length === 0
+  )
+    return <PageLoading />;
 
   return (
     <Row>

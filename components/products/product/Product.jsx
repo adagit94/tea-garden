@@ -11,6 +11,7 @@ import { useBtnPopover } from 'custom-hooks/product';
 import { BtnPopover } from 'components/ui/Popovers';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
+import { PageLoading } from 'components/ui/Indicators';
 
 import styles from './Product.module.scss';
 
@@ -88,7 +89,7 @@ export default function Product({ param }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [param]);
 
-  if (!productData) return null;
+  if (!productData) return <PageLoading />;
 
   return (
     <Row className='px-3 px-md-0 pb-md-3'>

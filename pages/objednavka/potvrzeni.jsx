@@ -1,12 +1,16 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useEffect, useContext, useRef } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
+import { PageLoading } from 'components/ui/Indicators';
 
 export default function Confirmation() {
+  const router = useRouter();
+
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
@@ -14,18 +18,23 @@ export default function Confirmation() {
 
   const unconfirmedPaymentRef = useRef();
 
-  unconfirmedPaymentRef.current = orderData.withPayment && !orderData.paymentConfirmed;
+  unconfirmedPaymentRef.current =
+    orderData.withPayment && !orderData.paymentConfirmed;
 
   useEffect(() => {
+    if (!window.localStorage.getItem('orderData')) router.push('/');
+
     return () => {
       if (!unconfirmedPaymentRef.current) {
         userDispatch({ type: 'clearOrderData' });
         window.localStorage.removeItem('orderData');
       }
     };
-  }, [userDispatch]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (Object.getOwnPropertyNames(orderData).length === 0) return null;
+  if (Object.getOwnPropertyNames(orderData).length === 0)
+    return <PageLoading />;
 
   return (
     <Row>
@@ -34,7 +43,7 @@ export default function Confirmation() {
           <p>
             Objednávka nebyla uhrazena. Nejdříve ji uhraďte na{' '}
             <Link href='/objednavka/platba'>
-              <a style={{textDecoration: 'underline'}}>platební stránce</a>
+              <a style={{ textDecoration: 'underline' }}>platební stránce</a>
             </Link>
             . Děkujeme.
           </p>
