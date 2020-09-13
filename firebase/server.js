@@ -6,9 +6,8 @@ const { PRICES } = require('tea-garden-constants');
 export const firestore = new Firestore({
   projectId: 'tea-garden-a95e7',
   credentials: {
-    client_email: 'firestore-njs@tea-garden-a95e7.iam.gserviceaccount.com',
-    private_key:
-      process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY,
+    client_email: process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+    private_key: process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, '\n'),
   },
 });
 

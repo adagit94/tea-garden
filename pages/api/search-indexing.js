@@ -28,4 +28,6 @@ export default function uploadIndexRecords(req, res) {
   index.saveObjects(req.body).catch(err => {
     console.error(err);
   });
+
+  res.end();
 }
