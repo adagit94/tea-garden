@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -13,9 +13,9 @@ import * as Yup from 'yup';
 
 import { PRICES } from 'tea-garden-constants';
 import { updateProduct, deleteProduct, updateAmount } from 'helpers/products';
-import { useBtnPopover } from 'custom-hooks/product';
 import { BtnPopover } from 'components/ui/Popovers';
 import { PageLoading } from 'components/ui/Indicators';
+import { AppStateContext } from 'pages/_app';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
@@ -76,14 +76,12 @@ function calculatePrice(subtotal, payments) {
 export default function Delivery() {
   const router = useRouter();
 
-  const [processing, setProcessing] = useState(false);
-
+  const firebaseReady = useContext(AppStateContext);
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
   const btnContainerRef = useRef(null);
-
-  const [btnPopover, setBtnPopover] = useBtnPopover();
+  const btnRef = useRef(null);
 
   const {
     firebase,
@@ -95,23 +93,8 @@ export default function Delivery() {
 
   const cartItems = Object.getOwnPropertyNames(shoppingCart);
 
-  useEffect(() => {
-    if (processing) return;
-
-    if (cartItems.length === 0) {
-      setBtnPopover({
-        show: true,
-        target: document.querySelector('#order-btn'),
-      });
-    } else {
-      setBtnPopover({
-        show: false,
-        target: null,
-      });
-    }
-  }, [cartItems.length, processing, setBtnPopover]);
-
-  if (loading || (isAuthenticated && !address)) return <PageLoading />;
+  if (!firebaseReady || loading || (isAuthenticated && !address))
+    return <PageLoading />;
 
   return (
     <Row className='p-3'>
@@ -140,10 +123,6 @@ export default function Delivery() {
           }}
           validationSchema={OrderSchema}
           onSubmit={async values => {
-            if (cartItems.length === 0) return;
-
-            setProcessing(true);
-
             let orderData = {
               uid: firebase?.uid,
               formValues: values,
@@ -158,7 +137,13 @@ export default function Delivery() {
               orderData.withPayment = true;
               orderData.paymentConfirmed = false;
 
-              router.push('/objednavka/platba');
+              userDispatch({ type: 'setOrderData', payload: orderData });
+              window.localStorage.setItem(
+                'orderData',
+                JSON.stringify(orderData)
+              );
+
+              await router.push('/objednavka/platba');
             } else {
               orderData.withPayment = false;
 
@@ -172,11 +157,14 @@ export default function Delivery() {
 
               orderData = await res.json();
 
-              router.push('/objednavka/potvrzeni');
-            }
+              userDispatch({ type: 'setOrderData', payload: orderData });
+              window.localStorage.setItem(
+                'orderData',
+                JSON.stringify(orderData)
+              );
 
-            userDispatch({ type: 'setOrderData', payload: orderData });
-            window.localStorage.setItem('orderData', JSON.stringify(orderData));
+              await router.push('/objednavka/potvrzeni');
+            }
 
             userDispatch({ type: 'clearCart' });
             window.localStorage.removeItem('shoppingCart');
@@ -688,14 +676,20 @@ export default function Delivery() {
                     >
                       <BtnPopover
                         bg='danger'
-                        show={btnPopover.show}
-                        target={btnPopover.target}
+                        show={cartItems.length === 0}
+                        target={btnRef}
                         container={btnContainerRef.current}
                         popoverID='order-btn-popover'
                       >
                         V košíku není žádné zboží.
                       </BtnPopover>
-                      <Button type='submit' variant='primary' id='order-btn'>
+                      <Button
+                        type='submit'
+                        variant='primary'
+                        disabled={cartItems.length === 0}
+                        ref={btnRef}
+                        id='order-btn'
+                      >
                         Potvrdit objednávku
                       </Button>
                     </Form.Group>

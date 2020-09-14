@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, useRef } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -24,10 +24,14 @@ export default function Payment() {
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
+  const shouldRedirectRef = useRef(null);
+  
   const stripe = useStripe();
   const elements = useElements();
 
   const { orderData } = userState;
+
+  const haveOrderData = Object.getOwnPropertyNames(orderData).length > 0;
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -94,15 +98,20 @@ export default function Payment() {
   }
 
   useEffect(() => {
+    shouldRedirectRef.current = haveOrderData && (orderData.paymentConfirmed || !orderData.withPayment);
+
+    if (shouldRedirectRef.current) router.push('/objednavka/potvrzeni');
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [haveOrderData]);
+
+  useEffect(() => {
     if (!window.localStorage.getItem('orderData')) router.push('/');
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (
-    !stripe ||
-    !elements ||
-    Object.getOwnPropertyNames(orderData).length === 0
-  )
+  console.log(orderData);
+  if (!stripe || !elements || !haveOrderData || shouldRedirectRef.current)
     return <PageLoading />;
 
   return (
@@ -147,13 +156,13 @@ export default function Payment() {
           </Form.Group>
 
           <Button
-            className='mb-3'
+            className={`mb-3 d-flex justify-content-center align-items-center ${styles.submitBtn}`}
             variant='outline-primary'
             type='submit'
             disabled={processing || success || empty}
           >
             {processing && (
-              <Spinner animation='border' role='status'>
+              <Spinner animation='border' role='status' size='sm'>
                 <span className='sr-only'>Zpracovávám platbu...</span>
               </Spinner>
             )}

@@ -9,7 +9,7 @@ import {
 
 export default async function (req, res) {
   let orderData = req.body;
-  console.log(process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY);
+
   const orderRef = firestore.collection('orders').doc();
 
   const price = await calculatePrice(orderData);

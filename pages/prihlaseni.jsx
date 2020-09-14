@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 
 import { loginEmail, loginProvider } from '../firebase/auth';
 import { useFirebaseAlert } from 'custom-hooks/error-handling';
+import { AppStateContext } from 'pages/_app';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { PageLoading } from 'components/ui/Indicators';
 import { FirebaseAlert } from 'components/ui/Alerts';
@@ -26,6 +27,8 @@ const LogInSchema = Yup.object({
 export default function LogIn() {
   const router = useRouter();
   const [alert, setAlert] = useFirebaseAlert();
+
+  const firebaseReady = useContext(AppStateContext);
   const userState = useContext(UserStateContext);
 
   const { firebase, isAuthenticated, loading } = userState;
@@ -41,7 +44,7 @@ export default function LogIn() {
     }
   });
 
-  if (loading || isAuthenticated) return <PageLoading />;
+  if (!firebaseReady || loading || isAuthenticated) return <PageLoading />;
 
   return (
     <Row className='px-3 px-lg-0 py-lg-3' xs={1} lg={2}>
