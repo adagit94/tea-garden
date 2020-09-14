@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import FormControl from 'react-bootstrap/FormControl';
 import Table from 'react-bootstrap/Table';
+import Badge from 'react-bootstrap/Badge';
 
 import { updateProduct, deleteProduct, updateAmount } from 'helpers/products';
 import { UserStateContext } from 'components/user/UserDataProvider';
@@ -31,7 +32,7 @@ export default function ShoppingCart() {
       show={showCart}
     >
       <Dropdown.Toggle
-        className='p-2 border-0'
+        className='p-2 border-0 position-relative'
         id='dropdown-shopping-cart'
         variant='outline-header'
       >
@@ -40,6 +41,13 @@ export default function ShoppingCart() {
           src='/icons/shopping-cart.svg'
           alt='nákupní košík'
         />
+
+        {cartItems.length > 0 && (
+          <div className={styles.itemCounter}>
+            <Badge variant='secondary' pill>{cartItems.length}</Badge>
+            <span className='sr-only'>produktů v nákupním košíku</span>
+          </div>
+        )}
       </Dropdown.Toggle>
       <Dropdown.Menu className='px-3 position-absolute' alignRight>
         {cartItems.length > 0 && (
@@ -57,10 +65,7 @@ export default function ShoppingCart() {
                 subtotal += itemPrice;
 
                 return (
-                  <tr
-                    className={`text-nowrap ${styles.tr}`}
-                    key={itemID}
-                  >
+                  <tr className={`text-nowrap ${styles.tr}`} key={itemID}>
                     <td>
                       <Link
                         href='[...param]'
@@ -68,7 +73,13 @@ export default function ShoppingCart() {
                         passHref
                       >
                         <a className='text-white'>
-                          <img className='border border-header rounded' width='50' height='50' src={image} alt={name} />{' '}
+                          <img
+                            className='border border-header rounded'
+                            width='50'
+                            height='50'
+                            src={image}
+                            alt={name}
+                          />{' '}
                           <b className='d-none d-lg-inline'>{title.full}</b>{' '}
                           {weight}g
                         </a>
@@ -78,7 +89,7 @@ export default function ShoppingCart() {
                       <InputGroup className='p-2 flex-nowrap'>
                         <InputGroup.Prepend>
                           <Button
-                            className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
+                            className={`d-flex justify-content-center align-items-center font-weight-bold ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(
                                 amountInputID,
@@ -127,7 +138,7 @@ export default function ShoppingCart() {
                         />
                         <InputGroup.Append>
                           <Button
-                            className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
+                            className={`d-flex justify-content-center align-items-center font-weight-bold ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(amountInputID, 'add');
 
@@ -196,9 +207,7 @@ export default function ShoppingCart() {
         )}
 
         {cartItems.length === 0 && (
-          <div className='text-nowrap text-center p-3'>
-            Košík je prázdný
-          </div>
+          <div className='text-nowrap text-center p-3'>Košík je prázdný</div>
         )}
       </Dropdown.Menu>
     </Dropdown>

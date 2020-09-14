@@ -536,7 +536,7 @@ export default function Delivery() {
                                   <InputGroup className='flex-nowrap'>
                                     <InputGroup.Prepend>
                                       <Button
-                                        className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
+                                        className={`d-flex justify-content-center align-items-center font-weight-bold ${styles.amountBtn}`}
                                         onClick={() => {
                                           const amount = updateAmount(
                                             amountInputID,
@@ -588,7 +588,7 @@ export default function Delivery() {
                                     />
                                     <InputGroup.Append>
                                       <Button
-                                        className={`d-flex justify-content-center align-items-center ${styles.amountBtn}`}
+                                        className={`d-flex justify-content-center align-items-center font-weight-bold ${styles.amountBtn}`}
                                         onClick={() => {
                                           const amount = updateAmount(
                                             amountInputID,
