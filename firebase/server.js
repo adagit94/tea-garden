@@ -99,6 +99,8 @@ export async function saveOrder(orderData) {
   });
 
   updateBatch.commit();
+
+  console.log(oid);
 }
 
 export async function sendOrder(orderData) {
