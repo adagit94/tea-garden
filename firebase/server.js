@@ -85,7 +85,7 @@ export async function saveOrder(orderData) {
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
   orderRef.set(order);
-
+/*
   if (userOrderRef) userOrderRef.set(order);
 
   Object.getOwnPropertyNames(products).forEach(productID => {
@@ -100,6 +100,7 @@ export async function saveOrder(orderData) {
   });
 
   updateBatch.commit();
+  */
 }
 
 export async function sendOrder(orderData) {
