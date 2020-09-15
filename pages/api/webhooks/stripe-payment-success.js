@@ -6,10 +6,7 @@ export default async function (req, res) {
   res.status(200).json({ received: true });
 
   const orderData = {
-    ...metadata,
-    price: Number(metadata.price),
-    formValues: JSON.parse(metadata.formValues),
-    products: JSON.parse(metadata.products),
+a: 1
   };
 
   saveOrder(orderData);
