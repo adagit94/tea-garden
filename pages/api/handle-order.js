@@ -16,15 +16,11 @@ export default async function (req, res) {
 
   orderData = { price, oid: orderRef.id, ...orderData };
 
-  const orderDataStr = JSON.stringify(orderData);
-
-  console.log(orderDataStr);
-  
   if (orderData.withPayment) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: price,
       currency: 'usd',
-      metadata: { oid: orderData.oid },
+      metadata: { orderData: JSON.stringify({ ...orderData }) },
     });
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
