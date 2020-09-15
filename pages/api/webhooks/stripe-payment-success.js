@@ -12,8 +12,6 @@ export default async function (req, res) {
     products: JSON.parse(metadata.products),
   };
 
-  console.log(orderData);
-
   saveOrder(orderData);
   sendOrder(orderData);
 }
