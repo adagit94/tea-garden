@@ -5,6 +5,7 @@ export default function (req, res) {
 
   const orderData = {
     ...metadata,
+    price: Number(metadata.price),
     formValues: JSON.parse(metadata.formValues),
     products: JSON.parse(metadata.products),
   };
