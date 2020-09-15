@@ -29,8 +29,8 @@ export default async function (req, res) {
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret, orderData });
   } else {
-    sendOrder(orderData);
     saveOrder(orderData);
+    sendOrder(orderData);
 
     res.status(200).json(orderData);
   }
