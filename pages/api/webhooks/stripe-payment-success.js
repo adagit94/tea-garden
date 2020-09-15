@@ -6,8 +6,13 @@ export default async function (req, res) {
   res.status(200).json({ received: true });
 
   const orderData = {
-a: 1
+    ...metadata,
+    price: Number(metadata.price),
+    formValues: JSON.parse(metadata.formValues),
+    products: JSON.parse(metadata.products),
   };
+
+  console.log(orderData);
 
   saveOrder(orderData);
   sendOrder(orderData);
