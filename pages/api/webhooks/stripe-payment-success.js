@@ -10,10 +10,10 @@ export default function (req, res) {
     products: JSON.parse(metadata.products),
   };
 
-  res.status(200).json({ received: true });
-
+  console.log(orderData);
+  
   saveOrder(orderData);
   sendOrder(orderData);
-
-  console.log(orderData);
+  
+  res.status(200).json({ received: true });
 }
