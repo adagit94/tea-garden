@@ -5,7 +5,7 @@ export default function (req, res) {
 
   try {
     event = stripe.webhooks.constructEvent(
-      req.body,
+      JSON.stringify(req.body),
       req.headers['stripe-signature'],
       process.env.STRIPE_PAYMENT_SUCCESS_ENDPOINT_SECRET
     );
@@ -14,7 +14,7 @@ export default function (req, res) {
   }
 
   res.status(200).json({ received: true });
-  
+
   console.log(event.data.object);
   console.log(event.data.object.metadata);
 
