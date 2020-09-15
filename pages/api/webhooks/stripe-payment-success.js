@@ -1,7 +1,7 @@
 import { firestore, saveOrder, sendOrder } from 'firebase/server';
 
 export default function (req, res) {
-  const { metadata } = req.body.event.data.object;
+  const { metadata } = req.body.data.object;
 
   const orderRef = firestore.collection('orders').doc();
 
