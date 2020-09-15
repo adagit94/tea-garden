@@ -17,6 +17,17 @@ export const firestore = new Firestore({
 export async function calculatePrice(orderData) {
   const { formValues, products } = orderData;
 
+  const firestore = new Firestore({
+  projectId: 'tea-garden-a95e7',
+  credentials: {
+    client_email: process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
+    private_key: process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replace(
+      /\\n/g,
+      '\n'
+    ),
+  },
+});
+  
   const productsRef = firestore.collection('products');
   const productRefs = Object.getOwnPropertyNames(products).map(productID =>
     productsRef.doc(productID)
@@ -84,7 +95,7 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  orderRef.set({a: 1});
+  orderRef.set(order);
 
   if (userOrderRef) userOrderRef.set(order);
 
