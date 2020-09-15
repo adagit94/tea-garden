@@ -20,7 +20,7 @@ export default async function (req, res) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: price,
       currency: 'usd',
-      metadata: orderData,
+      metadata: { price: orderData.price },
     });
 
     res.status(200).json({ clientSecret: paymentIntent.client_secret });
