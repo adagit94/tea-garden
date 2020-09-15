@@ -110,7 +110,7 @@ export default function Payment() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(orderData);
+
   if (!stripe || !elements || !haveOrderData || shouldRedirectRef.current)
     return <PageLoading />;
 

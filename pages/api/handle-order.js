@@ -14,17 +14,20 @@ export default async function (req, res) {
 
   const price = await calculatePrice(orderData);
 
-  orderData = {price, oid: orderRef.id, ...orderData };
+  orderData = { price, oid: orderRef.id, ...orderData };
 
   if (orderData.withPayment) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: price,
       currency: 'usd',
+      metadata: { integration_check: 'accept_a_payment' },
     });
 
     orderRef.set({ data: JSON.stringify(orderData) });
 
-    res.status(200).json({ clientSecret: paymentIntent.client_secret, orderData });
+    res
+      .status(200)
+      .json({ clientSecret: paymentIntent.client_secret, orderData });
   } else {
     saveOrder(orderData, orderRef);
     sendOrder(orderData);
