@@ -38,10 +38,11 @@ export async function calculatePrice(orderData) {
   return price;
 }
 
-export async function saveOrder(orderData, orderRef) {
+export async function saveOrder(orderData) {
   const { uid, oid, formValues, products, price } = orderData;
 
   const productsRef = firestore.collection('products');
+  const orderRef = firestore.collection('orders').doc(oid);
   const userOrderRef = uid
     ? firestore.collection('users').doc(uid).collection('orders').doc(oid)
     : null;
