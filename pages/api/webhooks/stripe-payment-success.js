@@ -1,11 +1,20 @@
+import { firestore, saveOrder, sendOrder } from 'firebase/server';
+
 export default function (req, res) {
-  const event = req.body;
+  const { metadata } = req.body.event.data.object;
+
+  const orderRef = firestore.collection('orders').doc();
+
+  const orderData = {
+    ...metadata,
+    formValues: JSON.parse(metadata.formValues),
+    products: JSON.parse(metadata.products),
+  };
 
   res.status(200).json({ received: true });
-  
-  console.log(event.data.object.metadata);
-}
 
-//orderDataRes.paymentConfirmed = true;
-//userDispatch({ type: 'setOrderData', payload: orderDataRes });
-//window.localStorage.setItem('orderData', JSON.stringify(orderDataRes));
+  saveOrder(orderData, orderRef);
+  sendOrder(orderData);
+
+  console.log(orderData);
+}

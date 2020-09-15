@@ -21,15 +21,13 @@ export default async function (req, res) {
       amount: price,
       currency: 'usd',
       metadata: {
-        uid: orderData.uid,
-        oid: orderData.oid,
-        price: orderData.price,
+        ...orderData,
         formValues: JSON.stringify({ ...orderData.formValues }),
         products: JSON.stringify({ ...orderData.products }),
       },
     });
 
-    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    res.status(200).json({ clientSecret: paymentIntent.client_secret, orderData });
   } else {
     saveOrder(orderData, orderRef);
     sendOrder(orderData);

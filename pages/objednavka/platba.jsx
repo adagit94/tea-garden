@@ -25,7 +25,7 @@ export default function Payment() {
   const userDispatch = useContext(UserDispatchContext);
 
   const shouldRedirectRef = useRef(null);
-  
+
   const stripe = useStripe();
   const elements = useElements();
 
@@ -46,7 +46,9 @@ export default function Payment() {
       body: JSON.stringify(orderData),
     });
 
-    const { clientSecret } = await res.json();
+    const resJSON = await res.json();
+
+    const { clientSecret } = resJSON;
 
     const paymentResult = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -63,9 +65,16 @@ export default function Payment() {
       setError(null);
       setSuccess(true);
 
-      /*setTimeout(() => {
+      let { orderData } = resJSON;
+
+      orderData.paymentConfirmed = true;
+
+      userDispatch({ type: 'setOrderData', payload: orderData });
+      window.localStorage.setItem('orderData', JSON.stringify(orderData));
+
+      setTimeout(() => {
         router.push('/objednavka/potvrzeni');
-      }, 4000);*/
+      }, 4000);
     }
 
     setProcessing(false);
@@ -77,7 +86,8 @@ export default function Payment() {
   }
 
   useEffect(() => {
-    shouldRedirectRef.current = haveOrderData && (orderData.paymentConfirmed || !orderData.withPayment);
+    shouldRedirectRef.current =
+      haveOrderData && (orderData.paymentConfirmed || !orderData.withPayment);
 
     if (shouldRedirectRef.current) router.push('/objednavka/potvrzeni');
 
