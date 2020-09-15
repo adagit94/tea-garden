@@ -46,7 +46,7 @@ export default function Payment() {
       body: JSON.stringify(orderData),
     });
 
-    const { clientSecret, orderData: orderDataRes } = await res.json();
+    const { clientSecret } = await res.json();
 
     const paymentResult = await stripe.confirmCardPayment(clientSecret, {
       payment_method: {
@@ -59,34 +59,13 @@ export default function Payment() {
 
     if (paymentResult.error) {
       setError(paymentResult.error.message);
-
-      window.fetch('/api/finalize-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'delete', oid: orderDataRes.oid }),
-      });
     } else {
       setError(null);
       setSuccess(true);
 
-      orderDataRes.paymentConfirmed = true;
-
-      userDispatch({ type: 'setOrderData', payload: orderDataRes });
-      window.localStorage.setItem('orderData', JSON.stringify(orderDataRes));
-
-      window.fetch('/api/finalize-order', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'save', oid: orderDataRes.oid }),
-      });
-
-      setTimeout(() => {
+      /*setTimeout(() => {
         router.push('/objednavka/potvrzeni');
-      }, 4000);
+      }, 4000);*/
     }
 
     setProcessing(false);
