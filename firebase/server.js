@@ -7,7 +7,10 @@ export const firestore = new Firestore({
   projectId: 'tea-garden-a95e7',
   credentials: {
     client_email: process.env.FIREBASE_SERVICE_ACCOUNT_CLIENT_EMAIL,
-    private_key: process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, '\n'),
+    private_key: process.env.FIREBASE_SERVICE_ACCOUNT_PRIVATE_KEY.replace(
+      /\\n/g,
+      '\n'
+    ),
   },
 });
 
@@ -81,10 +84,14 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  await orderRef.set(order);
+  orderRef.set(order).catch(err => {
+    console.error(err);
+  });
 
   if (userOrderRef) {
-    await userOrderRef.set(order);
+    userOrderRef.set(order).catch(err => {
+      console.error(err);
+    });
   }
 
   Object.getOwnPropertyNames(products).forEach(productID => {
@@ -98,7 +105,9 @@ export async function saveOrder(orderData) {
     });
   });
 
-  await updateBatch.commit();
+  updateBatch.commit().catch(err => {
+    console.error(err);
+  });
 }
 
 export async function sendOrder(orderData) {
