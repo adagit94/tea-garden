@@ -3,6 +3,8 @@ import { saveOrder, sendOrder } from 'firebase/server';
 export default async function (req, res) {
   const { metadata } = req.body.data.object;
 
+  res.status(200).json({ received: true });
+
   const orderData = {
     ...metadata,
     price: Number(metadata.price),
@@ -10,8 +12,8 @@ export default async function (req, res) {
     products: JSON.parse(metadata.products),
   };
 
+  console.log(1);
+  
   sendOrder(orderData);
-  await saveOrder(orderData);
-
-  res.status(200).json({ received: true });
+  saveOrder(orderData);
 }

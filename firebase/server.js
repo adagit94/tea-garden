@@ -84,15 +84,9 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  orderRef.set(order).catch(err => {
-    console.error(err);
-  });
+  orderRef.set(order);
 
-  if (userOrderRef) {
-    userOrderRef.set(order).catch(err => {
-      console.error(err);
-    });
-  }
+  if (userOrderRef) userOrderRef.set(order);
 
   Object.getOwnPropertyNames(products).forEach(productID => {
     const [weight, amount] = products[productID];
@@ -105,9 +99,7 @@ export async function saveOrder(orderData) {
     });
   });
 
-  updateBatch.commit().catch(err => {
-    console.error(err);
-  });
+  updateBatch.commit();
 }
 
 export async function sendOrder(orderData) {
