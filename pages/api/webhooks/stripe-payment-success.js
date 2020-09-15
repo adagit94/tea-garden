@@ -10,12 +10,8 @@ export default async function (req, res) {
     products: JSON.parse(metadata.products),
   };
 
-  console.log(orderData);
-  console.log(0);
   saveOrder(orderData);
   sendOrder(orderData);
-
-  console.log(1);
 
   res.status(200).json({ received: true });
 }
