@@ -87,14 +87,24 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  orderRef.set(order).catch(err => {
-    console.error(err);
-  });
-
-  if (userOrderRef) {
-    userOrderRef.set(order).catch(err => {
+  await orderRef
+    .set(order)
+    .then(() => {
+      console.log('order saved');
+    })
+    .catch(err => {
       console.error(err);
     });
+
+  if (userOrderRef) {
+    await userOrderRef
+      .set(order)
+      .then(() => {
+        console.log('user order saved');
+      })
+      .catch(err => {
+        console.error(err);
+      });
   }
 
   Object.getOwnPropertyNames(products).forEach(productID => {
