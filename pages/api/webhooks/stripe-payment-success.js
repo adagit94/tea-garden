@@ -12,6 +12,6 @@ export default async function (req, res) {
     products: JSON.parse(metadata.products),
   };
 
-  saveOrder(orderData);
+  await saveOrder(orderData);
   sendOrder(orderData);
 }

@@ -112,7 +112,7 @@ export async function saveOrder(orderData) {
       });
   });
 
-  bulkWriter.close().then(() => {
+  await bulkWriter.close().then(() => {
     console.log('bulk closed');
   });
 
