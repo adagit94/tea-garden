@@ -122,7 +122,7 @@ export async function saveOrder(orderData) {
       });
   });
 
-  bulkWriter.close();
+  await bulkWriter.close();
 }
 
 export async function sendOrder(orderData) {
