@@ -33,6 +33,9 @@ export async function calculatePrice(orderData) {
 
         price += data.packs[pack] * amount;
       });
+    })
+    .catch(err => {
+      console.error(err);
     });
 
   if (formValues.payment === 'post') price += PRICES.payment.post;
@@ -50,7 +53,7 @@ export async function saveOrder(orderData) {
     ? firestore.collection('users').doc(uid).collection('orders').doc(oid)
     : null;
 
-  const updateBatch = firestore.batch();
+  const bulkWriter = firestore.bulkWriter();
 
   let order = {
     status: 'čeká na vyřízení',
@@ -84,22 +87,33 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  orderRef.set(order);
+  orderRef.set(order).catch(err => {
+    console.error(err);
+  });
 
-  if (userOrderRef) userOrderRef.set(order);
+  if (userOrderRef)
+    userOrderRef.set(order).catch(err => {
+      console.error(err);
+    });
 
   Object.getOwnPropertyNames(products).forEach(productID => {
     const [weight, amount] = products[productID];
 
     const totalAmount = weight * amount;
 
-    updateBatch.update(productsRef.doc(productID), {
-      stock: Firestore.FieldValue.increment(-totalAmount),
-      'stats.orderedAmount': Firestore.FieldValue.increment(totalAmount),
-    });
+    bulkWriter
+      .update(productsRef.doc(productID), {
+        stock: Firestore.FieldValue.increment(-totalAmount),
+        'stats.orderedAmount': Firestore.FieldValue.increment(totalAmount),
+      })
+      .catch(err => {
+        console.error(err);
+      });
   });
 
-  updateBatch.commit();
+  bulkWriter.close().then(() => {
+    console.log('bulk closed');
+  });
 }
 
 export async function sendOrder(orderData) {
