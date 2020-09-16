@@ -122,11 +122,7 @@ export async function saveOrder(orderData) {
       });
   });
 
-  await bulkWriter.close().then(() => {
-    console.log('bulk closed');
-  });
-
-  console.log(order);
+  bulkWriter.close();
 }
 
 export async function sendOrder(orderData) {
