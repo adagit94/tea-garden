@@ -112,7 +112,7 @@ export async function saveOrder(orderData) {
 
     const totalAmount = weight * amount;
 
-    bulkWriter
+    await bulkWriter
       .update(productsRef.doc(productID), {
         stock: Firestore.FieldValue.increment(-totalAmount),
         'stats.orderedAmount': Firestore.FieldValue.increment(totalAmount),
