@@ -53,8 +53,6 @@ export async function saveOrder(orderData) {
     ? firestore.collection('users').doc(uid).collection('orders').doc(oid)
     : null;
 
-  const bulkWriter = firestore.bulkWriter();
-
   let order = {
     status: 'čeká na vyřízení',
     payment: formValues.payment,
@@ -87,32 +85,24 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  await orderRef
-    .set(order)
-    .then(() => {
-      console.log('order saved');
-    })
-    .catch(err => {
-      console.error(err);
-    });
+  orderRef.set(order).catch(err => {
+    console.error(err);
+  });
 
   if (userOrderRef) {
-    await userOrderRef
-      .set(order)
-      .then(() => {
-        console.log('user order saved');
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    userOrderRef.set(order).catch(err => {
+      console.error(err);
+    });
   }
 
-  Object.getOwnPropertyNames(products).forEach(async productID => {
+  const bulkWriter = firestore.bulkWriter();
+
+  Object.getOwnPropertyNames(products).forEach(productID => {
     const [weight, amount] = products[productID];
 
     const totalAmount = weight * amount;
 
-    await bulkWriter
+    bulkWriter
       .update(productsRef.doc(productID), {
         stock: Firestore.FieldValue.increment(-totalAmount),
         'stats.orderedAmount': Firestore.FieldValue.increment(totalAmount),
@@ -122,7 +112,7 @@ export async function saveOrder(orderData) {
       });
   });
 
-  await bulkWriter.close();
+  bulkWriter.close();
 }
 
 export async function sendOrder(orderData) {
