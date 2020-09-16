@@ -87,12 +87,12 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  orderRef.set(order).catch(err => {
+  await orderRef.set(order).catch(err => {
     console.error(err);
   });
 
   if (userOrderRef)
-    userOrderRef.set(order).catch(err => {
+    await userOrderRef.set(order).catch(err => {
       console.error(err);
     });
 
@@ -111,7 +111,7 @@ export async function saveOrder(orderData) {
       });
   });
 
-  bulkWriter.close().then(() => {
+  await bulkWriter.close().then(() => {
     console.log('bulk closed');
   });
 }
