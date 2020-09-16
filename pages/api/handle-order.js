@@ -1,4 +1,4 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_API_KEY);
+import stripe from 'stripe';
 
 import {
   firestore,
@@ -6,6 +6,8 @@ import {
   saveOrder,
   sendOrder,
 } from 'firebase/server';
+
+const stripePay = stripe(process.env.STRIPE_SECRET_API_KEY);
 
 export default async function (req, res) {
   let orderData = req.body;
@@ -17,7 +19,7 @@ export default async function (req, res) {
   orderData = { price, oid: orderRef.id, ...orderData };
 
   if (orderData.withPayment) {
-    const paymentIntent = await stripe.paymentIntents.create({
+    const paymentIntent = await stripePay.paymentIntents.create({
       amount: price,
       currency: 'usd',
       metadata: {

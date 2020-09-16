@@ -1,7 +1,7 @@
-const sgMail = require('@sendgrid/mail');
-const { Firestore } = require('@google-cloud/firestore');
+import sgMail from '@sendgrid/mail';
+import { Firestore } from '@google-cloud/firestore';
 
-const { PRICES } = require('tea-garden-constants');
+import { PRICES } from 'tea-garden-constants';
 
 export const firestore = new Firestore({
   projectId: 'tea-garden-a95e7',
