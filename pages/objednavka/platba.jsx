@@ -161,6 +161,18 @@ export default function Payment() {
             {!processing && success && 'Zaplaceno'}
           </Button>
         </Form>
+        <p>
+          * Testovací karty k použití v{' '}
+          <a
+            href='https://stripe.com/docs/testing'
+            target='_blank'
+            rel='noreferrer'
+            style={{ textDecoration: 'underline' }}
+          >
+            dokumentaci
+          </a>
+          .
+        </p>
       </Col>
     </Row>
   );
