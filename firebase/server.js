@@ -157,7 +157,7 @@ export async function sendOrder(orderData) {
 
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-  sgMail.send({
+  await sgMail.send({
     to: email,
     from: 'adam.pelcius@seznam.cz',
     subject: `Tea Garden e-shop: objednávka ${oid}`,

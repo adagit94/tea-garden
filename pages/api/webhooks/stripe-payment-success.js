@@ -10,8 +10,7 @@ export default async function (req, res) {
     products: JSON.parse(metadata.products),
   };
 
-  await saveOrder(orderData);
-  sendOrder(orderData);
+  await Promise.all([saveOrder(orderData), sendOrder(orderData)]);
 
   res.status(200).json({ received: true });
 }
