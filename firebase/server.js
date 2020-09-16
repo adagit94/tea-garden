@@ -87,7 +87,7 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  await orderRef
+  orderRef
     .set(order)
     .then(() => {
       console.log('order saved');
@@ -97,7 +97,7 @@ export async function saveOrder(orderData) {
     });
 
   if (userOrderRef) {
-    await userOrderRef
+    userOrderRef
       .set(order)
       .then(() => {
         console.log('user order saved');
