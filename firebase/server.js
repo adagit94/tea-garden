@@ -87,14 +87,15 @@ export async function saveOrder(orderData) {
 
   order = { date: Firestore.FieldValue.serverTimestamp(), ...order };
 
-  await orderRef.set(order).catch(err => {
+  orderRef.set(order).catch(err => {
     console.error(err);
   });
 
-  if (userOrderRef)
-    await userOrderRef.set(order).catch(err => {
+  if (userOrderRef) {
+    userOrderRef.set(order).catch(err => {
       console.error(err);
     });
+  }
 
   Object.getOwnPropertyNames(products).forEach(productID => {
     const [weight, amount] = products[productID];
@@ -111,9 +112,11 @@ export async function saveOrder(orderData) {
       });
   });
 
-  await bulkWriter.close().then(() => {
+  bulkWriter.close().then(() => {
     console.log('bulk closed');
   });
+
+  console.log(order);
 }
 
 export async function sendOrder(orderData) {
