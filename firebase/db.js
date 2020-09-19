@@ -131,9 +131,9 @@ export async function getProducts(spec) {
     const [category, subcategory] = spec;
 
     if (category === 'cerstve') {
-      productsRef = productsRef.where('harvest.year', '==', 2020);
+      productsRef = productsRef.where('harvest.year', '==', (new Date()).getFullYear());
     } else if (category === 'archivni') {
-      productsRef = productsRef.where('harvest.year', '<=', 2005);
+      productsRef = productsRef.where('harvest.year', '<=', (new Date()).getFullYear() - 5);
     } else {
       productsRef = productsRef.where('metadata.url.category', '==', category);
 
