@@ -7,6 +7,7 @@ import Table from 'react-bootstrap/Table';
 
 import AccountLayout from 'components/user/account/AccountLayout';
 import { UserStateContext } from 'components/user/UserDataProvider';
+import { PRICES } from 'tea-garden-constants';
 
 export function Address({ address }) {
   return (
@@ -104,7 +105,7 @@ export default function Order() {
                     </td>
                     <td className='text-right'>
                       {order.delivery === 'post' &&
-                        `Česká pošta: ${order.price.delivery} Kč`}
+                        `Česká pošta: ${PRICES.delivery.post} Kč`}
 
                       {order.delivery === 'personal' && `Osobní vyzvednutí`}
                     </td>
@@ -115,11 +116,13 @@ export default function Order() {
                     </td>
                     <td className='text-right'>
                       {order.payment === 'post' &&
-                        `Dobírkou: ${order.price.payment} Kč`}
+                        `Dobírkou: ${PRICES.payment.post} Kč`}
 
-                      {order.payment === 'bank-transfer' && `Převodem na účet`}
+                      {order.payment === 'bank-transfer' && `Převodem na účet: Nezaplaceno`}
 
                       {order.payment === 'cash' && `Hotově`}
+
+                      {order.payment === 'card' && `Kartou: Zaplaceno`}
                     </td>
                   </tr>
                 </tbody>
