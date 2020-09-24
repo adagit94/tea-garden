@@ -126,12 +126,8 @@ export default function Delivery() {
             let orderData = {
               uid: firebase?.uid,
               formValues: values,
-              products: {},
+              products: shoppingCart,
             };
-
-            cartItems.forEach(item => {
-              orderData.products[item] = shoppingCart[item].pack;
-            });
 
             if (values.payment === 'card') {
               orderData.withPayment = true;

@@ -64,7 +64,7 @@ export async function initFirestoreListeners(user, syncData) {
     syncData('address', address);
   });
 
-  detachOrdersListener = ordersRef.onSnapshot(data => {
+  detachOrdersListener = ordersRef.orderBy('date', 'desc').onSnapshot(data => {
     const dateFormat = new Intl.DateTimeFormat('cs-CZ');
 
     let orders = {};

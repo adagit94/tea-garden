@@ -45,7 +45,7 @@ export default function Orders() {
                       <td className='text-center'>{orders[oid].date}</td>
                       <td className='text-center'>{orders[oid].status}</td>
                       <td className='text-center'>
-                        {orders[oid].price.total} Kč
+                        {orders[oid].price} Kč
                       </td>
                     </tr>
                   ))}

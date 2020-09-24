@@ -29,7 +29,7 @@ export async function calculatePrice(orderData) {
     .then(docs => {
       docs.forEach(doc => {
         const data = doc.data();
-        const [pack, amount] = products[doc.id];
+        const [pack, amount] = products[doc.id].pack;
 
         price += data.packs[pack] * amount;
       });
@@ -98,7 +98,7 @@ export async function saveOrder(orderData) {
   const bulkWriter = firestore.bulkWriter();
 
   Object.getOwnPropertyNames(products).forEach(productID => {
-    const [weight, amount] = products[productID];
+    const [weight, amount] = products[productID].pack;
 
     const totalAmount = weight * amount;
 

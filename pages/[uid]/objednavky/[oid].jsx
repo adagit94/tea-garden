@@ -70,7 +70,8 @@ export default function Order() {
                       <tr key={productID}>
                         <td>
                           <Link
-                            href={`/${url.category}/${url.subcategory}/${url.product}`}
+                            href='/[...param]'
+                            as={`/${url.category}/${url.subcategory}/${url.product}`}
                             passHref
                           >
                             <a>
@@ -128,7 +129,7 @@ export default function Order() {
                       <b>Celkem</b>
                     </td>
                     <td className='text-right'>
-                      <b>{order.price.total} Kč</b>
+                      <b>{order.price} Kč</b>
                     </td>
                   </tr>
                 </tfoot>
