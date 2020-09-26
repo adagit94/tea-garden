@@ -89,7 +89,7 @@ export default function ShoppingCart() {
                       <InputGroup className='p-2 flex-nowrap'>
                         <InputGroup.Prepend>
                           <Button
-                            className={`d-flex justify-content-center align-items-center font-weight-bold ${styles.amountBtn}`}
+                            className={`d-flex justify-content-center align-items-center font-weight-bold border-right-0 ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(
                                 amountInputID,
@@ -138,7 +138,7 @@ export default function ShoppingCart() {
                         />
                         <InputGroup.Append>
                           <Button
-                            className={`d-flex justify-content-center align-items-center font-weight-bold ${styles.amountBtn}`}
+                            className={`d-flex justify-content-center align-items-center font-weight-bold border-left-0 ${styles.amountBtn}`}
                             onClick={() => {
                               const amount = updateAmount(amountInputID, 'add');
 

@@ -494,7 +494,8 @@ export default function Delivery() {
                             <tr key={itemID}>
                               <td>
                                 <Link
-                                  href={`/${url.category}/${url.subcategory}/${url.product}`}
+                                  href='/[...param]'
+                                  as={`/${url.category}/${url.subcategory}/${url.product}`}
                                   passHref
                                 >
                                   <a>
