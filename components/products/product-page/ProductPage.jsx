@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import React, { useState, useEffect, useContext } from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -16,17 +15,6 @@ import styles from './ProductPage.module.scss';
 
 function sortProducts(ordering, products, productIDs) {
   switch (ordering) {
-    case 'date':
-      return [...productIDs].sort((a, b) => {
-        const createdA = products[a].metadata.created;
-        const createdB = products[b].metadata.created;
-
-        if (createdA > createdB) return -1;
-        if (createdA < createdB) return 1;
-
-        return 0;
-      });
-
     case 'sold':
       return [...productIDs].sort((a, b) => {
         const orderedAmountA = products[a].stats.orderedAmount;
@@ -34,6 +22,17 @@ function sortProducts(ordering, products, productIDs) {
 
         if (orderedAmountA > orderedAmountB) return -1;
         if (orderedAmountA < orderedAmountB) return 1;
+
+        return 0;
+      });
+
+    case 'date':
+      return [...productIDs].sort((a, b) => {
+        const createdA = products[a].metadata.created;
+        const createdB = products[b].metadata.created;
+
+        if (createdA > createdB) return -1;
+        if (createdA < createdB) return 1;
 
         return 0;
       });
@@ -127,54 +126,42 @@ function Sidebar({ category, subcategory }) {
 }
 
 export default function ProductPage({ param }) {
-  const router = useRouter();
-
-  const [page, setPage] = useState(1);
+  //const [page, setPage] = useState(1);
   const [productIDs, setProductIDs] = useState(null);
 
   const userState = useContext(UserStateContext);
   const userDispatch = useContext(UserDispatchContext);
 
+  const [category, subcategory] = param;
   const { products } = userState;
 
-  const includeSidebar = param[0] !== 'cerstve' && param[0] !== 'archivni';
+  const includeSidebar = category !== 'cerstve' && category !== 'archivni';
 
   useEffect(() => {
     async function initPage() {
-      const products = await getProducts(param);
+      const products = await getProducts(category);
+      const sortedProducts = sortProducts('sold', products, Object.getOwnPropertyNames(products));
 
       userDispatch({ type: 'setProducts', payload: products });
-      setProductIDs(Object.getOwnPropertyNames(products));
+      setProductIDs(sortedProducts);
     }
 
+    setProductIDs(null);
     initPage();
-  }, [param, userDispatch]);
-
-  useEffect(() => {
-    function resetProductIDs() {
-      setProductIDs(null);
-    }
-
-    router.events.on('routeChangeStart', resetProductIDs);
-
-    return () => {
-      router.events.off('routeChangeStart', resetProductIDs);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [category, userDispatch]);
 
   if (!productIDs) return <PageLoading />;
 
   return (
-    <Row className='px-3 px-lg-0 py-lg-3'>
+    <Row className={includeSidebar && 'px-3 px-lg-0 py-lg-3'}>
       {includeSidebar && (
-        <Col xs={12} lg={2} className={`p-3 ${styles.sidebarCol}`}>
-          <Sidebar category={param[0]} subcategory={param[1]} />
+        <Col xs={12} lg={2} className={`d-flex justify-content-center justify-content-lg-start p-3 ${styles.sidebarCol}`}>
+          <Sidebar category={category} subcategory={subcategory} />
         </Col>
       )}
       <Col xs={12} lg={includeSidebar ? 10 : 12} className='px-0'>
         <Row>
-          <Col className='pt-3'>
+          <Col className='pt-3 px-3'>
             <Form.Group
               className={`m-0 ${styles.orderBySelection}`}
               controlId='sorting-select'
@@ -189,8 +176,8 @@ export default function ProductPage({ param }) {
                 as='select'
                 custom
               >
-                <option value='date'>Od nejnovějšího</option>
                 <option value='sold'>Od nejprodávanějšího</option>
+                <option value='date'>Od nejnovějšího</option>
                 <option value='priceAsc'>Od nejlevnějšího</option>
                 <option value='priceDesc'>Od nejdražšího</option>
               </Form.Control>
@@ -198,9 +185,18 @@ export default function ProductPage({ param }) {
           </Col>
         </Row>
         <Row className='m-0' xs={1} sm={2} md={3}>
-          {productIDs.map(productID => (
-            <ProductCard key={productID} {...products[productID]} />
-          ))}
+          {productIDs.map(productID => {
+            const product = products[productID];
+
+            if (
+              subcategory &&
+              subcategory !== product.metadata.url.subcategory
+            ) {
+              return null;
+            }
+
+            return <ProductCard key={productID} {...product} />;
+          })}
         </Row>
         {/* pagination */}
       </Col>

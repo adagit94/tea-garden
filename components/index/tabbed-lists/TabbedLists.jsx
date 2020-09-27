@@ -14,10 +14,10 @@ export default function TabbedLists() {
       id='tabbed-teas'
     >
       <Tab eventKey='new' title='Nejnovější'>
-        <Items list='new' />
+        <Items category='nejnovejsi' />
       </Tab>
       <Tab eventKey='topSelling' title='Nejprodávanější'>
-        <Items list='topSelling' />
+        <Items category='nejprodavanejsi' />
       </Tab>
     </Tabs>
   );

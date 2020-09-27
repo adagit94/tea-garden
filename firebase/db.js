@@ -118,33 +118,38 @@ export async function updateAddress(uid, formValues, stateValues, setAlert) {
   }
 }
 
-export async function getProducts(spec) {
+export async function getProducts(category) {
   let productsRef = firestore.collection('products');
 
   let products;
 
-  if (spec === 'new') {
-    productsRef = productsRef.orderBy('metadata.created', 'desc').limit(6);
-  } else if (spec === 'topSelling') {
-    productsRef = productsRef.orderBy('stats.orderedAmount', 'desc').limit(6);
-  } else {
-    const [category, subcategory] = spec;
+  switch (category) {
+    case 'nejnovejsi':
+      productsRef = productsRef.orderBy('metadata.created', 'desc').limit(6);
+      break;
 
-    if (category === 'cerstve') {
-      productsRef = productsRef.where('harvest.year', '==', (new Date()).getFullYear());
-    } else if (category === 'archivni') {
-      productsRef = productsRef.where('harvest.year', '<=', (new Date()).getFullYear() - 5);
-    } else {
+    case 'nejprodavanejsi':
+      productsRef = productsRef.orderBy('stats.orderedAmount', 'desc').limit(6);
+      break;
+
+    case 'cerstve':
+      productsRef = productsRef.where(
+        'harvest.year',
+        '==',
+        new Date().getFullYear()
+      );
+      break;
+
+    case 'archivni':
+      productsRef = productsRef.where(
+        'harvest.year',
+        '<=',
+        new Date().getFullYear() - 5
+      );
+      break;
+
+    default:
       productsRef = productsRef.where('metadata.url.category', '==', category);
-
-      if (subcategory) {
-        productsRef = productsRef.where(
-          'metadata.url.subcategory',
-          '==',
-          subcategory
-        );
-      }
-    }
   }
 
   products = await productsRef

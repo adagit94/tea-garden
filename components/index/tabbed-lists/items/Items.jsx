@@ -9,7 +9,7 @@ import { AppStateContext } from 'pages/_app';
 
 import styles from './Items.module.scss';
 
-export default function Items({ list }) {
+export default function Items({ category }) {
   const [products, setProducts] = useState({});
 
   const firebaseReady = useContext(AppStateContext);
@@ -18,7 +18,7 @@ export default function Items({ list }) {
 
   useEffect(() => {
     async function getItems() {
-      const products = await getProducts(list);
+      const products = await getProducts(category);
 
       setProducts(products);
     }
