@@ -23,6 +23,7 @@ export default function Newsletter() {
           <InputGroup.Text>@</InputGroup.Text>
         </InputGroup.Prepend>
         <Form.Control
+          className='rounded-right'
           placeholder='Váš email'
           type='email'
           name='EMAIL'
