@@ -40,7 +40,7 @@ function CustomSearchBox({ currentRefinement, refine, clearSearchRef }) {
       <Form.Group controlId='nav-search-field'>
         <Form.Label srOnly>Vyhledávač</Form.Label>
         <Form.Control
-          className='p-0 border-top-0 border-right-0 border-left-0 rounded-0 border-white bg-header text-white'
+          className='border-secondary bg-header text-white'
           value={currentRefinement}
           onChange={e => refine(e.currentTarget.value)}
           type='search'

@@ -121,8 +121,8 @@ export default function Product({ param }) {
           </Breadcrumb>
         </Col>
       </Row>
-      <Row className='px-3 px-md-0 pb-md-3'>
-        <Col className={`pb-3 pb-md-0 ${styles.carouselCol}`} xs={12} md={6}>
+      <Row className='pb-lg-3'>
+        <Col xs={12} md={6}>
           <Carousel images={productData.metadata.images} />
         </Col>
         <Col className='pt-3 pt-md-0' xs={12} md={6}>
@@ -152,13 +152,13 @@ export default function Product({ param }) {
               <span className='text-danger'>Není skladem</span>
             )}
           </div>
-          <Form className='mt-3' ref={btnContainerRef} inline>
+          <Form ref={btnContainerRef} inline>
             <div className='d-flex flex-column'>
               <Form.Group
-                className='m-2 d-flex justify-content-between align-items-center'
+                className='p-2 d-flex justify-content-between align-items-center'
                 controlId='product-weight'
               >
-                <Form.Label className='mb-0 mr-3'>Balení:</Form.Label>
+                <Form.Label className='mr-3'>Balení:</Form.Label>
 
                 <Form.Control
                   onChange={e => {
@@ -174,7 +174,6 @@ export default function Product({ param }) {
                   disabled={productData.stock < packsWeight[0] ? true : false}
                   value={weightInput}
                   as='select'
-                  custom
                 >
                   {packsWeight.map(pack => (
                     <option key={pack} value={pack}>
@@ -185,11 +184,11 @@ export default function Product({ param }) {
               </Form.Group>
 
               <Form.Group
-                className='m-2 d-flex justify-content-between align-items-center'
+                className='p-2 d-flex justify-content-between align-items-center'
                 controlId='product-amount'
                 ref={btnContainerRef}
               >
-                <Form.Label className='mb-0  mr-3'>Množství:</Form.Label>
+                <Form.Label className='mr-3'>Množství:</Form.Label>
 
                 <Form.Control
                   onChange={e => {
@@ -212,10 +211,10 @@ export default function Product({ param }) {
               </Form.Group>
 
               <Form.Group
-                className='m-2 d-flex justify-content-between align-items-center'
+                className='p-2 d-flex justify-content-between align-items-center'
                 controlId='product-price'
               >
-                <Form.Label className='mb-0 mr-3'>Cena:</Form.Label>
+                <Form.Label className='mr-3'>Cena:</Form.Label>
 
                 <Form.Control
                   className={`p-0 ${styles.formInput}`}
@@ -262,7 +261,7 @@ export default function Product({ param }) {
                         });
                       }, 2000);
                     }}
-                    className='m-2 align-self-start'
+                    className='m-3 align-self-start'
                     variant='primary'
                   >
                     Do košíku

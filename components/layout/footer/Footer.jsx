@@ -19,7 +19,7 @@ export default function Footer() {
             <Col className='d-flex flex-column justify-content-center'>
               <Newsletter />
             </Col>
-            <Col className='d-flex flex-column flex-sm-row justify-content-center'>
+            <Col className='pt-3 d-flex flex-column flex-sm-row justify-content-center'>
               <Contact />
             </Col>
           </Row>

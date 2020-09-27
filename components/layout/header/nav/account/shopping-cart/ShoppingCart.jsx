@@ -114,7 +114,7 @@ export default function ShoppingCart() {
                           </Button>
                         </InputGroup.Prepend>
                         <FormControl
-                          className={`border-secondary bg-header text-white ${styles.amountInput}`}
+                          className={`border border-secondary bg-header text-white ${styles.amountInput}`}
                           id={amountInputID}
                           onChange={e => {
                             const amount = Number(e.target.value);

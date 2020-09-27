@@ -10,8 +10,6 @@ import { UserStateContext } from '../UserDataProvider';
 import { logout } from '../../../firebase/auth';
 import { PageLoading } from 'components/ui/Indicators';
 
-import styles from './AccountLayout.module.scss';
-
 export default function AccountLayout({ activeItem, children }) {
   const router = useRouter();
   const userState = useContext(UserStateContext);
@@ -45,7 +43,7 @@ export default function AccountLayout({ activeItem, children }) {
   return (
     <Row className='px-3 px-lg-0 py-lg-3'>
       <Col
-        className={`d-flex flex-lg-column justify-content-between p-3 ${styles.accountNavCol}`}
+        className='d-flex flex-lg-column justify-content-between p-3'
         xs={12}
         lg={2}
       >
@@ -83,7 +81,7 @@ export default function AccountLayout({ activeItem, children }) {
           </Button>
         </div>
       </Col>
-      <Col className='py-md-3 py-lg-0' xs={12} lg={10}>
+      <Col className='p-3' xs={12} lg={10}>
         {children}
       </Col>
     </Row>

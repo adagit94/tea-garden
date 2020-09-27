@@ -1,14 +1,3 @@
-.sidebarCol {
-  border-bottom: 1px solid #000000;
-}
-
-@media (min-width: 992px) {
-  .sidebarCol {
-    border-right: 1px solid #000000;
-    border-bottom: none;
-  }
-}
-
 .orderBySelection {
   width: 100%;
   max-width: 200px;

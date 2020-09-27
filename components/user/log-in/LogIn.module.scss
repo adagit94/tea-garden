@@ -1,27 +1,16 @@
-.authProviders {
-  border-top: 1px solid #000000;
-
-  button {
-    width: 100%;
-  }
+.authProviderButton {
+  width: 100%;
 }
 
 @media (min-width: 576px) {
-  .authProviders {
-    button {
-      width: 50%;
-    }
+  .authProviderButton {
+    width: 50%;
   }
 }
 
 @media (min-width: 992px) {
-  .authProviders {
-    border-left: 1px solid #000000;
-    border-top: none;
-
-    button {
-      max-width: 300px;
-    }
+  .authProviderButton {
+    max-width: 300px;
   }
 }
 

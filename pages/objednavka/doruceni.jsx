@@ -265,7 +265,6 @@ export default function Delivery() {
                       <Form.Control
                         as='select'
                         value={values.countryInvoice}
-                        custom
                         {...getFieldProps('countryInvoice')}
                       >
                         <option value='Czech'>Česká republika</option>
@@ -361,7 +360,6 @@ export default function Delivery() {
                         as='select'
                         value={values.countryDelivery}
                         disabled={values.sameAsInvoice}
-                        custom
                         {...getFieldProps('countryDelivery')}
                       >
                         <option value='Czech'>Česká republika</option>
@@ -466,7 +464,7 @@ export default function Delivery() {
                   <Col>
                     <h2 className='text-center text-lg-left'>Poznámka</h2>
                     <Form.Group className={styles.singleInput}>
-                      <Form.Control as='textarea' {...getFieldProps('note')} />
+                      <Form.Control className='border border-primary rounded' as='textarea' {...getFieldProps('note')} />
                     </Form.Group>
                   </Col>
                 </Row>
@@ -546,7 +544,7 @@ export default function Delivery() {
                                       </Button>
                                     </InputGroup.Prepend>
                                     <FormControl
-                                      className={`border-primary ${styles.amountInput}`}
+                                      className={`border border-primary ${styles.amountInput}`}
                                       id={amountInputID}
                                       onChange={e => {
                                         const amount = Number(e.target.value);

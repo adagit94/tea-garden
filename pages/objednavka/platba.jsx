@@ -110,15 +110,15 @@ export default function Payment() {
           className='d-flex flex-column align-items-center'
           onSubmit={handleSubmit}
         >
-          <Form.Group className={`my-3 p-3 border rounded ${styles.formGroup}`}>
+          <Form.Group className={`my-3 p-2 border-bottom border-primary ${styles.formGroup}`}>
             <Form.Label srOnly>Platba kartou</Form.Label>
             <CardElement
               options={{
                 style: {
                   base: {
-                    color: '#495057',
+                    color: '#000000',
                     '::placeholder': {
-                      color: '#495057',
+                      color: '#000000',
                     },
                   },
                   invalid: {

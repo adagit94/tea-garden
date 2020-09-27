@@ -92,7 +92,6 @@ export default function AddressForm() {
               <Form.Control
                 as='select'
                 value={values.country}
-                custom
                 {...getFieldProps('country')}
               >
                 <option value='Czech'>Česká republika</option>

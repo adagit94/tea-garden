@@ -77,7 +77,6 @@ export default function Registration() {
                 <Form.Control
                   type='email'
                   autoComplete='email'
-                  isValid={touched.email && !errors.email}
                   isInvalid={touched.email && errors.email}
                   {...getFieldProps('email')}
                 />

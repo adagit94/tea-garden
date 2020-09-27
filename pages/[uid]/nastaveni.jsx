@@ -26,13 +26,14 @@ export default function Settings() {
   return (
     <AccountLayout activeItem='settings'>
       <Row xs={1} lg={2}>
-        <Col className='p-3 text-center text-lg-left'>
+        <Col className='text-center text-lg-left'>
           <UserForm />
 
           <Button
             onClick={() => {
               setShowModal(true);
             }}
+            className='mb-3 mb-lg-0'
             variant='outline-danger'
           >
             Odstranit účet
@@ -81,7 +82,7 @@ export default function Settings() {
           </Modal>
         </Col>
 
-        <Col className={`p-3 text-center text-lg-left ${styles.addressForm}`}>
+        <Col className='text-center text-lg-left'>
           <AddressForm />
         </Col>
       </Row>

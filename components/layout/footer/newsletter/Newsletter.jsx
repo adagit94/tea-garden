@@ -19,11 +19,8 @@ export default function Newsletter() {
         Odběr novinek
       </Form.Label>
       <InputGroup className='p-2'>
-        <InputGroup.Prepend>
-          <InputGroup.Text>@</InputGroup.Text>
-        </InputGroup.Prepend>
         <Form.Control
-          className='rounded-right'
+          className='bg-footer text-black'
           placeholder='Váš email'
           type='email'
           name='EMAIL'

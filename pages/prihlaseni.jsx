@@ -112,13 +112,13 @@ export default function LogIn() {
         />
       </Col>
       <Col
-        className={`p-3 d-flex flex-column justify-content-center align-items-center align-items-lg-start ${styles.authProviders}`}
+        className='p-3 d-flex flex-column justify-content-center align-items-center align-items-lg-start'
       >
         <button
           onClick={() => {
             loginProvider('fb');
           }}
-          className={`border-0 rounded p-2 mb-1 text-light text-center text-lg-left ${styles.authProviderFacebook}`}
+          className={`border-0 rounded p-2 mb-1 text-light text-center text-lg-left ${styles.authProviderButton} ${styles.authProviderFacebook}`}
           type='button'
         >
           <img src='/icons/facebook.svg' alt='facebook účet' /> Příhlásit
@@ -128,7 +128,7 @@ export default function LogIn() {
           onClick={() => {
             loginProvider('google');
           }}
-          className={`border-0 rounded p-2 mt-1 text-light text-center text-lg-left ${styles.authProviderGoogle}`}
+          className={`border-0 rounded p-2 mt-1 text-light text-center text-lg-left ${styles.authProviderButton} ${styles.authProviderGoogle}`}
           type='button'
         >
           <img src='/icons/google.svg' alt='google účet' /> Příhlásit Google

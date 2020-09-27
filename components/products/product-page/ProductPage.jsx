@@ -155,7 +155,7 @@ export default function ProductPage({ param }) {
   return (
     <Row className={includeSidebar && 'px-3 px-lg-0 py-lg-3'}>
       {includeSidebar && (
-        <Col xs={12} lg={2} className={`d-flex justify-content-center justify-content-lg-start p-3 ${styles.sidebarCol}`}>
+        <Col xs={12} lg={2} className='d-flex justify-content-center justify-content-lg-start p-3'>
           <Sidebar category={category} subcategory={subcategory} />
         </Col>
       )}
@@ -174,7 +174,6 @@ export default function ProductPage({ param }) {
                   );
                 }}
                 as='select'
-                custom
               >
                 <option value='sold'>Od nejprodávanějšího</option>
                 <option value='date'>Od nejnovějšího</option>
