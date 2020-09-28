@@ -1733,6 +1733,9 @@ pre code {
 .table tbody + tbody {
   border-top: 2px solid #000000;
 }
+.table tbody tr:first-child td {
+  border-top: none;
+}
 
 .table-sm th,
 .table-sm td {

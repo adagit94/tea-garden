@@ -468,7 +468,7 @@ export default function Delivery() {
                     </Form.Group>
                   </Col>
                 </Row>
-                <Row>
+                <Row className='border-top border-primary'>
                   <Col>
                     <Table className='m-0' responsive>
                       <tbody>

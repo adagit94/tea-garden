@@ -68,7 +68,7 @@ export default function ShoppingCart() {
                   <tr className='text-nowrap' key={itemID}>
                     <td className='border-secondary'>
                       <Link
-                        href='[...param]'
+                        href='/[...param]'
                         as={`/${url.category}/${url.subcategory}/${url.product}`}
                         passHref
                       >

@@ -56,7 +56,7 @@ export default function Order() {
               )}
             </Col>
           </Row>
-          <Row>
+          <Row className='border-top border-primary'>
             <Col>
               <Table className='m-0' size='sm' responsive>
                 <tbody>

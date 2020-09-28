@@ -23,10 +23,10 @@ export default function Orders() {
               <Table responsive>
                 <thead>
                   <tr>
-                    <th className='border-0'>Objednávka</th>
-                    <th className='text-center border-0'>Datum</th>
-                    <th className='text-center border-0'>Stav</th>
-                    <th className='text-center border-0'>Cena</th>
+                    <th className='border-top-0'>Objednávka</th>
+                    <th className='text-center border-top-0'>Datum</th>
+                    <th className='text-center border-top-0'>Stav</th>
+                    <th className='text-center border-top-0'>Cena</th>
                   </tr>
                 </thead>
                 <tbody>
