@@ -49,9 +49,9 @@ export default function ShoppingCart() {
           </div>
         )}
       </Dropdown.Toggle>
-      <Dropdown.Menu className='px-3 position-absolute' alignRight>
+      <Dropdown.Menu className='p-3 position-absolute' alignRight>
         {cartItems.length > 0 && (
-          <Table className='m-0 text-white' size='sm' borderless responsive>
+          <Table className='m-0 text-white' size='sm' responsive>
             <tbody>
               {cartItems.map(itemID => {
                 const { title, image, url, pack, price, stock } = shoppingCart[
@@ -65,8 +65,8 @@ export default function ShoppingCart() {
                 subtotal += itemPrice;
 
                 return (
-                  <tr className={`text-nowrap ${styles.tr}`} key={itemID}>
-                    <td>
+                  <tr className='text-nowrap' key={itemID}>
+                    <td className='border-secondary'>
                       <Link
                         href='[...param]'
                         as={`/${url.category}/${url.subcategory}/${url.product}`}
@@ -85,7 +85,7 @@ export default function ShoppingCart() {
                         </a>
                       </Link>
                     </td>
-                    <td className='d-flex'>
+                    <td className='d-flex border-secondary'>
                       <InputGroup className='p-2 flex-nowrap'>
                         <InputGroup.Prepend>
                           <Button
@@ -175,20 +175,20 @@ export default function ShoppingCart() {
                         </Button>
                       </InputGroup>
                     </td>
-                    <td className='align-middle'>{itemPrice} Kč</td>
+                    <td className='align-middle border-secondary'>{itemPrice} Kč</td>
                   </tr>
                 );
               })}
             </tbody>
             <tfoot>
               <tr>
-                <td colSpan='2'>
+                <td className='border-secondary' colSpan='2'>
                   <b>Celkem</b>
                 </td>
-                <td>{subtotal} Kč</td>
+                <td className='border-secondary'>{subtotal} Kč</td>
               </tr>
               <tr>
-                <td className='text-center text-lg-right' colSpan='3'>
+                <td className='text-center text-lg-right border-0' colSpan='3'>
                   <Link href='/objednavka/doruceni' passHref>
                     <Button
                       onClick={() => {

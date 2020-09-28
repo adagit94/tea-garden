@@ -20,7 +20,6 @@ import styles from './Product.module.scss';
 function Carousel({ images }) {
   return (
     <Carous
-      indicators={false}
       controls={false}
       keyboard={false}
       touch={false}

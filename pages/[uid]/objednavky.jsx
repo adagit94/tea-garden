@@ -18,15 +18,15 @@ export default function Orders() {
     <AccountLayout activeItem='orders'>
       {orders && (
         <Row>
-          <Col className='p-3'>
+          <Col>
             {ordersID.length > 0 && (
               <Table responsive>
                 <thead>
                   <tr>
-                    <th>Objednávka</th>
-                    <th className='text-center'>Datum</th>
-                    <th className='text-center'>Stav</th>
-                    <th className='text-center'>Cena</th>
+                    <th className='border-0'>Objednávka</th>
+                    <th className='text-center border-0'>Datum</th>
+                    <th className='text-center border-0'>Stav</th>
+                    <th className='text-center border-0'>Cena</th>
                   </tr>
                 </thead>
                 <tbody>

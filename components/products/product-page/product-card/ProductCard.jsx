@@ -10,6 +10,8 @@ import { BtnPopover } from 'components/ui/Popovers';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 
+import styles from './ProductCard.module.scss';
+
 export default function ProductCard({
   id,
   metadata,
@@ -33,7 +35,7 @@ export default function ProductCard({
 
   return (
     <Col className='p-3'>
-      <Card>
+      <Card className={styles.productCard}>
         <Link
           href='/[...param]'
           as={`/${metadata.url.category}/${metadata.url.subcategory}/${metadata.url.product}`}

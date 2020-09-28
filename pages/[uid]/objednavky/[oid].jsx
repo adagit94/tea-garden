@@ -38,11 +38,11 @@ export default function Order() {
       {order && (
         <>
           <Row>
-            <Col>
-              Objednávka: <b>{oid}</b>
+            <Col className='text-center text-md-left'>
+              Objednávka: <b className='text-break'>{oid}</b>
             </Col>
           </Row>
-          <Row>
+          <Row className='py-3 text-center text-md-left' xs={1} md={2}>
             <Col>
               <h2>Fakturační adresa</h2>
               <Address address={order.address.invoice} />

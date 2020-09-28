@@ -41,7 +41,7 @@ export default function AccountLayout({ activeItem, children }) {
   if (!firebase || !address || !orders) return <PageLoading />;
 
   return (
-    <Row className='px-3 px-lg-0 py-lg-3'>
+    <Row>
       <Col
         className='d-flex flex-lg-column justify-content-between p-3'
         xs={12}
