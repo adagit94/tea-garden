@@ -16,7 +16,7 @@ export default function Nav() {
   const [showGreenDropdown, setShowGreenDropdown] = useState(false);
 
   return (
-    <Navbar className={styles.nav} variant='dark' expand='lg' collapseOnSelect>
+    <Navbar variant='dark' expand='lg' collapseOnSelect>
       <Navbar.Brand>
         <Link href='/'>
           <a className='text-white'>HP</a>

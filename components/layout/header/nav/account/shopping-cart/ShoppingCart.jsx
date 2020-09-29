@@ -207,7 +207,7 @@ export default function ShoppingCart() {
         )}
 
         {cartItems.length === 0 && (
-          <div className='text-nowrap text-center p-3'>Košík je prázdný</div>
+          <div className='text-nowrap text-center'>Košík je prázdný</div>
         )}
       </Dropdown.Menu>
     </Dropdown>
