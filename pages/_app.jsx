@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, createContext, useEffect } from 'react';
 
 import UserDataProvider from '../components/user/UserDataProvider';
@@ -17,14 +18,21 @@ export default function MyApp({ Component, pageProps }) {
   }, []);
 
   return (
-    <AppStateContext.Provider value={firebaseReady}>
-      <UserDataProvider>
-        <PaymentProvider>
-          <Layout>
-            <Component {...pageProps} />
-          </Layout>
-        </PaymentProvider>
-      </UserDataProvider>
-    </AppStateContext.Provider>
+    <>
+      <Head>
+        <title>Tea Garden - čaje</title>
+        <meta name='description' content='Obchod ...'></meta>
+      </Head>
+
+      <AppStateContext.Provider value={firebaseReady}>
+        <UserDataProvider>
+          <PaymentProvider>
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          </PaymentProvider>
+        </UserDataProvider>
+      </AppStateContext.Provider>
+    </>
   );
 }

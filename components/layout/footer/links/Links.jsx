@@ -5,9 +5,9 @@ import Col from 'react-bootstrap/Col';
 export default function Links() {
   return (
     <>
-      <Col className='d-flex flex-column align-items-center text-center text-md-left'>
+      <Col className='d-flex flex-column align-items-center text-center text-sm-left'>
         <h4>Infomace pro zákazníky</h4>
-        <ul className='list-unstyled mb-md-0'>
+        <ul className='list-unstyled mb-sm-0'>
           <li>
             <Link href='#'>
               <a>O nás</a>
@@ -25,7 +25,7 @@ export default function Links() {
           </li>
         </ul>
       </Col>
-      <Col className='d-flex flex-column align-items-center text-center text-md-left'>
+      <Col className='d-flex flex-column align-items-center text-center text-sm-left'>
         <h4>Užitečné info</h4>
         <ul className='list-unstyled mb-0'>
           <li>
