@@ -161,13 +161,7 @@ export default function Product({ param }) {
 
                 <Form.Control
                   onChange={e => {
-                    const weight = Number(e.target.value);
-
-                    if (weight * amountInput > productData.stock) {
-                      return;
-                    }
-
-                    setWeightInput(weight);
+                    setWeightInput(Number(e.target.value));
                   }}
                   className={styles.formInput}
                   disabled={productData.stock < packsWeight[0] ? true : false}
@@ -175,7 +169,7 @@ export default function Product({ param }) {
                   as='select'
                 >
                   {packsWeight.map(pack => (
-                    <option key={pack} value={pack}>
+                    <option key={pack} value={pack} disabled={pack * amountInput > productData.stock}>
                       {pack}g
                     </option>
                   ))}
