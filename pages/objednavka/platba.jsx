@@ -7,13 +7,14 @@ import Button from 'react-bootstrap/Button';
 import Spinner from 'react-bootstrap/Spinner';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 
+import PaymentProvider from 'components/stripe/PaymentProvider';
 import { UserStateContext } from 'components/user/UserDataProvider';
 import { UserDispatchContext } from 'components/user/UserDataProvider';
 import { PageLoading } from 'components/ui/Indicators';
 
 import styles from 'components/stripe/Payment.module.scss';
 
-export default function Payment() {
+function Payment() {
   const router = useRouter();
 
   const [processing, setProcessing] = useState(false);
@@ -110,7 +111,9 @@ export default function Payment() {
           className='d-flex flex-column align-items-center'
           onSubmit={handleSubmit}
         >
-          <Form.Group className={`my-3 p-2 border-bottom border-primary ${styles.formGroup}`}>
+          <Form.Group
+            className={`my-3 p-2 border-bottom border-primary ${styles.formGroup}`}
+          >
             <Form.Label srOnly>Platba kartou</Form.Label>
             <CardElement
               options={{
@@ -175,5 +178,13 @@ export default function Payment() {
         </p>
       </Col>
     </Row>
+  );
+}
+
+export default function PaymentWithProvider() {
+  return (
+    <PaymentProvider>
+      <Payment />
+    </PaymentProvider>
   );
 }
